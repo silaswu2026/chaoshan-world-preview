@@ -1879,36 +1879,135 @@ body.quiet-mode .v2-lamp-presence {
 }
 
 
-/* ===== 13. 推门震撼升级：真 4K 四尊百丈菩萨云海天梯全景 (bg-realm-4K) ===== */
+/* ===== 13. 推门震撼升级：真 4K 四尊百丈菩萨云海圣境合理构图（四尊全览不裁头 + 五殿独立缩略图 + 3D 动感） ===== */
+#screen-map {
+  background: radial-gradient(ellipse at 50% 38%, #263133 0%, #121a1d 65%, #090e10 100%) !important;
+}
+#screen-map .map-canvas {
+  perspective: 1100px;
+}
+/* 桌面宽屏使用完整纵幅构图 + 两侧云雾羽化衔接，确保顶部普贤菩萨与底部地藏菩萨 100% 完整可见、绝不裁切！ */
 #screen-map .map-painted-bg {
   background-image:
-    linear-gradient(180deg, rgba(8, 13, 16, 0.34) 0%, rgba(8, 13, 16, 0.0) 26%, rgba(8, 13, 16, 0.04) 68%, rgba(8, 13, 16, 0.68) 100%),
-    url("./assets/world-realm-4k.jpg?v=20261125-v2-14") !important;
-  background-position: center 36% !important;
-  background-size: cover !important;
-  filter: contrast(1.06) saturate(1.04) brightness(1.02) !important;
+    linear-gradient(180deg, rgba(8, 13, 16, 0.42) 0%, rgba(8, 13, 16, 0.0) 16%, rgba(8, 13, 16, 0.0) 76%, rgba(8, 13, 16, 0.78) 100%),
+    url("./assets/world-realm-4k.jpg?v=20261125-v2-15") !important;
+  background-position: center center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  filter: contrast(1.06) saturate(1.05) brightness(1.04) !important;
+  transform: translate3d(var(--map-px, 0px), var(--map-py, 0px), 0) scale(1.04) !important;
+  animation: v2-map-breathe 22s ease-in-out infinite alternate !important;
+  will-change: transform;
 }
-@media (max-width: 700px) and (orientation: portrait) {
+/* 桌面两侧自动用同一张图的柔焦云海补齐宽屏，零黑边、浑然一体 */
+#screen-map .map-canvas::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  background: url("./assets/world-realm-4k.jpg?v=20261125-v2-15") center 30% / cover no-repeat;
+  filter: blur(28px) brightness(0.42) saturate(0.85);
+  pointer-events: none;
+}
+#screen-map .map-painted-bg {
+  z-index: 1;
+}
+
+@media (max-width: 820px) and (orientation: portrait) {
   #screen-map .map-painted-bg {
     background-image:
-      linear-gradient(180deg, rgba(8, 13, 16, 0.36) 0%, rgba(8, 13, 16, 0.0) 24%, rgba(8, 13, 16, 0.08) 68%, rgba(8, 13, 16, 0.72) 100%),
-      url("./assets/world-realm-4k-mobile.jpg?v=20261125-v2-14") !important;
-    background-position: center 28% !important;
+      linear-gradient(180deg, rgba(8, 13, 16, 0.42) 0%, rgba(8, 13, 16, 0.0) 18%, rgba(8, 13, 16, 0.06) 74%, rgba(8, 13, 16, 0.78) 100%),
+      url("./assets/world-realm-4k-mobile.jpg?v=20261125-v2-15") !important;
+    background-size: cover !important;
+    background-position: center 22% !important;
   }
 }
 
-/* 让四山交互节点精巧落位，不遮挡四尊巍峨菩萨圣像面容 */
+/* 顶部四山香印轻量化，不挡顶部普贤菩萨 */
+#screen-map .map-progress {
+  position: absolute !important;
+  top: 56px !important;
+  left: 16px !important;
+  margin: 0 !important;
+  z-index: 26;
+}
+
+/* 压缩底部四大净境栏为极简紧凑单行，腾出更多纵深给九华山地藏尊像 */
+.v2-sanctuary-dock {
+  bottom: max(10px, env(safe-area-inset-bottom) + 6px) !important;
+  padding: 7px 10px !important;
+  border-radius: 14px !important;
+}
+.v2-dock-head {
+  display: none !important;
+}
+.v2-realm-btn {
+  padding: 7px 10px !important;
+}
+
+/* 五座大殿（大雄宝殿 + 四大道场）：5 张完全不同且清晰的 4K 代表图 + 精准不挡佛面落位 */
 #screen-map .map-rings {
   display: none !important;
 }
-#screen-map .map-node .orb {
-  width: 44px !important;
-  height: 44px !important;
-  border-color: rgba(246, 218, 146, 0.78) !important;
-  box-shadow: 0 0 0 3px rgba(8, 14, 16, 0.42), 0 0 22px rgba(244, 198, 96, 0.42) !important;
+#screen-map .map-constellation {
+  width: min(920px, 94vw) !important;
+  height: calc(100vh - 150px) !important;
+  max-height: 760px !important;
 }
-#screen-map .map-node[data-mountain="emei"] { top: 26% !important; left: 50% !important; }
-#screen-map .map-node[data-mountain="wutai"] { top: 44% !important; left: 20% !important; }
-#screen-map .map-node[data-mountain="putuo"] { top: 44% !important; left: 80% !important; }
-#screen-map .map-node[data-mountain="jiuhua"] { top: 64% !important; left: 50% !important; }
-#screen-map .map-node[data-mountain="gate"] { top: 76% !important; left: 16% !important; width: auto !important; }
+#screen-map .map-node .orb {
+  width: 50px !important;
+  height: 50px !important;
+  background-size: cover !important;
+  background-position: center 25% !important;
+  border: 1.5px solid rgba(246, 218, 146, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(8, 14, 16, 0.52), 0 0 22px rgba(244, 198, 96, 0.45) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+#screen-map .map-node:hover .orb {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(246, 218, 146, 0.4), 0 0 28px rgba(255, 224, 136, 0.8) !important;
+}
+#screen-map .map-node[data-mountain="emei"] .orb {
+  background-image: url("./assets/scene-emei-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #f8d87e !important;
+}
+#screen-map .map-node[data-mountain="wutai"] .orb {
+  background-image: url("./assets/scene-wutai-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #c9e2f2 !important;
+}
+#screen-map .map-node[data-mountain="putuo"] .orb {
+  background-image: url("./assets/scene-putuo-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #b7e4dc !important;
+}
+#screen-map .map-node[data-mountain="jiuhua"] .orb {
+  background-image: url("./assets/scene-jiuhua-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #ebb974 !important;
+}
+#screen-map .map-node[data-mountain="gate"] .orb {
+  background-image: url("./assets/scene-hall-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #f4d282 !important;
+}
+
+/* 合理布局：避开普贤/文殊/观音/地藏四尊造像主体，清晰对称分布 */
+#screen-map .map-node[data-mountain="emei"]   { top: 24% !important; left: 61% !important; }
+#screen-map .map-node[data-mountain="wutai"]  { top: 52% !important; left: 17% !important; }
+#screen-map .map-node[data-mountain="putuo"]  { top: 52% !important; left: 83% !important; }
+#screen-map .map-node[data-mountain="jiuhua"] { top: 76% !important; left: 63% !important; }
+#screen-map .map-node[data-mountain="gate"]   { top: 76% !important; left: 37% !important; width: auto !important; }
+
+@media (max-width: 780px) {
+  #screen-map .map-progress {
+    top: auto !important;
+    bottom: 132px !important;
+    left: 12px !important;
+  }
+  #screen-map .map-node .orb {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  #screen-map .map-node[data-mountain="emei"]   { top: 22% !important; left: 50% !important; }
+  #screen-map .map-node[data-mountain="wutai"]  { top: 44% !important; left: 19% !important; }
+  #screen-map .map-node[data-mountain="putuo"]  { top: 44% !important; left: 81% !important; }
+  #screen-map .map-node[data-mountain="jiuhua"] { top: 63% !important; left: 68% !important; }
+  #screen-map .map-node[data-mountain="gate"]   { top: 63% !important; left: 32% !important; }
+}

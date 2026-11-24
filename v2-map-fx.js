@@ -107,6 +107,21 @@
   window.addEventListener("resize", resize);
   resize();
 
+  // 桌面端平滑阻尼鼠标视差，让四尊百丈菩萨圣境真正“活起来”
+  let targetPx = 0;
+  let targetPy = 0;
+  let curPx = 0;
+  let curPy = 0;
+  mapScreen.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "touch") return;
+    targetPx = (e.clientX / Math.max(1, w) - 0.5) * -22;
+    targetPy = (e.clientY / Math.max(1, h) - 0.5) * -14;
+  });
+  mapScreen.addEventListener("pointerleave", () => {
+    targetPx = 0;
+    targetPy = 0;
+  });
+
   const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   function tick(now) {
@@ -118,6 +133,11 @@
     }
 
     const t = now * 0.001;
+    curPx += (targetPx + Math.sin(t * 0.45) * 4 - curPx) * 0.05;
+    curPy += (targetPy + Math.cos(t * 0.35) * 3 - curPy) * 0.05;
+    mapCanvasWrap.style.setProperty("--map-px", `${curPx.toFixed(2)}px`);
+    mapCanvasWrap.style.setProperty("--map-py", `${curPy.toFixed(2)}px`);
+
     ctx.clearRect(0, 0, w, h);
 
     // 1. 峨眉山（上中）：柔和呼吸的金顶佛光 + 细微晨光金尘
