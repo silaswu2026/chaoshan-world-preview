@@ -1295,3 +1295,40 @@ html[lang="en"] .v2-pm-copy p {
   height: 100%;
   display: block;
 }
+
+
+/* ===== 11. 五大殿堂真 4K 超清画质升级（大雄宝殿 / 峨眉 / 普陀 / 五台 / 九华） ===== */
+#temple-scene .temple-art {
+  background-image: url("./assets/scene-hall-4k.jpg?v=20261125-v2-11") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  filter: contrast(1.04) saturate(1.03);
+}
+#temple-scene[data-mountain="putuo"] .temple-art {
+  background-image: url("./assets/scene-putuo-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="wutai"] .temple-art {
+  background-image: url("./assets/scene-wutai-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="emei"] .temple-art {
+  background-image: url("./assets/scene-emei-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="jiuhua"] .temple-art {
+  background-image: url("./assets/scene-jiuhua-4k.jpg?v=20261125-v2-11") !important;
+}
+
+/* 殿内薄雾替换为真实摄影丝缕云雾，提升层次感与庄严质感 */
+#temple-scene .sacred-mist i {
+  background: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-11") center / cover no-repeat !important;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse 68% 60% at 50% 56%, #000 30%, transparent 90%);
+  mask-image: radial-gradient(ellipse 68% 60% at 50% 56%, #000 30%, transparent 90%);
+  opacity: 0.24 !important;
+}
+
+/* 殿内光影压暗边缘、突出中心 4K 主尊法相 */
+#temple-scene::after {
+  background:
+    radial-gradient(ellipse 76% 68% at 50% 42%, transparent 48%, rgba(5, 10, 12, 0.56) 100%),
+    linear-gradient(180deg, rgba(5, 10, 12, 0.38) 0%, transparent 22%, transparent 64%, rgba(5, 10, 12, 0.68) 100%) !important;
+}

@@ -87,7 +87,7 @@
     return randomItems(names, amount).map((name, index) => {
       const wish = wishes[Math.floor(Math.random() * wishes.length)];
       return `<div class="rite-witness"><b>${name}</b><span>${wish.text}</span></div>`;
-    });
+    }).join("");
   }
   function renderWitnesses(target = $(".rite-witnesses", stage)) {
     if (target) target.innerHTML = witnessesMarkup();

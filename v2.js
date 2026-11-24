@@ -289,11 +289,11 @@
       event.stopImmediatePropagation();
       const m = mapNode.dataset.mountain || "gate";
       const imgMap = {
-        putuo: "./assets/scene-putuo.webp?v=20261124-7",
-        wutai: "./assets/scene-wutai.webp?v=20261124-7",
-        emei: "./assets/scene-emei.webp?v=20261124-7",
-        jiuhua: "./assets/scene-jiuhua.webp?v=20261124-7",
-        gate: "./assets/scene-hall.webp?v=20261124-7",
+        putuo: "./assets/scene-putuo-4k.jpg?v=20261125-v2-11",
+        wutai: "./assets/scene-wutai-4k.jpg?v=20261125-v2-11",
+        emei: "./assets/scene-emei-4k.jpg?v=20261125-v2-11",
+        jiuhua: "./assets/scene-jiuhua-4k.jpg?v=20261125-v2-11",
+        gate: "./assets/scene-hall-4k.jpg?v=20261125-v2-11",
       };
       window.JianshanWebGLMist({
         isGateEntry: false,
