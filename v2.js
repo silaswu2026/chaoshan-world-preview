@@ -204,12 +204,25 @@
 
   function triggerEnterChaoshan() {
     playTempleBell();
-    // 借用现有推门动画逻辑，直接进入二图合一朝山世界 (#screen-map)
-    const hiddenEnter = $("#btn-enter-gate");
-    if (hiddenEnter) {
-      hiddenEnter.click();
-    } else {
+    // 若用户未静音且尚未开启佛音，点击推开山门时可轻柔淡入清净佛音（InPeace 式体验）
+    const cue = document.querySelector("#v2-sound-cue");
+    if (cue && !cue.classList.contains("is-playing")) {
+      const musicBtn = document.querySelector('#overlay-music [data-music="0"]');
+      if (musicBtn) {
+        musicBtn.click();
+        cue.classList.add("is-playing");
+        window.dispatchEvent(new CustomEvent("chaoshan:lang", { detail: { lang: currentLang() } }));
+      }
+    }
+    const enterMapDirect = () => {
+      $$(".overlay").forEach((o) => o.classList.remove("is-open"));
       $$(".screen").forEach((s) => s.classList.toggle("is-active", s.dataset.screen === "map"));
+      syncOnlineCount();
+    };
+    if (typeof window.JianshanMistTransition === "function") {
+      window.JianshanMistTransition({ isGateEntry: true, onMidpoint: enterMapDirect });
+    } else {
+      enterMapDirect();
     }
   }
 

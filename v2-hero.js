@@ -12,39 +12,171 @@
     if (saved === "classic" || saved === "cinema") currentTheme = saved;
   } catch (_) { /* ignore */ }
 
-  /* ===== 1. 注入电影级光影层、石灯微焰与 Canvas 粒子画布 ===== */
+  /* ===== 1. 五句随机「朝山意境文案」（中 / 繁 / 英） ===== */
+  const QUOTES = [
+    {
+      "zh-Hans": "步步登高，是为放下；一念朝山，即是见佛。",
+      "zh-Hant": "步步登高，是為放下；一念朝山，即是見佛。",
+      en: "Every step upward is a letting go; one sincere turning of the heart is to meet the Buddha.",
+    },
+    {
+      "zh-Hans": "山在云外，佛在心中；循香而上，暂别尘嚣，与清净重逢。",
+      "zh-Hant": "山在雲外，佛在心中；循香而上，暫別塵囂，與清淨重逢。",
+      en: "Beyond the clouds lies the mountain; within the stillness dwells the awakened heart.",
+    },
+    {
+      "zh-Hans": "世人上山拜佛，非求远方神明，只为在云雾钟声里，照见本自具足的安宁。",
+      "zh-Hant": "世人上山拜佛，非求遠方神明，只為在雲霧鐘聲裡，照見本自具足的安寧。",
+      en: "We climb the sacred mountain not to seek a distant god, but to awaken the peace already within.",
+    },
+    {
+      "zh-Hans": "踏云入山门，一炷清香礼诸佛；心有所向，步步皆是道场。",
+      "zh-Hant": "踏雲入山門，一炷清香禮諸佛；心有所向，步步皆是道場。",
+      en: "Step through the misty gate with one incense; wherever the heart bows in sincerity, the sanctuary appears.",
+    },
+    {
+      "zh-Hans": "上山朝佛，下山见己。",
+      "zh-Hant": "上山朝佛，下山見己。",
+      en: "Ascend to bow before the Buddha; return to see yourself.",
+    },
+  ];
+
+  // 每次进入页面随机择一句缘分禅语
+  const sessionQuoteIndex = Math.floor(Math.random() * QUOTES.length);
+
+  function getLang() {
+    const l = document.documentElement.lang || "zh-Hans";
+    return l === "en" || l === "zh-Hant" ? l : "zh-Hans";
+  }
+
+  function getSessionQuote(offset = 0) {
+    const q = QUOTES[(sessionQuoteIndex + offset) % QUOTES.length];
+    return q[getLang()] || q["zh-Hans"];
+  }
+
+  /* ===== 2. 注入电影级光影层 + 独立近景左右苍松透视图层 + Canvas 飘渺云海与粒子 ===== */
   const fxLayer = document.createElement("div");
   fxLayer.className = "v2-cinema-fx";
   fxLayer.setAttribute("aria-hidden", "true");
   fxLayer.innerHTML = `
+    <div class="v2-sanctuary-glow"></div>
     <div class="v2-god-rays"><i></i><i></i><i></i><i></i></div>
     <div class="v2-lantern v2-lantern-left"></div>
     <div class="v2-lantern v2-lantern-right"></div>
     <div class="v2-velvet-mist v2-mist-a"></div>
     <div class="v2-velvet-mist v2-mist-b"></div>
+    <div class="v2-velvet-mist v2-mist-c"></div>
     <canvas class="v2-hero-canvas" id="v2-hero-canvas"></canvas>
+    <div class="v2-pine-layer v2-pine-left">
+      <svg viewBox="0 0 360 640" preserveAspectRatio="xMinYMid slice" fill="none">
+        <path d="M-20 640 C12 520 26 420 18 300 C12 200 30 120 6 0 L-20 0 Z" fill="#060c0e"/>
+        <path d="M10 110 C75 108 135 128 195 154 C145 148 92 140 24 148 Z" fill="#070e11"/>
+        <path d="M6 210 C96 200 188 225 256 262 C182 252 104 244 20 250 Z" fill="#060d10"/>
+        <path d="M12 340 C78 332 146 355 204 388 C142 380 82 372 18 380 Z" fill="#050b0d"/>
+        <ellipse cx="145" cy="136" rx="74" ry="20" fill="#091317" opacity="0.92"/>
+        <ellipse cx="204" cy="240" rx="88" ry="24" fill="#081216" opacity="0.9"/>
+        <ellipse cx="110" cy="215" rx="76" ry="22" fill="#0a161b" opacity="0.86"/>
+        <ellipse cx="152" cy="366" rx="78" ry="22" fill="#071014" opacity="0.9"/>
+        <ellipse cx="76" cy="462" rx="64" ry="20" fill="#060e11" opacity="0.88"/>
+      </svg>
+    </div>
+    <div class="v2-pine-layer v2-pine-right">
+      <svg viewBox="0 0 360 640" preserveAspectRatio="xMaxYMid slice" fill="none">
+        <path d="M380 640 C348 520 334 420 342 300 C348 200 330 120 354 0 L380 0 Z" fill="#060c0e"/>
+        <path d="M350 116 C282 112 222 132 162 158 C212 152 266 144 336 152 Z" fill="#070e11"/>
+        <path d="M354 218 C262 208 172 232 102 270 C176 260 256 250 340 256 Z" fill="#060d10"/>
+        <path d="M348 346 C280 338 214 360 154 394 C218 386 278 378 342 386 Z" fill="#050b0d"/>
+        <ellipse cx="215" cy="142" rx="76" ry="21" fill="#091317" opacity="0.92"/>
+        <ellipse cx="156" cy="246" rx="90" ry="25" fill="#081216" opacity="0.9"/>
+        <ellipse cx="250" cy="222" rx="76" ry="22" fill="#0a161b" opacity="0.86"/>
+        <ellipse cx="208" cy="372" rx="80" ry="22" fill="#071014" opacity="0.9"/>
+        <ellipse cx="284" cy="468" rx="64" ry="20" fill="#060e11" opacity="0.88"/>
+      </svg>
+    </div>
     <div class="v2-foreground-vignette"></div>
   `;
   atmosphere.appendChild(fxLayer);
 
-  /* ===== 2. 注入 A/B 4K 山门一键切换胶囊 ===== */
+  /* ===== 3. 首页注入随机「朝山意境禅语」与 InPeace 式声音开启引导 ===== */
+  const landingContent = landing.querySelector(".landing-content");
+  if (landingContent) {
+    const quoteEl = document.createElement("p");
+    quoteEl.className = "v2-hero-quote";
+    quoteEl.id = "v2-hero-quote";
+    const taglineEl = landingContent.querySelector(".tagline");
+    if (taglineEl) taglineEl.insertAdjacentElement("afterend", quoteEl);
+
+    const soundCue = document.createElement("button");
+    soundCue.type = "button";
+    soundCue.className = "v2-sound-cue";
+    soundCue.id = "v2-sound-cue";
+    soundCue.innerHTML = `<i class="v2-sound-waves"><span></span><span></span><span></span></i><em id="v2-sound-cue-text">建议开启声音 · 聆听古刹钟声与梵呗</em>`;
+    const actionsEl = landingContent.querySelector(".landing-actions");
+    if (actionsEl) actionsEl.insertAdjacentElement("afterend", soundCue);
+
+    soundCue.addEventListener("click", () => {
+      const musicBtn = document.querySelector('#overlay-music [data-music="0"]');
+      if (musicBtn && !soundCue.classList.contains("is-playing")) {
+        musicBtn.click();
+        soundCue.classList.add("is-playing");
+        updateDynamicTexts();
+      } else {
+        document.querySelector("#overlay-music")?.classList.add("is-open");
+      }
+    });
+  }
+
+  /* ===== 4. 注入 Persepolis 式全屏飘渺云雾穿门过场层 ===== */
+  const mistOverlay = document.createElement("div");
+  mistOverlay.className = "v2-mist-transition";
+  mistOverlay.id = "v2-mist-transition";
+  mistOverlay.setAttribute("aria-hidden", "true");
+  mistOverlay.innerHTML = `
+    <div class="v2-mt-cloud v2-mt-c1"></div>
+    <div class="v2-mt-cloud v2-mt-c2"></div>
+    <div class="v2-mt-cloud v2-mt-c3"></div>
+    <div class="v2-mt-glow"></div>
+    <div class="v2-mt-copy">
+      <small id="v2-mt-sub">入 山 门 · 见 本 心</small>
+      <p id="v2-mt-quote"></p>
+    </div>
+  `;
+  document.querySelector("#app")?.appendChild(mistOverlay);
+
+  /* ===== 5. 注入 A/B 4K 山门一键切换胶囊 ===== */
   const switcher = document.createElement("div");
   switcher.className = "v2-gate-switcher";
   switcher.setAttribute("role", "group");
   switcher.setAttribute("aria-label", "4K 山门画卷切换");
   switcher.innerHTML = `
-    <button type="button" data-gate-theme="cinema" class="is-on"><i class="dot"></i><span data-v2-gate="cinema">新 4K 电影山门</span></button>
+    <button type="button" data-gate-theme="cinema" class="is-on"><i class="dot"></i><span data-v2-gate="cinema">新 4K 大雄宝殿山门</span></button>
     <button type="button" data-gate-theme="classic"><i class="dot"></i><span data-v2-gate="classic">原 4K 经典山门</span></button>
   `;
   landing.appendChild(switcher);
 
-  function updateSwitcherLabels() {
-    const lang = document.documentElement.lang || "zh-Hans";
+  function updateDynamicTexts() {
+    const lang = getLang();
+    const quoteEl = document.querySelector("#v2-hero-quote");
+    if (quoteEl) quoteEl.textContent = getSessionQuote(0);
+
+    const cue = document.querySelector("#v2-sound-cue");
+    const cueText = document.querySelector("#v2-sound-cue-text");
+    if (cue && cueText) {
+      const playing = cue.classList.contains("is-playing");
+      if (lang === "en") {
+        cueText.textContent = playing ? "Sanctuary sound on · Tap to adjust" : "Turn on sound · Temple bell & real chants";
+      } else if (lang === "zh-Hant") {
+        cueText.textContent = playing ? "清淨梵唄已開啟 · 點此調整" : "建議開啟聲音 · 聆聽古剎鐘聲與梵唄";
+      } else {
+        cueText.textContent = playing ? "清净梵呗已开启 · 点此调整" : "建议开启声音 · 聆听古刹钟声与梵呗";
+      }
+    }
+
     const labels = lang === "en"
-      ? { cinema: "New 4K Cinema", classic: "Classic 4K Gate" }
+      ? { cinema: "New 4K Mahāvīra Gate", classic: "Classic 4K Gate" }
       : lang === "zh-Hant"
-        ? { cinema: "新 4K 電影山門", classic: "原 4K 經典山門" }
-        : { cinema: "新 4K 电影山门", classic: "原 4K 经典山门" };
+        ? { cinema: "新 4K 大雄寶殿山門", classic: "原 4K 經典山門" }
+        : { cinema: "新 4K 大雄宝殿山门", classic: "原 4K 经典山门" };
     switcher.querySelector('[data-v2-gate="cinema"]').textContent = labels.cinema;
     switcher.querySelector('[data-v2-gate="classic"]').textContent = labels.classic;
   }
@@ -64,11 +196,60 @@
     if (btn) applyGateTheme(btn.dataset.gateTheme);
   });
 
-  window.addEventListener("chaoshan:lang", updateSwitcherLabels);
+  window.addEventListener("chaoshan:lang", updateDynamicTexts);
   applyGateTheme(currentTheme);
-  updateSwitcherLabels();
+  updateDynamicTexts();
 
-  /* ===== 3. 悬停「推开山门」按钮：联动暖金佛光、镜头前推与粒子汇聚 ===== */
+  /* ===== 6. 暴露 Persepolis 式一镜到底穿门 + 轻量云雾切换接口 ===== */
+  let mistBusy = false;
+  window.JianshanMistTransition = function runMistTransition({ isGateEntry = false, onMidpoint } = {}) {
+    if (mistBusy) return;
+    mistBusy = true;
+    const reduce = document.body.classList.contains("reduce-motion") || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const lang = getLang();
+    const mtSub = document.querySelector("#v2-mt-sub");
+    const mtQuote = document.querySelector("#v2-mt-quote");
+    if (mtSub) {
+      mtSub.textContent = lang === "en"
+        ? (isGateEntry ? "ENTERING THE SACRED GATE" : "DRIFTING THROUGH THE MIST")
+        : lang === "zh-Hant"
+          ? (isGateEntry ? "推 開 山 門 · 步 入 淨 境" : "雲 霧 繚 繞 · 移 步 換 景")
+          : (isGateEntry ? "推 开 山 门 · 步 入 净 境" : "云 雾 缭 绕 · 移 步 换 景");
+    }
+    if (mtQuote) {
+      mtQuote.textContent = isGateEntry ? getSessionQuote(0) : "";
+    }
+
+    if (isGateEntry && !reduce) {
+      landing.classList.add("is-entering-3d");
+    }
+
+    mistOverlay.classList.toggle("is-quick", !isGateEntry);
+    mistOverlay.classList.remove("is-clearing");
+    mistOverlay.classList.add("is-active");
+    mistOverlay.setAttribute("aria-hidden", "false");
+
+    const midDelay = reduce ? 60 : (isGateEntry ? 1250 : 380);
+    const clearDelay = reduce ? 120 : (isGateEntry ? 1850 : 540);
+    const endDelay = reduce ? 200 : (isGateEntry ? 2650 : 980);
+
+    setTimeout(() => {
+      if (typeof onMidpoint === "function") onMidpoint();
+      landing.classList.remove("is-entering-3d");
+    }, midDelay);
+
+    setTimeout(() => {
+      mistOverlay.classList.add("is-clearing");
+    }, clearDelay);
+
+    setTimeout(() => {
+      mistOverlay.classList.remove("is-active", "is-clearing", "is-quick");
+      mistOverlay.setAttribute("aria-hidden", "true");
+      mistBusy = false;
+    }, endDelay);
+  };
+
+  /* ===== 7. 悬停「推开山门」按钮：联动暖金佛光、3D 镜头前推与粒子汇聚 ===== */
   const enterBtn = document.querySelector("#btn-v2-enter-gate");
   let ctaHover = false;
   if (enterBtn) {
@@ -82,7 +263,7 @@
     });
   }
 
-  /* ===== 4. 五层平滑阻尼景深 + 60fps Canvas 三层金光粒子 ===== */
+  /* ===== 8. 五层 3D 平滑阻尼景深 + 60fps Canvas 飘渺云絮 & 三层金光粒子 ===== */
   const canvas = document.querySelector("#v2-hero-canvas");
   const ctx = canvas?.getContext("2d");
   if (!canvas || !ctx) return;
@@ -98,10 +279,24 @@
   let pointerPxY = -9999;
 
   const particles = [];
+  const mistPuffs = [];
+
+  function createMistPuff(randomX = true) {
+    const dir = Math.random() > 0.5 ? 1 : -1;
+    return {
+      x: randomX ? Math.random() * width : (dir > 0 ? -240 : width + 240),
+      y: height * (0.28 + Math.random() * 0.62),
+      rx: 150 + Math.random() * 220,
+      ry: 46 + Math.random() * 72,
+      vx: dir * (0.14 + Math.random() * 0.24),
+      alpha: 0.045 + Math.random() * 0.065,
+      phase: Math.random() * Math.PI * 2,
+      warm: Math.random() > 0.65,
+    };
+  }
 
   function createParticle(layer, randomY = true) {
     if (layer === 0) {
-      // 远景光柱细尘
       return {
         layer: 0,
         x: Math.random() * width,
@@ -116,7 +311,6 @@
       };
     }
     if (layer === 1) {
-      // 中景香火金星萤光
       return {
         layer: 1,
         x: width * (0.15 + Math.random() * 0.7),
@@ -130,7 +324,6 @@
         hue: 38 + Math.random() * 12,
       };
     }
-    // 近景大光圈柔焦暖金光斑 (Bokeh)
     return {
       layer: 2,
       x: Math.random() * width,
@@ -156,19 +349,17 @@
 
     if (particles.length === 0) {
       const isMobile = width < 700;
-      const farCount = isMobile ? 34 : 58;
-      const midCount = isMobile ? 16 : 28;
-      const bokehCount = isMobile ? 4 : 7;
-      for (let i = 0; i < farCount; i++) particles.push(createParticle(0, true));
-      for (let i = 0; i < midCount; i++) particles.push(createParticle(1, true));
-      for (let i = 0; i < bokehCount; i++) particles.push(createParticle(2, true));
+      for (let i = 0; i < (isMobile ? 34 : 58); i++) particles.push(createParticle(0, true));
+      for (let i = 0; i < (isMobile ? 16 : 28); i++) particles.push(createParticle(1, true));
+      for (let i = 0; i < (isMobile ? 4 : 7); i++) particles.push(createParticle(2, true));
+      for (let i = 0; i < (isMobile ? 7 : 12); i++) mistPuffs.push(createMistPuff(true));
     }
   }
 
   landing.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
-    targetX = (e.clientX / Math.max(1, width) - 0.5) * 2;  // -1 .. 1
-    targetY = (e.clientY / Math.max(1, height) - 0.5) * 2; // -1 .. 1
+    targetX = (e.clientX / Math.max(1, width) - 0.5) * 2;
+    targetY = (e.clientY / Math.max(1, height) - 0.5) * 2;
     pointerPxX = e.clientX;
     pointerPxY = e.clientY;
   });
@@ -193,41 +384,63 @@
       return;
     }
 
-    // 1. 阻尼缓动更新五层景深 CSS 变量
-    const idleX = Math.sin(now * 0.00035) * 0.14;
-    const idleY = Math.cos(now * 0.00028) * 0.1;
-    const goalX = targetX + idleX;
-    const goalY = targetY + idleY;
-    curX += (goalX - curX) * 0.055;
-    curY += (goalY - curY) * 0.055;
+    // 3D 阻尼透视更新（远 / 中 / 近前景苍松 2.8× 速度差）
+    const idleX = Math.sin(now * 0.00032) * 0.16;
+    const idleY = Math.cos(now * 0.00025) * 0.1;
+    curX += (targetX + idleX - curX) * 0.055;
+    curY += (targetY + idleY - curY) * 0.055;
 
-    atmosphere.style.setProperty("--v2-far-x", `${(-curX * 12).toFixed(2)}px`);
-    atmosphere.style.setProperty("--v2-far-y", `${(-curY * 7).toFixed(2)}px`);
-    atmosphere.style.setProperty("--v2-mid-x", `${(-curX * 22).toFixed(2)}px`);
-    atmosphere.style.setProperty("--v2-mid-y", `${(-curY * 12).toFixed(2)}px`);
-    atmosphere.style.setProperty("--v2-near-x", `${(curX * 34).toFixed(2)}px`);
-    atmosphere.style.setProperty("--v2-near-y", `${(curY * 18).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-far-x", `${(-curX * 14).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-far-y", `${(-curY * 8).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-mid-x", `${(-curX * 24).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-mid-y", `${(-curY * 14).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-near-x", `${(curX * 42).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-near-y", `${(curY * 22).toFixed(2)}px`);
+    atmosphere.style.setProperty("--v2-rot-y", `${(curX * 1.4).toFixed(2)}deg`);
+    atmosphere.style.setProperty("--v2-rot-x", `${(-curY * 0.9).toFixed(2)}deg`);
 
-    // 2. 绘制三层 Canvas 金光粒子
     ctx.clearRect(0, 0, width, height);
+
+    // 1. 极飘渺流动水墨云絮
+    for (let i = 0; i < mistPuffs.length; i++) {
+      const m = mistPuffs[i];
+      m.x += m.vx;
+      m.phase += 0.004;
+      const yFloat = m.y + Math.sin(m.phase) * 10;
+      if (m.x < -m.rx * 2 || m.x > width + m.rx * 2) {
+        mistPuffs[i] = createMistPuff(false);
+        continue;
+      }
+      ctx.save();
+      ctx.translate(m.x + curX * 18, yFloat + curY * 10);
+      ctx.scale(1, m.ry / m.rx);
+      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, m.rx);
+      const rgb = m.warm ? "246, 234, 206" : "212, 232, 232";
+      grad.addColorStop(0, `rgba(${rgb}, ${m.alpha})`);
+      grad.addColorStop(0.5, `rgba(${rgb}, ${m.alpha * 0.42})`);
+      grad.addColorStop(1, `rgba(${rgb}, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(0, 0, m.rx, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 2. 三层金光粒子
     const gateX = width * 0.5;
     const gateY = height * 0.43;
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       p.phase += p.speed;
-
-      // 水平微风漂移 + 上升
       p.x += p.vx + Math.sin(p.phase) * (p.layer === 1 ? 0.24 : 0.09);
       p.y += p.vy * (ctaHover && p.layer === 1 ? 1.45 : 1);
 
-      // 悬停「推开山门」时，中景金光粒子温柔向山门中心汇聚
       if (ctaHover && p.layer === 1) {
-        p.x += (gateX - p.x) * 0.008;
-        p.y += (gateY - p.y) * 0.005;
+        p.x += (gateX - p.x) * 0.009;
+        p.y += (gateY - p.y) * 0.006;
       }
 
-      // 鼠标划过时的微风扰动
       if (pointerPxX > -1000 && p.layer < 2) {
         const dx = p.x - pointerPxX;
         const dy = p.y - pointerPxY;
@@ -240,7 +453,6 @@
         }
       }
 
-      // 越界重生
       if (p.y < -p.r * 2 - 20 || p.x < -80 || p.x > width + 80) {
         particles[i] = createParticle(p.layer, false);
         continue;
@@ -248,15 +460,12 @@
 
       const twinkle = 0.55 + 0.45 * Math.sin(p.phase * 1.4);
       const a = p.alpha * twinkle * (ctaHover ? 1.25 : 1);
-
-      // 叠加视差偏移
-      const pxOffset = p.layer === 0 ? -curX * 8 : p.layer === 1 ? curX * 14 : curX * 28;
-      const pyOffset = p.layer === 0 ? -curY * 5 : p.layer === 1 ? curY * 9 : curY * 16;
+      const pxOffset = p.layer === 0 ? -curX * 8 : p.layer === 1 ? curX * 16 : curX * 32;
+      const pyOffset = p.layer === 0 ? -curY * 5 : p.layer === 1 ? curY * 10 : curY * 18;
       const drawX = p.x + pxOffset;
       const drawY = p.y + pyOffset;
 
       if (p.layer === 2) {
-        // 柔焦大光斑
         const grad = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, p.r);
         grad.addColorStop(0, `hsla(${p.hue}, 88%, 78%, ${a})`);
         grad.addColorStop(0.55, `hsla(${p.hue}, 80%, 62%, ${a * 0.4})`);
@@ -266,7 +475,6 @@
         ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
         ctx.fill();
       } else if (p.layer === 1) {
-        // 中景带光晕金星
         const haloR = p.r * 4.2;
         const grad = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, haloR);
         grad.addColorStop(0, `hsla(${p.hue}, 95%, 86%, ${Math.min(1, a)})`);
@@ -277,7 +485,6 @@
         ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // 远景微尘
         ctx.fillStyle = `hsla(${p.hue}, 90%, 84%, ${a})`;
         ctx.beginPath();
         ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
