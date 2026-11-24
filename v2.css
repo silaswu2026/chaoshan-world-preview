@@ -954,23 +954,27 @@ html[lang="en"] .v2-mt-copy p {
   font-style: italic;
 }
 
-/* 全新 4K 朝山世界全景地图 (#screen-map) */
+/* 全新 4K 庄严实拍朝山世界全景地图 (#screen-map) */
 #screen-map .map-painted-bg {
   background-image:
-    linear-gradient(180deg, rgba(8, 13, 16, 0.24), rgba(8, 13, 16, 0.04) 42%, rgba(8, 13, 16, 0.56)),
-    url("./assets/world-panorama-4k.jpg?v=20261125-v2-5") !important;
+    linear-gradient(180deg, rgba(7, 12, 14, 0.32), rgba(7, 12, 14, 0.06) 40%, rgba(7, 12, 14, 0.62)),
+    url("./assets/world-panorama-4k.jpg?v=20261125-v2-8") !important;
   background-position: center center !important;
   background-size: cover !important;
+}
+/* 收敛旧版游戏感旋转光环，保持庄严肃穆的纪录片气场 */
+#screen-map .map-auras {
+  opacity: 0.22 !important;
+}
+#screen-map .map-rings {
+  opacity: 0.32 !important;
+  border-color: rgba(226, 204, 154, 0.22) !important;
 }
 @media (max-width: 700px) and (orientation: portrait) {
   #screen-map .map-painted-bg {
     background-image:
-      linear-gradient(180deg, rgba(8, 13, 16, 0.26), rgba(8, 13, 16, 0.04) 42%, rgba(8, 13, 16, 0.62)),
-      url("./assets/world-panorama-4k-mobile.jpg?v=20261125-v2-5") !important;
-  }
-  .v2-pine-layer {
-    width: 28vw;
-    opacity: 0.72;
+      linear-gradient(180deg, rgba(7, 12, 14, 0.34), rgba(7, 12, 14, 0.06) 40%, rgba(7, 12, 14, 0.66)),
+      url("./assets/world-panorama-4k-mobile.jpg?v=20261125-v2-8") !important;
   }
 }
 
