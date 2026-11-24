@@ -2011,3 +2011,134 @@ body.quiet-mode .v2-lamp-presence {
   #screen-map .map-node[data-mountain="jiuhua"] { top: 63% !important; left: 68% !important; }
   #screen-map .map-node[data-mountain="gate"]   { top: 63% !important; left: 32% !important; }
 }
+
+
+/* ===== 14. 全幅宽屏满铺 + 修复五尊菩萨入口层级 + 右上西方极乐 / 左下后山 / 右下冥想 ===== */
+#screen-map .map-canvas::before {
+  display: none !important;
+}
+#screen-map .map-painted-bg {
+  background-size: cover !important;
+  background-position: center 14% !important;
+}
+#screen-map .map-constellation {
+  position: relative !important;
+  z-index: 15 !important;
+  width: min(1180px, 96vw) !important;
+  height: calc(100vh - 96px) !important;
+  max-height: 820px !important;
+}
+#screen-map .map-node {
+  z-index: 16 !important;
+}
+/* 精准排布五座大殿入口在各尊圣像旁 */
+#screen-map .map-node[data-mountain="emei"]   { top: 18% !important; left: 50% !important; }
+#screen-map .map-node[data-mountain="wutai"]  { top: 44% !important; left: 22% !important; }
+#screen-map .map-node[data-mountain="putuo"]  { top: 44% !important; left: 78% !important; }
+#screen-map .map-node[data-mountain="jiuhua"] { top: 72% !important; left: 50% !important; }
+#screen-map .map-node[data-mountain="gate"]   { top: 52% !important; left: 50% !important; width: auto !important; }
+
+/* 空间四角净境入口：右上西方极乐 · 左下后山 · 右下静心冥想 */
+.v2-world-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.v2-corner-node {
+  position: absolute;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px 9px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.45);
+  background: linear-gradient(135deg, rgba(13, 21, 24, 0.84), rgba(9, 15, 17, 0.92));
+  color: #f6ebd4;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.46), 0 0 20px rgba(236, 192, 98, 0.18);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  text-align: left;
+}
+.v2-corner-node:hover {
+  transform: translateY(-2px);
+  border-color: rgba(248, 222, 156, 0.82);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.52), 0 0 28px rgba(246, 206, 114, 0.36);
+}
+.v2-corner-orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #161006;
+  background: linear-gradient(135deg, #f3d284, #b98b3c);
+  box-shadow: 0 0 16px rgba(243, 210, 132, 0.55);
+  flex-shrink: 0;
+}
+.v2-corner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v2-corner-text b {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #fff4d8;
+}
+.v2-corner-text small {
+  font-size: 11px;
+  color: rgba(235, 220, 188, 0.78);
+}
+
+/* 右上角：西方极乐世界 */
+.v2-corner-node.is-pureland {
+  top: 76px;
+  right: 22px;
+}
+/* 左下角：后山（心灯祈福 + 高僧解惑） */
+.v2-corner-node.is-backmountain {
+  left: 22px;
+  bottom: max(22px, env(safe-area-inset-bottom) + 14px);
+}
+/* 右下角：静心冥想 */
+.v2-corner-node.is-meditation {
+  right: 22px;
+  bottom: max(22px, env(safe-area-inset-bottom) + 14px);
+}
+
+@media (max-width: 780px) {
+  .v2-corner-node {
+    padding: 6px 11px 6px 7px;
+    gap: 7px;
+  }
+  .v2-corner-orb {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .v2-corner-text b {
+    font-size: 12px;
+  }
+  .v2-corner-text small {
+    font-size: 9px;
+  }
+  .v2-corner-node.is-pureland {
+    top: 92px;
+    right: 10px;
+  }
+  .v2-corner-node.is-backmountain {
+    left: 10px;
+    bottom: max(14px, env(safe-area-inset-bottom) + 8px);
+  }
+  .v2-corner-node.is-meditation {
+    right: 10px;
+    bottom: max(14px, env(safe-area-inset-bottom) + 8px);
+  }
+}

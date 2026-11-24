@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="./world.css?v=20261124-7" />
     <link rel="stylesheet" href="./sanctuary.css?v=20261124-7" />
     <link rel="stylesheet" href="./ritual-stage.css?v=20261124-7" />
-    <link rel="stylesheet" href="./v2.css?v=20261125-v2-15" />
+    <link rel="stylesheet" href="./v2.css?v=20261125-v2-16" />
   </head>
   <body>
     <div class="app" id="app">
@@ -181,29 +181,19 @@
             </button>
           </div>
         </div>
-        <div class="v2-sanctuary-dock" aria-label="四大独立净境">
-          <div class="v2-dock-head">
-            <span data-v2-i18n="dockTitle">朝山净境 · 直达入口</span>
-            <small data-v2-i18n="dockHint">点选四山入殿，或前往净境静修</small>
-          </div>
-          <div class="v2-dock-grid">
-            <button type="button" class="v2-realm-btn" data-world-open="meditation">
-              <b data-v2-i18n="realmMeditation">静心冥想</b>
-              <small data-v2-i18n="realmMeditationSub">4K 禅堂 · 同修共修蒲团</small>
-            </button>
-            <button type="button" class="v2-realm-btn" data-world-open="backmountain">
-              <b data-v2-i18n="realmLamp">后山 · 心灯与高僧</b>
-              <small data-v2-i18n="realmLampSub">万灯祈福 · 高僧解惑</small>
-            </button>
-            <button type="button" class="v2-realm-btn" data-world-open="pureland">
-              <b data-v2-i18n="realmPureland">西方极乐 · 归莲净土</b>
-              <small data-v2-i18n="realmPurelandSub">怀念故人 · 追思莲位</small>
-            </button>
-            <button type="button" class="v2-realm-btn" data-world-open="room">
-              <b data-v2-i18n="realmGuidance">同行禅院</b>
-              <small data-v2-i18n="realmGuidanceSub">千人同修 · 莲灯共愿</small>
-            </button>
-          </div>
+        <div class="v2-world-corners" aria-label="净境入口">
+          <button type="button" class="v2-corner-node is-pureland" data-world-open="pureland">
+            <span class="v2-corner-orb">莲</span>
+            <span class="v2-corner-text"><b data-v2-i18n="realmPureland">西方极乐世界</b><small data-v2-i18n="realmPurelandSub">怀念故人 · 归莲净土</small></span>
+          </button>
+          <button type="button" class="v2-corner-node is-backmountain" data-world-open="backmountain">
+            <span class="v2-corner-orb">灯</span>
+            <span class="v2-corner-text"><b data-v2-i18n="realmLamp">后山</b><small data-v2-i18n="realmLampSub">心灯祈福 · 高僧解惑</small></span>
+          </button>
+          <button type="button" class="v2-corner-node is-meditation" data-world-open="meditation">
+            <span class="v2-corner-orb">定</span>
+            <span class="v2-corner-text"><b data-v2-i18n="realmMeditation">静心冥想</b><small data-v2-i18n="realmMeditationSub">4K 禅堂 · 同修蒲团</small></span>
+          </button>
         </div>
         <div class="map-footer">
           <p class="map-tip">点选道场 · 入殿礼佛</p>
