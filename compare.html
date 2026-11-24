@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>见山 · 朝山 ｜ 版本对比台 (Demo-V1 / Demo-V2)</title>
+  <title>见山 · 朝山 ｜ 多版本对比台 (Demo-V1 / Demo-V2 / Demo-3D)</title>
   <style>
     :root {
       --bg: #0c1214;
@@ -76,13 +76,14 @@
   <header>
     <div class="brand">
       <strong>见山 · 朝山</strong>
-      <span>版本对比台 / Version Compare</span>
+      <span>多版本对比台 / V1 · V2 · 3D</span>
     </div>
     <div class="controls">
-      <div class="group" role="group" aria-label="版本模式">
-        <button type="button" data-mode="v2" class="is-on">Demo-V2（最新）</button>
+      <div class="group" role="group" aria-label="版本切换">
+        <button type="button" data-mode="v2" class="is-on">Demo-V2（4K精修）</button>
+        <button type="button" data-mode="3d">Demo-3D（真三维同修）</button>
         <button type="button" data-mode="v1">Demo-V1（基线）</button>
-        <button type="button" data-mode="split">左右分屏对比</button>
+        <button type="button" data-mode="split">V1 / V2 分屏</button>
       </div>
       <div class="group" role="group" aria-label="视口尺寸">
         <button type="button" data-vp="desktop" class="is-on">全宽桌面</button>
@@ -101,24 +102,37 @@
     </section>
     <section class="pane" id="pane-v2">
       <div class="pane-head">
-        <div><b>Demo-V2</b> <small>见山 5 柱顶栏 · 极简山门 · 推门钟声直入朝山世界 · EN/简/繁 · 清净模式</small></div>
+        <div><b>Demo-V2</b> <small>见山 5 柱 · 4K 山门与五殿 · 同修蒲团/千灯海/本殿祈愿簿 · 巡检精修</small></div>
         <a class="open-link" href="./" target="_blank" rel="noopener">独立打开 V2 ↗</a>
       </div>
       <div class="frame-wrap"><iframe id="frame-v2" src="./" title="Demo-V2"></iframe></div>
+    </section>
+    <section class="pane is-hidden" id="pane-3d">
+      <div class="pane-head">
+        <div><b>Demo-3D</b> <small>WebGL2 真三维大雄宝殿 · 8 位可见 3D 同修角色 · 4 组电影机位</small></div>
+        <a class="open-link" href="./3d/" target="_blank" rel="noopener">独立打开 3D ↗</a>
+      </div>
+      <div class="frame-wrap"><iframe id="frame-3d" data-src="./3d/" title="Demo-3D"></iframe></div>
     </section>
   </main>
   <script>
     const stage = document.getElementById("stage");
     const paneV1 = document.getElementById("pane-v1");
     const paneV2 = document.getElementById("pane-v2");
+    const pane3D = document.getElementById("pane-3d");
+    const frame3D = document.getElementById("frame-3d");
     const direct = document.getElementById("direct-link");
 
     function setMode(mode) {
       document.querySelectorAll("[data-mode]").forEach((b) => b.classList.toggle("is-on", b.dataset.mode === mode));
       stage.classList.toggle("is-split", mode === "split");
-      paneV1.classList.toggle("is-hidden", mode === "v2");
-      paneV2.classList.toggle("is-hidden", mode === "v1");
-      direct.href = mode === "v1" ? "./v1/" : "./";
+      paneV1.classList.toggle("is-hidden", mode !== "v1" && mode !== "split");
+      paneV2.classList.toggle("is-hidden", mode !== "v2" && mode !== "split");
+      pane3D.classList.toggle("is-hidden", mode !== "3d");
+      if (mode === "3d" && !frame3D.getAttribute("src")) {
+        frame3D.setAttribute("src", frame3D.dataset.src);
+      }
+      direct.href = mode === "v1" ? "./v1/" : mode === "3d" ? "./3d/" : "./";
     }
 
     function setViewport(vp) {

@@ -14,18 +14,21 @@
 
   /* ===== 1. 静心冥想：地面共修蒲团阵列（同修名字 + 实时倒计时） ===== */
   function enhanceMeditation() {
-    const stage = $("#meditation-stage");
+    const stage = $("#meditation-fullscreen");
     if (!stage || $("#v2-meditation-cushions")) return;
+
+    const headTitle = stage.querySelector(".meditation-head h2");
+    if (headTitle) headTitle.textContent = "静心冥想 · 共修禅堂";
 
     const peers = [
       { name: "清和", sec: 522, x: 14, y: 74 },
       { name: "Maya", sec: 855, x: 26, y: 66 },
-      { name: "静远", sec: 207, x: 37, y: 78 },
-      { name: "林安", sec: 1148, x: 63, y: 78 },
+      { name: "静远", sec: 207, x: 37, y: 80 },
+      { name: "林安", sec: 1148, x: 63, y: 80 },
       { name: "David", sec: 411, x: 74, y: 66 },
       { name: "慧心", sec: 690, x: 86, y: 74 },
-      { name: "云舒", sec: 318, x: 20, y: 86 },
-      { name: "Grace", sec: 964, x: 80, y: 86 },
+      { name: "云舒", sec: 318, x: 20, y: 88 },
+      { name: "Grace", sec: 964, x: 80, y: 88 },
     ];
 
     const wrap = document.createElement("div");
@@ -40,7 +43,7 @@
 
     wrap.innerHTML = `
       <div class="v2-med-peer-bar">
-        <i></i><span>此刻有 <b id="v2-med-peer-count">36</b> 位同修正在殿内一同静坐</span>
+        <i></i><span>此刻有 <b id="v2-med-peer-count">36</b> 位同修正在禅堂一同静坐</span>
       </div>
       <div class="v2-cushion-field">
         ${peers.map((p, idx) => `
@@ -49,13 +52,19 @@
             <div class="v2-cushion-pad"><i></i></div>
           </div>
         `).join("")}
-        <div class="v2-cushion is-self" id="v2-self-cushion" style="left:50%;top:82%">
+        <div class="v2-cushion is-self" id="v2-self-cushion" style="left:50%;top:86%">
           <div class="v2-cushion-tag"><b id="v2-self-cushion-name">你 · 蒲团</b><time id="v2-self-cushion-time">静候入座</time></div>
           <div class="v2-cushion-pad"><i></i></div>
         </div>
       </div>
     `;
     stage.appendChild(wrap);
+
+    // 点击“选择本次冥想”时隐藏介绍层，彻底避免文字重叠
+    $("#btn-meditation-open")?.addEventListener("click", () => {
+      const intro = $("#meditation-intro");
+      if (intro) intro.style.display = "none";
+    });
 
     // 每秒真实跳动同修倒计时 + 同步自己的冥想状态
     setInterval(() => {
@@ -66,12 +75,12 @@
         const el = $(`[data-peer-time="${idx}"]`, wrap);
         if (el) el.textContent = fmt(p.sec);
       });
-      const selfClock = $("#meditation-clock");
+      const selfClock = $("#meditation-countdown");
       const selfPad = $("#v2-self-cushion");
       const selfTime = $("#v2-self-cushion-time");
       const selfName = $("#v2-self-cushion-name");
       if (selfName) selfName.textContent = ($("#hud-name")?.textContent || "清风") + " · 蒲团";
-      const running = stage.classList.contains("is-running");
+      const running = stage.classList.contains("is-meditating");
       if (selfPad) selfPad.classList.toggle("is-active", running);
       if (selfTime && selfClock) selfTime.textContent = running ? selfClock.textContent : "静候入座";
     }, 1000);
@@ -86,22 +95,20 @@
     try { savedLamps = JSON.parse(localStorage.getItem(LAMP_STORE_KEY) || "[]"); } catch (_) { savedLamps = []; }
 
     const seedLamps = [
-      { name: "林", tag: "平安", wish: "愿父母岁岁安康，灯火可亲", x: 12, y: 34 },
-      { name: "陈", tag: "考学", wish: "愿一举登科，心明眼亮", x: 24, y: 24 },
-      { name: "Maya", tag: "Peace", wish: "May all beings find inner calm tonight", x: 37, y: 31 },
-      { name: "苏", tag: "康健", wish: "愿家人病痛远离，喜乐常伴", x: 52, y: 22 },
-      { name: "周", tag: "顺遂", wish: "愿事业踏实有进，所行皆善", x: 67, y: 28 },
-      { name: "Alex", tag: "Clarity", wish: "Grateful for wisdom on the path ahead", x: 80, y: 23 },
-      { name: "吴", tag: "阖家", wish: "愿远方亲友四季平安", x: 89, y: 36 },
-      { name: "郑", tag: "静心", wish: "愿放下焦虑，安住当下", x: 18, y: 52 },
-      { name: "清和", tag: "平安", wish: "愿天下众生离苦得乐", x: 31, y: 48 },
-      { name: "Grace", tag: "Family", wish: "Blessings of warmth for my parents", x: 46, y: 44 },
-      { name: "沈", tag: "事业", wish: "愿脚踏实地，正财安稳", x: 60, y: 49 },
-      { name: "慧安", tag: "安宁", wish: "愿夜深好眠，心无挂碍", x: 74, y: 45 },
-      { name: "David", tag: "Hope", wish: "Lighting a lamp for courage and peace", x: 86, y: 55 },
-      { name: "陆", tag: "学业", wish: "愿孩子静心向学，稳步前行", x: 26, y: 68 },
-      { name: "明心", tag: "慈悲", wish: "愿以微光温暖身边每一个人", x: 50, y: 65 },
-      { name: "云舒", tag: "康泰", wish: "愿长辈福寿绵长", x: 72, y: 67 },
+      { name: "林", tag: "平安", wish: "愿父母岁岁安康，灯火可亲", x: 14, y: 24 },
+      { name: "陈", tag: "考学", wish: "愿一举登科，心明眼亮", x: 30, y: 20 },
+      { name: "Maya", tag: "Peace", wish: "May all beings find inner calm tonight", x: 48, y: 22 },
+      { name: "苏", tag: "康健", wish: "愿家人病痛远离，喜乐常伴", x: 66, y: 20 },
+      { name: "Alex", tag: "Clarity", wish: "Grateful for wisdom on the path ahead", x: 82, y: 25 },
+      { name: "周", tag: "顺遂", wish: "愿事业踏实有进，所行皆善", x: 18, y: 46 },
+      { name: "清和", tag: "平安", wish: "愿天下众生离苦得乐", x: 35, y: 44 },
+      { name: "Grace", tag: "Family", wish: "Blessings of warmth for my parents", x: 64, y: 44 },
+      { name: "慧安", tag: "安宁", wish: "愿夜深好眠，心无挂碍", x: 80, y: 47 },
+      { name: "郑", tag: "静心", wish: "愿放下焦虑，安住当下", x: 16, y: 70 },
+      { name: "陆", tag: "学业", wish: "愿孩子静心向学，稳步前行", x: 34, y: 72 },
+      { name: "明心", tag: "慈悲", wish: "愿以微光温暖身边每一个人", x: 52, y: 74 },
+      { name: "David", tag: "Hope", wish: "Lighting a lamp for courage and peace", x: 70, y: 72 },
+      { name: "云舒", tag: "康泰", wish: "愿长辈福寿绵长", x: 84, y: 69 },
     ];
 
     const guidanceLibrary = [
@@ -231,8 +238,8 @@
         ...savedLamps.map((l, i) => ({
           ...l,
           isSelf: true,
-          x: 42 + ((i * 11) % 20),
-          y: 34 + ((i * 9) % 24),
+          x: 50 + ((i % 3) - 1) * 14,
+          y: 52 + (Math.floor(i / 3) % 2) * 10,
         })),
       ];
       sea.innerHTML = allLamps.map((l, idx) => `

@@ -119,7 +119,7 @@
 
     <div class="overlay world-overlay sanctuary-overlay" id="overlay-world-culture" role="dialog" aria-modal="true" aria-label="朝山佛学文化网">
       <div class="culture-site">
-        <header class="culture-site-head"><button type="button" class="culture-brand" data-culture-page="about"><i>朝</i><span>朝山文化<small>CHAOSHAN CULTURE</small></span></button><nav aria-label="文化网站栏目"><button type="button" class="is-on" data-culture-page="about">关于</button><button type="button" data-culture-page="learn">佛学学习</button><button type="button" data-culture-page="objects">纪念品</button><button type="button" data-culture-page="books">佛书</button><button type="button" data-culture-page="events">活动</button></nav><button type="button" class="culture-exit" data-world-close>返回世界</button></header>
+        <header class="culture-site-head"><button type="button" class="culture-brand" data-culture-page="about"><i>见</i><span>见山 · 朝山<small>JIANSHAN · CHAOSHAN</small></span></button><nav aria-label="文化网站栏目"><button type="button" class="is-on" data-culture-page="about">关于</button><button type="button" data-culture-page="learn">佛学学习</button><button type="button" data-culture-page="objects">请佛物</button><button type="button" data-culture-page="books">佛书</button><button type="button" data-culture-page="events">最新活动</button></nav><button type="button" class="culture-exit" data-world-close>返回朝山</button></header>
         <main id="culture-main"></main>
         <footer class="culture-footer"><span>朝山文化 · 虚拟佛教文化体验</span><span>非实体寺院官网 · 无宗教功效承诺 · 个人资料仅存本机</span></footer>
       </div>

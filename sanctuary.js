@@ -252,6 +252,7 @@
   function renderBackmountain() {
     const back = state.backmountain;
     const scene = $("#backmountain-scene");
+    if (!scene) return;
     scene.classList.toggle("is-lit", back.lights > 0);
     $("#backmountain-light-count").textContent = `本机已点亮 ${back.lights} 次`;
     $("#backmountain-scene-status").textContent = back.lights ? "心灯已亮 · 愿光明也在日常善行中" : "等你点亮第一盏心灯";

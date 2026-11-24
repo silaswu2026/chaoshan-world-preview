@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0b1215" />
+  <title>见山 · 朝山 3D ｜ 大雄宝殿三维共修圣境</title>
+  <link rel="stylesheet" href="./scene3d.css?v=20261125-3d-1" />
+</head>
+<body>
+  <div id="scene3d-wrap">
+    <canvas id="scene3d-canvas"></canvas>
+    <div id="peer-labels" class="peer-labels" aria-live="polite"></div>
+
+    <!-- 入场金色云雾 Loading -->
+    <div class="s3d-loader" id="s3d-loader">
+      <div class="s3d-lotus-ring"><i></i><b></b></div>
+      <small>JIANSHAN · CHAOSHAN 3D</small>
+      <p id="s3d-loader-quote">步步登高，是为放下；一念朝山，即是见佛。</p>
+      <span>正在构筑三维大雄宝殿圣境…</span>
+    </div>
+
+    <!-- 顶部栏（统一 V1 暗青玉细金美学） -->
+    <header class="s3d-topbar">
+      <div class="s3d-brand">
+        <strong>见山 · 朝山 3D</strong>
+        <small>大雄宝殿 · 真三维共修空间</small>
+      </div>
+      <div class="s3d-top-actions">
+        <span class="s3d-online-badge" id="s3d-online-badge"><i></i><b id="s3d-peer-num">8</b> 位 3D 同修正在殿内</span>
+        <button type="button" class="s3d-chip" id="btn-toggle-peers">隐藏同修</button>
+        <button type="button" class="s3d-chip" id="btn-s3d-audio">清音 · 关</button>
+        <button type="button" class="s3d-chip" id="btn-s3d-lang">EN</button>
+      </div>
+    </header>
+
+    <!-- 左侧电影机位切换 -->
+    <aside class="s3d-cameras" aria-label="三维视角">
+      <button type="button" class="is-on" data-cam="overview">全景漫游</button>
+      <button type="button" data-cam="buddha">瞻仰主尊</button>
+      <button type="button" data-cam="censer">香炉敬香</button>
+      <button type="button" data-cam="cushion">蒲团静坐</button>
+    </aside>
+
+    <!-- 第一人称礼拜双手浮层 -->
+    <div class="s3d-bow-overlay" id="s3d-bow-overlay" aria-hidden="true">
+      <img src="./assets/hands-jade.webp?v=20261124-7" alt="" />
+      <span>一心顶礼 · 愿心无散乱</span>
+    </div>
+
+    <!-- 底部交互栏 -->
+    <footer class="s3d-bottom">
+      <p class="s3d-hint" id="s3d-hint">单指拖动环绕 · 双指缩放 · 点击殿内 3D 同修可随喜共愿</p>
+      <div class="s3d-actions">
+        <button type="button" class="s3d-btn is-gold" id="btn-3d-incense"><b>香</b><span>敬香入炉</span></button>
+        <button type="button" class="s3d-btn" id="btn-3d-bow"><b>礼</b><span>第一人称礼拜</span></button>
+        <button type="button" class="s3d-btn" id="btn-3d-lamp"><b>灯</b><span>殿前供灯</span></button>
+        <button type="button" class="s3d-btn" id="btn-3d-wish"><b>愿</b><span>发愿飘屏</span></button>
+      </div>
+    </footer>
+
+    <!-- 发愿弹窗 -->
+    <div class="s3d-modal" id="s3d-wish-modal" role="dialog" aria-modal="true" aria-label="殿前发愿">
+      <div class="s3d-sheet">
+        <h3>在三维大雄宝殿写下心愿</h3>
+        <p>愿文将化作你的莲灯标签呈现在大殿空间中（仅保存在本机）。</p>
+        <input id="s3d-wish-name" type="text" maxlength="8" placeholder="你的香客名（如：清风）" value="清风" />
+        <input id="s3d-wish-text" type="text" maxlength="36" placeholder="写下一句清净心愿…" />
+        <div class="s3d-sheet-actions">
+          <button type="button" class="s3d-btn is-gold" id="btn-3d-wish-submit">发愿并点亮莲灯</button>
+          <button type="button" class="s3d-chip" id="btn-3d-wish-close">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="s3d-toast" id="s3d-toast" role="status"></div>
+  </div>
+
+  <audio id="s3d-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="./scene3d.js?v=20261125-3d-1"></script>
+</body>
+</html>
