@@ -1345,3 +1345,535 @@ html[lang="en"] .v2-pm-copy p {
     radial-gradient(ellipse 76% 68% at 50% 42%, transparent 48%, rgba(5, 10, 12, 0.56) 100%),
     linear-gradient(180deg, rgba(5, 10, 12, 0.38) 0%, transparent 22%, transparent 64%, rgba(5, 10, 12, 0.68) 100%) !important;
 }
+
+
+/* ===== 12. 全站回归 V1 暗青玉细金统一风格 + 五殿主尊立体感 + 四大净境 4K 沉浸重做 ===== */
+/* A. 统一过场雾气回 V1 暗青玉晨岚（与全站深色视觉完全一致，不刺眼跳白） */
+.v2-photo-mist .v2-pm-backdrop {
+  background: radial-gradient(
+    ellipse 82% 72% at 50% 45%,
+    rgba(24, 38, 42, 0.90) 0%,
+    rgba(13, 21, 24, 0.95) 56%,
+    rgba(8, 13, 15, 0.98) 100%
+  ) !important;
+  backdrop-filter: blur(12px);
+}
+.v2-photo-mist .v2-pm-layer {
+  mix-blend-mode: screen !important;
+  filter: blur(14px) brightness(0.92) contrast(0.95) !important;
+  opacity: 0.42 !important;
+}
+.v2-photo-mist .v2-pm-glow {
+  background: radial-gradient(circle, rgba(242, 206, 132, 0.24) 0%, rgba(196, 152, 72, 0.08) 46%, transparent 74%) !important;
+}
+.v2-photo-mist .v2-pm-copy small {
+  color: #e4c37b !important;
+}
+.v2-photo-mist .v2-pm-copy p {
+  color: #f6ebd4 !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.72) !important;
+}
+.v2-photo-mist .v2-wm-loader {
+  background: rgba(228, 195, 123, 0.22) !important;
+}
+.v2-photo-mist .v2-wm-loader i {
+  background: linear-gradient(90deg, transparent, #f3d285, transparent) !important;
+}
+
+/* B. 五座大殿：4K 主尊立体突出聚焦（柔和中轴高光 + 四周暗角纵深） */
+#temple-scene .temple-art {
+  filter: contrast(1.07) saturate(1.05) brightness(1.02) !important;
+}
+#temple-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 38% 48% at 50% 40%,
+    rgba(255, 236, 184, 0.14) 0%,
+    rgba(232, 192, 108, 0.04) 48%,
+    transparent 76%
+  );
+  mix-blend-mode: screen;
+}
+#temple-scene .ritual-actions {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+}
+
+/* C. 静心冥想：高清晰背景 + 地面共修蒲团阵列（同修名字 + 实时倒计时） */
+#overlay-world-meditation .meditation-backdrop {
+  filter: contrast(1.06) brightness(1.04) saturate(1.04);
+}
+.v2-meditation-cushions {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.v2-med-peer-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.72);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  color: #efe2c4;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+.v2-med-peer-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+}
+.v2-cushion-field {
+  position: absolute;
+  inset: 0;
+}
+.v2-cushion {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.v2-cushion-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.74);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  font-size: 10px;
+  color: #efe2c4;
+  white-space: nowrap;
+}
+.v2-cushion-tag b {
+  color: #f6d58b;
+  font-weight: 500;
+}
+.v2-cushion-tag time {
+  font-variant-numeric: tabular-nums;
+  color: rgba(242, 232, 206, 0.8);
+}
+.v2-cushion-pad {
+  width: 44px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 42%, rgba(212, 168, 86, 0.42), rgba(74, 54, 28, 0.84) 72%, rgba(20, 26, 28, 0.92));
+  border: 1px solid rgba(235, 200, 126, 0.48);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.52), 0 0 14px rgba(236, 192, 98, 0.22);
+  position: relative;
+}
+.v2-cushion-pad i {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 8px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c6, rgba(240, 190, 92, 0.3) 65%, transparent);
+  animation: v2-lantern-flicker 3.2s ease-in-out infinite alternate;
+}
+.v2-cushion.is-self .v2-cushion-pad {
+  width: 64px;
+  height: 22px;
+  border-color: rgba(248, 218, 146, 0.85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 24px rgba(246, 206, 114, 0.45);
+}
+.v2-cushion.is-self.is-active .v2-cushion-pad {
+  animation: v2-cta-breathe 2.6s ease-in-out infinite alternate;
+}
+
+/* D. 后山（心灯祈福海 + 高僧解惑）：统一 V1 4K 沉浸范式 */
+#overlay-world-backmountain .backmountain-sheet {
+  padding: 0 !important;
+  overflow: hidden;
+  background: #0d1518 !important;
+}
+.v2-sanctuary-hero {
+  position: relative;
+  min-height: min(84vh, 760px);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px 22px;
+  color: #f3e8d2;
+  overflow-y: auto;
+}
+.v2-sh-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.v2-bm-bg {
+  background-image: url("./assets/backmountain-4k.jpg?v=20261125-v2-13");
+}
+.v2-sh-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(9, 15, 17, 0.84) 0%, rgba(9, 15, 17, 0.46) 38%, rgba(9, 15, 17, 0.88) 100%);
+}
+.v2-sh-top,
+.v2-bm-panel {
+  position: relative;
+  z-index: 2;
+}
+.v2-sh-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.v2-sh-top small {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #d7b874;
+}
+.v2-sh-top h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 500;
+  margin: 4px 0;
+  color: #fbf2de;
+}
+.v2-sh-top p {
+  font-size: 13px;
+  color: rgba(242, 232, 210, 0.78);
+}
+.v2-sh-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.v2-bm-tabs {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.72);
+  border: 1px solid rgba(228, 194, 122, 0.32);
+}
+.v2-bm-tabs button {
+  border: 0;
+  background: transparent;
+  color: rgba(242, 232, 210, 0.76);
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.v2-bm-tabs button.is-on {
+  background: linear-gradient(135deg, #b88c42, #d8b56b);
+  color: #151008;
+  font-weight: 600;
+}
+
+.v2-bm-panel {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+.v2-bm-panel.is-on {
+  display: flex;
+}
+
+.v2-lamp-presence {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(11, 18, 20, 0.68);
+  border: 1px solid rgba(228, 194, 122, 0.24);
+  font-size: 12px;
+  color: #e8dcc0;
+}
+.v2-lamp-presence i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+}
+.v2-inline-switch {
+  margin-left: auto;
+  border: 1px solid rgba(235, 200, 126, 0.42);
+  background: rgba(212, 172, 92, 0.16);
+  color: #f8dfa2;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* 千灯祈福海 */
+.v2-lamp-sea {
+  position: relative;
+  min-height: 290px;
+  flex: 1;
+  border-radius: 16px;
+  border: 1px solid rgba(228, 194, 122, 0.22);
+  background: radial-gradient(ellipse at 50% 62%, rgba(242, 190, 86, 0.14), rgba(8, 14, 16, 0.56) 76%);
+  overflow: hidden;
+}
+.v2-sea-lamp {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  animation: v2-lamp-float 4.8s ease-in-out infinite alternate;
+}
+@keyframes v2-lamp-float {
+  0% { transform: translate(-50%, -50%) translateY(0px); }
+  100% { transform: translate(-50%, -50%) translateY(-5px); }
+}
+.v2-lamp-flame {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(255, 228, 148, 0.72), rgba(235, 162, 54, 0.24) 55%, transparent 74%);
+  box-shadow: 0 0 18px rgba(246, 194, 82, 0.55);
+}
+.v2-lamp-flame i {
+  width: 7px;
+  height: 11px;
+  border-radius: 50% 50% 45% 45%;
+  background: linear-gradient(180deg, #fffbe2, #f8be56);
+  box-shadow: 0 0 8px #ffd478;
+}
+.v2-lamp-label {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(9, 15, 17, 0.78);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  color: rgba(244, 234, 210, 0.9);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.v2-lamp-label b {
+  color: #f6d58b;
+  font-weight: 500;
+}
+.v2-sea-lamp.is-self .v2-lamp-flame {
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 0 26px rgba(255, 218, 118, 0.9);
+}
+.v2-sea-lamp.is-self .v2-lamp-label {
+  border-color: rgba(250, 220, 142, 0.78);
+  background: rgba(54, 38, 14, 0.88);
+  color: #fff6de;
+}
+
+.v2-lamp-inspect {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(12, 20, 22, 0.78);
+  border: 1px solid rgba(228, 194, 122, 0.24);
+  font-size: 13px;
+  color: #efe2c4;
+}
+.v2-lamp-inspect strong {
+  color: #f5d284;
+}
+.v2-lamp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(11, 18, 20, 0.82);
+  border: 1px solid rgba(228, 194, 122, 0.26);
+}
+.v2-lamp-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.v2-lamp-cats button,
+.v2-master-topics button {
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  background: rgba(255, 245, 224, 0.05);
+  color: #e6d9ba;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.v2-lamp-cats button.is-on,
+.v2-master-topics button.is-on {
+  background: rgba(214, 174, 92, 0.26);
+  border-color: #ebc97c;
+  color: #fff6df;
+}
+.v2-lamp-input-row,
+.v2-master-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.v2-lamp-input-row input,
+.v2-master-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  background: rgba(7, 12, 14, 0.74);
+  color: #f6ebd4;
+  font-size: 13px;
+}
+.v2-gold-btn {
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(248, 218, 148, 0.72) !important;
+  background: linear-gradient(135deg, #c89f4e, #9f7530) !important;
+  color: #161006 !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 高僧解惑面板 */
+.v2-master-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 14px;
+  flex: 1;
+}
+.v2-master-card,
+.v2-master-reply {
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(11, 18, 20, 0.8);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.v2-master-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(242, 208, 134, 0.62);
+  background: radial-gradient(circle, rgba(220, 178, 92, 0.28), rgba(14, 22, 24, 0.9));
+  font-family: var(--font-display);
+  color: #f6d58b;
+  letter-spacing: 0.1em;
+}
+.v2-master-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: #fbf2de;
+}
+.v2-master-intro {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(242, 232, 210, 0.84);
+}
+.v2-master-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.v2-master-note {
+  font-size: 11px;
+  color: rgba(226, 214, 188, 0.62);
+}
+.v2-master-reply small {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #d8b874;
+}
+.v2-master-reply blockquote {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 2px solid #d8b56b;
+  background: rgba(216, 181, 107, 0.08);
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: #fae6b6;
+  line-height: 1.7;
+}
+.v2-master-reply p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: #efe4cc;
+}
+.v2-mr-practice {
+  margin-top: auto;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(228, 194, 122, 0.12);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  font-size: 13px;
+  color: #f8e5b8;
+  line-height: 1.65;
+}
+
+/* E. 西方极乐 · 归莲净土：4K 莲境背景统一 */
+#overlay-world-pureland .pureland-sheet {
+  background:
+    linear-gradient(180deg, rgba(10, 17, 19, 0.84) 0%, rgba(10, 17, 19, 0.72) 50%, rgba(10, 17, 19, 0.92) 100%),
+    url("./assets/pureland-4k.jpg?v=20261125-v2-13") center / cover no-repeat !important;
+}
+#overlay-world-pureland .sanctuary-primary {
+  background: linear-gradient(135deg, #c89f4e, #9f7530) !important;
+  color: #161006 !important;
+  border: 1px solid rgba(248, 218, 148, 0.72) !important;
+  font-weight: 600 !important;
+}
+
+/* 清净模式同步隐藏净境中的他人共修动态 */
+body.quiet-mode .v2-cushion.is-peer,
+body.quiet-mode .v2-med-peer-bar,
+body.quiet-mode .v2-lamp-presence {
+  display: none !important;
+}
+
+@media (max-width: 780px) {
+  .v2-master-layout {
+    grid-template-columns: 1fr;
+  }
+  .v2-cushion-tag {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .v2-lamp-sea {
+    min-height: 240px;
+  }
+  #temple-scene .ritual-actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
