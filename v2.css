@@ -1058,3 +1058,171 @@ html[lang="en"] .v2-webgl-mist-copy p {
   0% { transform: translateX(-110%); }
   100% { transform: translateX(260%); }
 }
+
+
+/* ===== 9. 真实摄影黑底云雾素材合成（彻底取代椭圆色块与数学噪波） ===== */
+/* 隐藏旧版 CSS 椭圆云块 */
+#screen-landing .cloud-sea {
+  display: none !important;
+}
+
+/* 首页常驻的真实摄影飘渺山岚（screen 滤色 + 柔边羽化遮罩） */
+#screen-landing .v2-velvet-mist {
+  left: -18% !important;
+  width: 136% !important;
+  height: 58% !important;
+  bottom: -10% !important;
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-9") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  mix-blend-mode: screen;
+  filter: contrast(1.06) brightness(0.88) !important;
+  -webkit-mask-image: radial-gradient(ellipse 68% 62% at 50% 56%, #000 32%, transparent 90%);
+  mask-image: radial-gradient(ellipse 68% 62% at 50% 56%, #000 32%, transparent 90%);
+  opacity: 0.42 !important;
+}
+#screen-landing .v2-mist-b {
+  bottom: 8% !important;
+  height: 52% !important;
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-9") !important;
+  opacity: 0.24 !important;
+  transform: scaleX(-1);
+}
+#screen-landing .v2-mist-c {
+  bottom: 22% !important;
+  height: 46% !important;
+  opacity: 0.22 !important;
+}
+
+/* 全屏写实摄影云雾淡进 / 淡出过场（Persepolis 风格） */
+.v2-photo-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 0.95s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.95s;
+}
+.v2-photo-mist.is-quick {
+  transition: opacity 0.48s ease, visibility 0s linear 0.48s;
+}
+.v2-photo-mist.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.v2-photo-mist.is-in {
+  opacity: 1;
+}
+.v2-photo-mist.is-out {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.15s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 1.15s;
+}
+.v2-photo-mist.is-quick.is-out {
+  transition: opacity 0.58s ease, visibility 0s linear 0.58s;
+}
+
+.v2-pm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 48%, rgba(22, 34, 38, 0.92) 0%, rgba(9, 15, 17, 0.98) 100%);
+}
+
+.v2-pm-layer {
+  position: absolute;
+  inset: -16%;
+  background-size: cover;
+  background-position: center center;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse 72% 68% at 50% 50%, #000 44%, transparent 94%);
+  mask-image: radial-gradient(ellipse 72% 68% at 50% 50%, #000 44%, transparent 94%);
+  will-change: transform, opacity;
+  transition: transform 2.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.1s ease;
+}
+
+.v2-pm-far {
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-9");
+  opacity: 0.72;
+  transform: scale(1.04) translateX(-3%);
+}
+.v2-pm-mid-left {
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-9");
+  opacity: 0.65;
+  transform: scale(1.12) translate(-8%, 4%);
+}
+.v2-pm-mid-right {
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-9");
+  opacity: 0.58;
+  transform: scaleX(-1.14) scaleY(1.14) translate(-8%, -4%);
+}
+.v2-pm-front {
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-9");
+  opacity: 0.48;
+  transform: scale(1.25) translate(6%, 8%);
+}
+
+/* 淡进漂移 */
+.v2-photo-mist.is-in .v2-pm-far { transform: scale(1.14) translateX(2%); }
+.v2-photo-mist.is-in .v2-pm-mid-left { transform: scale(1.22) translate(2%, -2%); }
+.v2-photo-mist.is-in .v2-pm-mid-right { transform: scaleX(-1.24) scaleY(1.24) translate(2%, 2%); }
+.v2-photo-mist.is-in .v2-pm-front { transform: scale(1.36) translate(-4%, -2%); }
+
+/* 拨云淡出：左右与前景云团向外推散，镜头穿云而出 */
+.v2-photo-mist.is-out .v2-pm-far { transform: scale(1.34); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-mid-left { transform: scale(1.42) translateX(-18%); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-mid-right { transform: scaleX(-1.42) scaleY(1.42) translateX(-18%); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-front { transform: scale(1.58) translateY(-10%); opacity: 0; }
+
+.v2-pm-glow {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(56vw, 480px);
+  height: min(56vw, 480px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 226, 152, 0.28) 0%, rgba(224, 174, 78, 0.08) 46%, transparent 72%);
+  mix-blend-mode: screen;
+}
+
+.v2-pm-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.v2-photo-mist.is-copy-show .v2-pm-copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+.v2-pm-copy small {
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  color: rgba(246, 222, 162, 0.92);
+  margin-bottom: 14px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
+}
+.v2-pm-copy p {
+  max-width: min(560px, 86vw);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.8vw, 26px);
+  line-height: 1.75;
+  letter-spacing: 0.14em;
+  color: #fff6e2;
+  text-shadow: 0 4px 26px rgba(0, 0, 0, 0.72);
+}
+html[lang="en"] .v2-pm-copy p {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}

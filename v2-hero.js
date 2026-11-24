@@ -325,32 +325,7 @@
 
     ctx.clearRect(0, 0, width, height);
 
-    // 1. 极飘渺流动水墨云絮
-    for (let i = 0; i < mistPuffs.length; i++) {
-      const m = mistPuffs[i];
-      m.x += m.vx;
-      m.phase += 0.004;
-      const yFloat = m.y + Math.sin(m.phase) * 10;
-      if (m.x < -m.rx * 2 || m.x > width + m.rx * 2) {
-        mistPuffs[i] = createMistPuff(false);
-        continue;
-      }
-      ctx.save();
-      ctx.translate(m.x + curX * 18, yFloat + curY * 10);
-      ctx.scale(1, m.ry / m.rx);
-      const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, m.rx);
-      const rgb = m.warm ? "246, 234, 206" : "212, 232, 232";
-      grad.addColorStop(0, `rgba(${rgb}, ${m.alpha})`);
-      grad.addColorStop(0.5, `rgba(${rgb}, ${m.alpha * 0.42})`);
-      grad.addColorStop(1, `rgba(${rgb}, 0)`);
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(0, 0, m.rx, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    // 2. 三层金光粒子
+    // 1. 三层金光粒子（云海已全面交由真实摄影云雾素材层渲染）
     const gateX = width * 0.5;
     const gateY = height * 0.43;
 
