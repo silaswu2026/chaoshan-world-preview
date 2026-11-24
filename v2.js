@@ -216,8 +216,8 @@
     }
     const isPortraitMobile = window.innerWidth <= 700 && window.innerHeight > window.innerWidth;
     const panoramaUrl = isPortraitMobile
-      ? "./assets/world-panorama-4k-mobile.jpg?v=20261125-v2-8"
-      : "./assets/world-panorama-4k.jpg?v=20261125-v2-8";
+      ? "./assets/world-realm-4k-mobile.jpg?v=20261125-v2-14"
+      : "./assets/world-realm-4k.jpg?v=20261125-v2-14";
     const enterMapDirect = () => {
       $$(".overlay").forEach((o) => o.classList.remove("is-open"));
       $$(".screen").forEach((s) => s.classList.toggle("is-active", s.dataset.screen === "map"));
