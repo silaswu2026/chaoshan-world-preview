@@ -67,32 +67,6 @@
     <div class="v2-velvet-mist v2-mist-b"></div>
     <div class="v2-velvet-mist v2-mist-c"></div>
     <canvas class="v2-hero-canvas" id="v2-hero-canvas"></canvas>
-    <div class="v2-pine-layer v2-pine-left">
-      <svg viewBox="0 0 360 640" preserveAspectRatio="xMinYMid slice" fill="none">
-        <path d="M-20 640 C12 520 26 420 18 300 C12 200 30 120 6 0 L-20 0 Z" fill="#060c0e"/>
-        <path d="M10 110 C75 108 135 128 195 154 C145 148 92 140 24 148 Z" fill="#070e11"/>
-        <path d="M6 210 C96 200 188 225 256 262 C182 252 104 244 20 250 Z" fill="#060d10"/>
-        <path d="M12 340 C78 332 146 355 204 388 C142 380 82 372 18 380 Z" fill="#050b0d"/>
-        <ellipse cx="145" cy="136" rx="74" ry="20" fill="#091317" opacity="0.92"/>
-        <ellipse cx="204" cy="240" rx="88" ry="24" fill="#081216" opacity="0.9"/>
-        <ellipse cx="110" cy="215" rx="76" ry="22" fill="#0a161b" opacity="0.86"/>
-        <ellipse cx="152" cy="366" rx="78" ry="22" fill="#071014" opacity="0.9"/>
-        <ellipse cx="76" cy="462" rx="64" ry="20" fill="#060e11" opacity="0.88"/>
-      </svg>
-    </div>
-    <div class="v2-pine-layer v2-pine-right">
-      <svg viewBox="0 0 360 640" preserveAspectRatio="xMaxYMid slice" fill="none">
-        <path d="M380 640 C348 520 334 420 342 300 C348 200 330 120 354 0 L380 0 Z" fill="#060c0e"/>
-        <path d="M350 116 C282 112 222 132 162 158 C212 152 266 144 336 152 Z" fill="#070e11"/>
-        <path d="M354 218 C262 208 172 232 102 270 C176 260 256 250 340 256 Z" fill="#060d10"/>
-        <path d="M348 346 C280 338 214 360 154 394 C218 386 278 378 342 386 Z" fill="#050b0d"/>
-        <ellipse cx="215" cy="142" rx="76" ry="21" fill="#091317" opacity="0.92"/>
-        <ellipse cx="156" cy="246" rx="90" ry="25" fill="#081216" opacity="0.9"/>
-        <ellipse cx="250" cy="222" rx="76" ry="22" fill="#0a161b" opacity="0.86"/>
-        <ellipse cx="208" cy="372" rx="80" ry="22" fill="#071014" opacity="0.9"/>
-        <ellipse cx="284" cy="468" rx="64" ry="20" fill="#060e11" opacity="0.88"/>
-      </svg>
-    </div>
     <div class="v2-foreground-vignette"></div>
   `;
   atmosphere.appendChild(fxLayer);
