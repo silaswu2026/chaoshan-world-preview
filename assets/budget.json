@@ -1,0 +1,128 @@
+[
+  {
+    "name": "bg-realm",
+    "origin": "2048x2048",
+    "master4K": "3840x3609",
+    "web1x": "1100px",
+    "web1xKB": 88,
+    "web2xKB": 155,
+    "masterKB": 12637
+  },
+  {
+    "name": "bg-realm-vertical",
+    "origin": "1024x1536",
+    "master4K": "3840x5411",
+    "web1x": "900px",
+    "web1xKB": 185,
+    "web2xKB": 188,
+    "masterKB": 17324
+  },
+  {
+    "name": "avatar-shao",
+    "origin": "1024x1024",
+    "master4K": "3840x3608",
+    "web1x": "560px",
+    "web1xKB": 17,
+    "web2xKB": 41,
+    "masterKB": 5762
+  },
+  {
+    "name": "avatar-qing",
+    "origin": "1024x1024",
+    "master4K": "3840x3608",
+    "web1x": "560px",
+    "web1xKB": 22,
+    "web2xKB": 56,
+    "masterKB": 7064
+  },
+  {
+    "name": "avatar-zhong",
+    "origin": "1024x1024",
+    "master4K": "3840x3608",
+    "web1x": "560px",
+    "web1xKB": 17,
+    "web2xKB": 41,
+    "masterKB": 6123
+  },
+  {
+    "name": "avatar-lao",
+    "origin": "1024x1024",
+    "master4K": "3840x3608",
+    "web1x": "560px",
+    "web1xKB": 21,
+    "web2xKB": 50,
+    "masterKB": 7218
+  },
+  {
+    "name": "scene-gate",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 144,
+    "web2xKB": 159,
+    "masterKB": 10211
+  },
+  {
+    "name": "scene-path",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 152,
+    "web2xKB": 169,
+    "masterKB": 10184
+  },
+  {
+    "name": "scene-hall",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 120,
+    "web2xKB": 132,
+    "masterKB": 9026
+  },
+  {
+    "name": "scene-map",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 168,
+    "web2xKB": 192,
+    "masterKB": 10722
+  },
+  {
+    "name": "scene-putuo",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 135,
+    "web2xKB": 149,
+    "masterKB": 9999
+  },
+  {
+    "name": "scene-wutai",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 127,
+    "web2xKB": 141,
+    "masterKB": 9347
+  },
+  {
+    "name": "scene-emei",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 113,
+    "web2xKB": 122,
+    "masterKB": 9233
+  },
+  {
+    "name": "scene-jiuhua",
+    "origin": "1536x1024",
+    "master4K": "3840x2405",
+    "web1x": "1280px",
+    "web1xKB": 129,
+    "web2xKB": 140,
+    "masterKB": 9251
+  }
+]
