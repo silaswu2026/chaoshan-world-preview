@@ -2404,3 +2404,89 @@ body.quiet-mode .v2-lamp-presence {
     font-size: 11px;
   }
 }
+
+
+/* ===== 16. 礼（拜佛）与香（敬香）动画电影级精修 ===== */
+/* 1) 礼（拜佛）：移除扁平矢量跪拜小人，升级为第一人称玉白合十双手 + 3D 俯首莲光曼陀罗 */
+.bow-scene .bow-person {
+  display: none !important;
+}
+.bow-scene {
+  perspective: 900px;
+}
+.bow-scene .bow-mandala {
+  width: 220px !important;
+  height: 220px !important;
+  border: 1px solid rgba(246, 214, 136, 0.42) !important;
+  background: radial-gradient(circle, rgba(255, 232, 166, 0.24) 0%, rgba(226, 178, 82, 0.08) 48%, transparent 74%) !important;
+  box-shadow: 0 0 46px rgba(244, 198, 96, 0.26), inset 0 0 32px rgba(255, 228, 152, 0.16) !important;
+  animation: v2-bow-mandala-breathe 3.4s cubic-bezier(0.32, 0.72, 0, 1) both !important;
+}
+.bow-scene .bow-hands-real {
+  width: min(230px, 56vw) !important;
+  opacity: 0.92 !important;
+  filter: drop-shadow(0 0 24px rgba(248, 218, 142, 0.45)) drop-shadow(0 12px 26px rgba(0, 0, 0, 0.45)) !important;
+  transform-origin: center 80%;
+  animation: v2-bow-hands-grace 3.4s cubic-bezier(0.38, 0.08, 0.22, 1) both !important;
+}
+@keyframes v2-bow-mandala-breathe {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.72) rotate(0deg); }
+  32%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.06) rotate(22deg); }
+  66%  { opacity: 1; transform: translate(-50%, -50%) scale(1.16) rotate(45deg); }
+  100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1.02) rotate(60deg); }
+}
+@keyframes v2-bow-hands-grace {
+  0%   { opacity: 0; transform: translate(-50%, 26px) scale(0.92) rotateX(0deg); }
+  22%  { opacity: 0.94; transform: translate(-50%, -10px) scale(1.02) rotateX(4deg); }
+  56%  { opacity: 0.98; transform: translate(-50%, 34px) scale(1.12) rotateX(28deg); }
+  84%  { opacity: 0.92; transform: translate(-50%, 2px) scale(1.0) rotateX(4deg); }
+  100% { opacity: 0.84; transform: translate(-50%, 0px) scale(0.98) rotateX(0deg); }
+}
+
+/* 2) 香（敬香）：立体古铜香炉 + 真实烛火摇曳 + 炭头明火点燃 + 丝缕袅袅青烟 */
+.incense-scene .incense-censer {
+  background: linear-gradient(180deg, #5e472a 0%, #3b2a17 34%, #22170c 72%, #150e07 100%) !important;
+  border: 1px solid rgba(236, 198, 120, 0.48) !important;
+  box-shadow:
+    inset 0 6px 14px rgba(255, 218, 134, 0.28),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.72),
+    0 14px 34px rgba(0, 0, 0, 0.65),
+    0 0 28px rgba(240, 186, 78, 0.16) !important;
+}
+.incense-scene .incense-candle {
+  background: linear-gradient(90deg, #5a1814, #9b2d24 42%, #762019 78%, #47120e) !important;
+  border: 1px solid rgba(242, 194, 118, 0.28) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55) !important;
+}
+.incense-scene .incense-flame {
+  background: radial-gradient(ellipse at 50% 68%, #fffef0 0%, #ffe082 36%, #f59a28 74%, rgba(235, 118, 22, 0) 100%) !important;
+  box-shadow: 0 0 18px #ffd470, 0 0 42px rgba(246, 168, 56, 0.72) !important;
+  animation: v2-lantern-flicker 1.2s ease-in-out infinite alternate !important;
+}
+.incense-scene .incense-bundle i {
+  background: linear-gradient(180deg, #7d5c32, #4d351a) !important;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+}
+.incense-scene .incense-bundle i::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff2c2 0%, #ff6b2b 58%, rgba(255, 82, 24, 0) 100%);
+  box-shadow: 0 0 10px #ff7b32, 0 0 18px rgba(255, 146, 62, 0.8);
+  animation: v2-ember-ignite 3.1s ease-in-out both;
+}
+@keyframes v2-ember-ignite {
+  0%, 24% { opacity: 0; transform: translateX(-50%) scale(0.4); }
+  36%     { opacity: 1; transform: translateX(-50%) scale(1.35); }
+  55%     { opacity: 0.92; transform: translateX(-50%) scale(1.0); }
+  100%    { opacity: 1; transform: translateX(-50%) scale(1.12); }
+}
+.incense-scene .incense-smoke-3d i {
+  background: radial-gradient(ellipse at 50% 50%, rgba(242, 236, 222, 0.56) 0%, rgba(214, 222, 220, 0.24) 48%, transparent 78%) !important;
+  filter: blur(5px) !important;
+}
