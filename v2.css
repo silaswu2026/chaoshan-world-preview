@@ -2142,3 +2142,265 @@ body.quiet-mode .v2-lamp-presence {
     bottom: max(14px, env(safe-area-inset-bottom) + 8px);
   }
 }
+
+
+/* ===== 15. 金色 Loading 莲环 + 五尊佛像真彩色三维立体渲染 + 本尊简介 / 专属任务 / 本殿祈愿簿 ===== */
+/* 金色 Loading 旋转莲环 */
+.v2-gold-lotus-loader {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+}
+.v2-gl-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(244, 212, 136, 0.22);
+  border-top-color: #f7d98c;
+  border-right-color: rgba(247, 217, 140, 0.65);
+  box-shadow: 0 0 18px rgba(240, 194, 92, 0.35);
+  animation: v2-gl-spin 2.2s linear infinite;
+}
+.v2-gl-ring.is-inner {
+  inset: 9px;
+  border-top-color: transparent;
+  border-bottom-color: #ffe6a4;
+  border-left-color: rgba(247, 217, 140, 0.55);
+  animation: v2-gl-spin 3.2s linear infinite reverse;
+}
+.v2-gl-core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8dc 0%, #f5c969 60%, rgba(226, 168, 56, 0.2) 100%);
+  box-shadow: 0 0 22px #f6cf72, 0 0 42px rgba(240, 188, 76, 0.65);
+  animation: v2-lantern-flicker 2s ease-in-out infinite alternate;
+}
+@keyframes v2-gl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 五尊佛像真彩色 + 三维立体雕塑感强化（告别平淡发灰） */
+#temple-scene {
+  perspective: 1100px;
+}
+#temple-scene .temple-art {
+  filter: saturate(1.24) contrast(1.12) brightness(1.06) !important;
+  transform: scale(1.045);
+}
+#temple-scene::before {
+  background: radial-gradient(
+    ellipse 34% 46% at 50% 39%,
+    rgba(255, 240, 192, 0.24) 0%,
+    rgba(244, 196, 94, 0.08) 46%,
+    transparent 76%
+  ) !important;
+}
+
+/* 菩萨旁「本尊简介」与「本殿祈愿簿」双按钮 */
+.v2-deity-side-bar {
+  position: absolute;
+  top: 96px;
+  right: 18px;
+  z-index: 18;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.v2-deity-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.44);
+  background: linear-gradient(135deg, rgba(14, 22, 25, 0.82), rgba(9, 15, 17, 0.9));
+  color: #f6ebd4;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.v2-deity-pill:hover {
+  transform: translateX(-2px);
+  border-color: rgba(248, 222, 156, 0.82);
+}
+.v2-deity-pill i {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: #161006;
+  background: linear-gradient(135deg, #f3d284, #ba8c3e);
+}
+.v2-deity-pill em {
+  font-style: normal;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(243, 210, 132, 0.2);
+  color: #fae09e;
+}
+
+/* 本殿专属功课条 */
+.v2-deity-task {
+  position: absolute;
+  left: 50%;
+  top: 66px;
+  transform: translateX(-50%);
+  z-index: 16;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(520px, calc(100vw - 24px));
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.36);
+  background: rgba(11, 18, 20, 0.78);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+}
+.v2-dt-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+  flex-shrink: 0;
+}
+.v2-dt-title {
+  font-size: 12px;
+  color: #f3e6c8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-dt-btn {
+  border: 1px solid rgba(248, 218, 148, 0.68);
+  background: linear-gradient(135deg, #c89f4e, #9f7530);
+  color: #161006;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.v2-deity-task.is-done .v2-dt-dot {
+  background: #8fd6a8;
+  box-shadow: 0 0 10px #8fd6a8;
+}
+
+/* 本尊简介与本殿祈愿簿弹窗（统一 V1 暗青玉细金样式） */
+.v2-deity-sheet {
+  max-width: 620px !important;
+  background: linear-gradient(165deg, rgba(16, 25, 28, 0.96), rgba(9, 15, 17, 0.98)) !important;
+  border: 1px solid rgba(232, 198, 128, 0.34) !important;
+}
+.v2-intro-blessing {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(228, 194, 122, 0.12);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  color: #f7dca0;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.v2-intro-body {
+  font-size: 14px;
+  line-height: 1.85;
+  color: #f0e4cc;
+  margin-bottom: 10px;
+}
+.v2-intro-body-en {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(235, 224, 198, 0.72);
+  font-style: italic;
+  margin-bottom: 18px;
+}
+.v2-intro-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.v2-vow-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.v2-vow-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 194, 122, 0.32);
+  background: rgba(7, 12, 14, 0.78);
+  color: #f6ebd4;
+  font-size: 13px;
+}
+.v2-vow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.v2-vow-item {
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: rgba(255, 245, 224, 0.04);
+  border: 1px solid rgba(228, 194, 122, 0.2);
+}
+.v2-vow-item.is-self {
+  background: rgba(228, 194, 122, 0.12);
+  border-color: rgba(246, 214, 138, 0.56);
+}
+.v2-vow-item header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.v2-vow-item header b {
+  color: #f5d284;
+  font-weight: 500;
+}
+.v2-vow-item header time {
+  color: rgba(235, 222, 194, 0.56);
+  font-size: 11px;
+}
+.v2-vow-item p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #efe4cc;
+}
+
+@media (max-width: 780px) {
+  .v2-deity-side-bar {
+    top: 112px;
+    right: 10px;
+  }
+  .v2-deity-task {
+    top: 62px;
+    padding: 5px 6px 5px 10px;
+    gap: 6px;
+  }
+  .v2-dt-title {
+    font-size: 11px;
+  }
+}
