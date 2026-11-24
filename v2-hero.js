@@ -100,22 +100,19 @@
     });
   }
 
-  /* ===== 4. 注入 Persepolis 式全屏飘渺云雾穿门过场层 ===== */
-  const mistOverlay = document.createElement("div");
-  mistOverlay.className = "v2-mist-transition";
-  mistOverlay.id = "v2-mist-transition";
-  mistOverlay.setAttribute("aria-hidden", "true");
-  mistOverlay.innerHTML = `
-    <div class="v2-mt-cloud v2-mt-c1"></div>
-    <div class="v2-mt-cloud v2-mt-c2"></div>
-    <div class="v2-mt-cloud v2-mt-c3"></div>
-    <div class="v2-mt-glow"></div>
-    <div class="v2-mt-copy">
-      <small id="v2-mt-sub">入 山 门 · 见 本 心</small>
-      <p id="v2-mt-quote"></p>
-    </div>
-  `;
-  document.querySelector("#app")?.appendChild(mistOverlay);
+  /* ===== 4. 暴露 Persepolis 式 WebGL 分形体积云雾穿门接口 ===== */
+  window.JianshanMistTransition = function runMistTransition({ isGateEntry = false, preloadUrls = [], onMidpoint } = {}) {
+    if (typeof window.JianshanWebGLMist === "function") {
+      window.JianshanWebGLMist({
+        isGateEntry,
+        preloadUrls,
+        quoteText: isGateEntry ? getSessionQuote(0) : "",
+        onMidpoint,
+      });
+    } else if (typeof onMidpoint === "function") {
+      onMidpoint();
+    }
+  };
 
   /* ===== 5. 注入 A/B 4K 山门一键切换胶囊 ===== */
   const switcher = document.createElement("div");
@@ -174,54 +171,7 @@
   applyGateTheme(currentTheme);
   updateDynamicTexts();
 
-  /* ===== 6. 暴露 Persepolis 式一镜到底穿门 + 轻量云雾切换接口 ===== */
-  let mistBusy = false;
-  window.JianshanMistTransition = function runMistTransition({ isGateEntry = false, onMidpoint } = {}) {
-    if (mistBusy) return;
-    mistBusy = true;
-    const reduce = document.body.classList.contains("reduce-motion") || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const lang = getLang();
-    const mtSub = document.querySelector("#v2-mt-sub");
-    const mtQuote = document.querySelector("#v2-mt-quote");
-    if (mtSub) {
-      mtSub.textContent = lang === "en"
-        ? (isGateEntry ? "ENTERING THE SACRED GATE" : "DRIFTING THROUGH THE MIST")
-        : lang === "zh-Hant"
-          ? (isGateEntry ? "推 開 山 門 · 步 入 淨 境" : "雲 霧 繚 繞 · 移 步 換 景")
-          : (isGateEntry ? "推 开 山 门 · 步 入 净 境" : "云 雾 缭 绕 · 移 步 换 景");
-    }
-    if (mtQuote) {
-      mtQuote.textContent = isGateEntry ? getSessionQuote(0) : "";
-    }
-
-    if (isGateEntry && !reduce) {
-      landing.classList.add("is-entering-3d");
-    }
-
-    mistOverlay.classList.toggle("is-quick", !isGateEntry);
-    mistOverlay.classList.remove("is-clearing");
-    mistOverlay.classList.add("is-active");
-    mistOverlay.setAttribute("aria-hidden", "false");
-
-    const midDelay = reduce ? 60 : (isGateEntry ? 1250 : 380);
-    const clearDelay = reduce ? 120 : (isGateEntry ? 1850 : 540);
-    const endDelay = reduce ? 200 : (isGateEntry ? 2650 : 980);
-
-    setTimeout(() => {
-      if (typeof onMidpoint === "function") onMidpoint();
-      landing.classList.remove("is-entering-3d");
-    }, midDelay);
-
-    setTimeout(() => {
-      mistOverlay.classList.add("is-clearing");
-    }, clearDelay);
-
-    setTimeout(() => {
-      mistOverlay.classList.remove("is-active", "is-clearing", "is-quick");
-      mistOverlay.setAttribute("aria-hidden", "true");
-      mistBusy = false;
-    }, endDelay);
-  };
+  /* ===== 6. （云雾过场已由 WebGL 分形云引擎接管） ===== */
 
   /* ===== 7. 悬停「推开山门」按钮：联动暖金佛光、3D 镜头前推与粒子汇聚 ===== */
   const enterBtn = document.querySelector("#btn-v2-enter-gate");

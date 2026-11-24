@@ -973,3 +973,84 @@ html[lang="en"] .v2-mt-copy p {
     opacity: 0.72;
   }
 }
+
+
+/* ===== 8. WebGL 实时分形体积云雾过场（Persepolis 风格：装载完成再拨云） ===== */
+.v2-webgl-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.v2-webgl-mist.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+.v2-webgl-mist-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.v2-webgl-mist-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.v2-webgl-mist.is-copy-show .v2-webgl-mist-copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+.v2-webgl-mist-copy small {
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  color: rgba(246, 222, 162, 0.9);
+  margin-bottom: 14px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+}
+.v2-webgl-mist-copy p {
+  max-width: min(560px, 86vw);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.8vw, 26px);
+  line-height: 1.75;
+  letter-spacing: 0.14em;
+  color: #fff6e2;
+  text-shadow: 0 4px 26px rgba(0, 0, 0, 0.62);
+}
+html[lang="en"] .v2-webgl-mist-copy p {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+.v2-wm-loader {
+  width: 120px;
+  height: 2px;
+  margin-top: 22px;
+  border-radius: 999px;
+  background: rgba(246, 222, 162, 0.2);
+  overflow: hidden;
+}
+.v2-wm-loader i {
+  display: block;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #f7d98c, transparent);
+  animation: v2-loader-sweep 1.3s ease-in-out infinite;
+}
+@keyframes v2-loader-sweep {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(260%); }
+}

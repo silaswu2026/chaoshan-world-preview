@@ -214,13 +214,21 @@
         window.dispatchEvent(new CustomEvent("chaoshan:lang", { detail: { lang: currentLang() } }));
       }
     }
+    const isPortraitMobile = window.innerWidth <= 700 && window.innerHeight > window.innerWidth;
+    const panoramaUrl = isPortraitMobile
+      ? "./assets/world-panorama-4k-mobile.jpg?v=20261125-v2-7"
+      : "./assets/world-panorama-4k.jpg?v=20261125-v2-7";
     const enterMapDirect = () => {
       $$(".overlay").forEach((o) => o.classList.remove("is-open"));
       $$(".screen").forEach((s) => s.classList.toggle("is-active", s.dataset.screen === "map"));
       syncOnlineCount();
     };
     if (typeof window.JianshanMistTransition === "function") {
-      window.JianshanMistTransition({ isGateEntry: true, onMidpoint: enterMapDirect });
+      window.JianshanMistTransition({
+        isGateEntry: true,
+        preloadUrls: [panoramaUrl],
+        onMidpoint: enterMapDirect,
+      });
     } else {
       enterMapDirect();
     }
@@ -271,6 +279,31 @@
     if (profileBtn) {
       $$(".overlay").forEach((o) => o.classList.remove("is-open"));
       $$(".screen").forEach((s) => s.classList.toggle("is-active", s.dataset.screen === "avatar"));
+      return;
+    }
+
+    // 在朝山世界全景点击四大道场节点时，走轻盈 WebGL 云雾缭绕 + 预加载大殿原画
+    const mapNode = event.target.closest("#screen-map .map-node");
+    if (mapNode && !mapNode.dataset.v2Bypass && typeof window.JianshanWebGLMist === "function") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const m = mapNode.dataset.mountain || "gate";
+      const imgMap = {
+        putuo: "./assets/scene-putuo.webp?v=20261124-7",
+        wutai: "./assets/scene-wutai.webp?v=20261124-7",
+        emei: "./assets/scene-emei.webp?v=20261124-7",
+        jiuhua: "./assets/scene-jiuhua.webp?v=20261124-7",
+        gate: "./assets/scene-hall.webp?v=20261124-7",
+      };
+      window.JianshanWebGLMist({
+        isGateEntry: false,
+        preloadUrls: imgMap[m] ? [imgMap[m]] : [],
+        onMidpoint: () => {
+          mapNode.dataset.v2Bypass = "1";
+          mapNode.click();
+          delete mapNode.dataset.v2Bypass;
+        },
+      });
       return;
     }
   }, true);
