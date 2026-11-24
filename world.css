@@ -28,7 +28,7 @@
 .world-sheet { position: relative; width: min(1100px,96vw); max-width: none; max-height: 92dvh; padding: 26px; overflow-x: hidden; overflow-y: auto; border: 1px solid rgba(211,188,131,.26); border-radius: 8px; background: radial-gradient(circle at 50% 0,rgba(117,104,62,.14),transparent 40%),#111a1b; color: #ddd5c3; box-shadow: 0 24px 90px rgba(0,0,0,.6); scrollbar-width: thin; scrollbar-color: #716347 transparent; }
 .world-sheet > *:not(.world-ambient) { position: relative; z-index: 1; }
 .world-ambient { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.world-ambient::before { content: ""; position: absolute; inset: 0; opacity: .09; background: url("./assets/scene-map.webp") center/cover; }
+.world-ambient::before { content: ""; position: absolute; inset: 0; opacity: .09; background: url("./assets/scene-map.webp?v=20261124-7") center/cover; }
 .world-ambient i { position: absolute; left: -20%; bottom: -20%; width: 75%; height: 45%; border-radius: 50%; background: rgba(213,222,211,.07); animation: world-mist 12s ease-in-out infinite alternate; }
 .world-ambient i:nth-child(2) { left: 40%; bottom: 5%; animation-delay: -5s; }
 .world-ambient i:nth-child(3) { left: 10%; bottom: 45%; width: 45%; height: 20%; animation-delay: -8s; }
@@ -43,7 +43,7 @@
 .world-map-canvas { position: relative; height: min(51vw,520px); min-height: 430px; overflow: hidden; isolation: isolate; }
 .world-map-background { position: absolute; z-index: 0; inset: 0; display: block; }
 .world-map-background img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
-.world-map-shade { position: absolute; z-index: 1; inset: 0; background: radial-gradient(circle at 50% 52%,transparent 0,rgba(4,11,13,.08) 42%,rgba(4,11,13,.52) 100%),linear-gradient(180deg,rgba(4,11,13,.22),transparent 28%,transparent 74%,rgba(4,11,13,.46)); pointer-events: none; }
+.world-map-shade { position: absolute; z-index: 1; inset: 0; background: radial-gradient(circle at 50% 52%,transparent 0,rgba(4,11,13,.03) 42%,rgba(4,11,13,.28) 100%),linear-gradient(180deg,rgba(4,11,13,.1),transparent 28%,transparent 74%,rgba(4,11,13,.3)); pointer-events: none; }
 .world-map-routes { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .world-map-routes path { fill: none; stroke: rgba(225,199,132,.4); stroke-width: 1; stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; animation: world-route-flow 18s linear infinite; }
 .world-map-clouds { position: absolute; z-index: 3; inset: 0; overflow: hidden; pointer-events: none; }
@@ -78,7 +78,7 @@
 .world-service-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; }
 .world-service-card { min-width: 0; overflow: hidden; padding: 0; border: 1px solid rgba(206,184,130,.17); border-radius: 5px; background: rgba(20,32,32,.8); color: #d9cbaa; text-align: left; transition: transform .25s,border-color .25s; }
 .world-service-card:hover { transform: translateY(-3px); border-color: rgba(221,193,126,.5); }
-.world-service-card > img { width: 100%; height: 82px; display: block; object-fit: cover; opacity: .72; }
+.world-service-card > img { width: 100%; height: 82px; display: block; object-fit: cover; opacity: .92; }
 .world-service-card > span { display: block; padding: 10px 11px 12px; }
 .world-service-card b { display: block; color: #dfd0ad; font-family: var(--font-display); font-size: 14px; font-weight: 400; }
 .world-service-card small { display: block; margin-top: 4px; color: #8e978d; font-size: 9px; line-height: 1.5; }
@@ -108,7 +108,7 @@
 .server-tabs small { color: #8f998f; font-size: 10px; }
 .server-tabs small i { display: inline-block; width: 6px; height: 6px; margin-right: 5px; border-radius: 50%; background: #8ca584; }
 .room-layout { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; min-height: 460px; margin-top: 14px; }
-.room-scene { position: relative; min-height: 430px; overflow: hidden; border: 1px solid rgba(206,184,130,.16); border-radius: 5px; background: linear-gradient(0deg,rgba(6,12,13,.35),rgba(6,12,13,.75)),url("./assets/scene-hall.webp") center/cover; }
+.room-scene { position: relative; min-height: 430px; overflow: hidden; border: 1px solid rgba(206,184,130,.16); border-radius: 5px; background: linear-gradient(0deg,rgba(6,12,13,.18),rgba(6,12,13,.52)),url("./assets/scene-hall.webp?v=20261124-7") center/cover; }
 .room-temple-glow { position: absolute; left: 50%; top: 12%; width: 160px; height: 160px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle,rgba(241,211,130,.2),transparent 67%); animation: room-glow 4s ease-in-out infinite alternate; }
 @keyframes room-glow { to { transform: translateX(-50%) scale(1.12); opacity: .55; } }
 .room-people { position: absolute; inset: auto 16px 68px; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; }

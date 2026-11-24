@@ -5,26 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#101719" />
     <meta name="description" content="朝山：一支香，四座山。中国佛教四大道场虚拟朝山体验。" />
-    <title>朝山 · 一支香，四座山</title>
-    <link rel="stylesheet" href="./styles.css?v=20261124-4" />
-    <link rel="stylesheet" href="./visual.css?v=20261124-4" />
-    <link rel="stylesheet" href="./ritual.css?v=20261124-4" />
-    <link rel="stylesheet" href="./world.css?v=20261124-6" />
-    <link rel="stylesheet" href="./sanctuary.css?v=20261124-4" />
-    <link rel="stylesheet" href="./ritual-stage.css?v=20261124-4" />
+    <title>见山 · 朝山 ｜ 一支香，四座山</title>
+    <link rel="stylesheet" href="./styles.css?v=20261124-7" />
+    <link rel="stylesheet" href="./visual.css?v=20261124-7" />
+    <link rel="stylesheet" href="./ritual.css?v=20261124-7" />
+    <link rel="stylesheet" href="./world.css?v=20261124-7" />
+    <link rel="stylesheet" href="./sanctuary.css?v=20261124-7" />
+    <link rel="stylesheet" href="./ritual-stage.css?v=20261124-7" />
+    <link rel="stylesheet" href="./v2.css?v=20261125-v2-3" />
   </head>
   <body>
     <div class="app" id="app">
-      <!-- 1. 落地 -->
+      <!-- 1. 落地（见山平台 · 朝山中心入口） -->
       <section class="screen is-active" id="screen-landing" data-screen="landing">
-        <header class="topbar">
-          <div></div>
-          <div class="topbar-actions">
+        <header class="jianshan-topbar">
+          <button type="button" class="jianshan-brand" data-jianshan-nav="about" aria-label="见山">
+            <strong data-v2-i18n="brandMain">见山</strong>
+            <small data-v2-i18n="brandSub">JIANSHAN</small>
+          </button>
+          <nav class="jianshan-nav" aria-label="见山主栏目">
+            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="about" data-v2-i18n="navAbout">关于</button>
+            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="learn" data-v2-i18n="navLearn">佛学学习</button>
+            <button type="button" class="jianshan-nav-btn is-center" data-jianshan-nav="chaoshan" data-v2-i18n="navChaoshan">朝山</button>
+            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="store" data-v2-i18n="navStore">请佛物</button>
+            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="events" data-v2-i18n="navEvents">最新活动</button>
+          </nav>
+          <div class="jianshan-tools">
             <div class="lang-switch" role="group" aria-label="语言">
+              <button type="button" data-lang="en">EN</button>
               <button type="button" class="is-on" data-lang="zh-Hans">简</button>
               <button type="button" data-lang="zh-Hant">繁</button>
             </div>
-            <button type="button" class="chip" data-go="about-note">关于</button>
+            <button type="button" class="jianshan-icon-btn" data-v2-sound data-v2-i18n="sound">清音</button>
           </div>
         </header>
         <div class="hero-atmosphere" aria-hidden="true">
@@ -40,20 +52,13 @@
           <div class="scene-shade"></div>
         </div>
         <div class="landing-content">
-          <p class="landing-eyebrow">云 雾 之 间 · 心 有 所 向</p>
-          <h1 class="brand-hero">朝山</h1>
-          <p class="tagline" data-i18n="tagline">一支香，四座山。</p>
-          <div class="landing-mountains" aria-label="四大道场">
-            <button type="button" data-visual-mountain="putuo"><img src="./assets/scene-putuo.webp" alt="" /><span>普陀山<small>观音 · 慈悲</small></span></button>
-            <button type="button" data-visual-mountain="wutai"><img src="./assets/scene-wutai.webp" alt="" /><span>五台山<small>文殊 · 智慧</small></span></button>
-            <button type="button" data-visual-mountain="emei"><img src="./assets/scene-emei.webp" alt="" /><span>峨眉山<small>普贤 · 行愿</small></span></button>
-            <button type="button" data-visual-mountain="jiuhua"><img src="./assets/scene-jiuhua.webp" alt="" /><span>九华山<small>地藏 · 愿力</small></span></button>
-          </div>
+          <p class="landing-eyebrow" data-v2-i18n="eyebrow">云 雾 之 间 · 心 有 所 向</p>
+          <h1 class="brand-hero" data-v2-i18n="heroTitle">朝山</h1>
+          <p class="tagline" data-v2-i18n="tagline">一支香，四座山。</p>
           <div class="btn-row landing-actions">
-            <button type="button" class="btn-primary" data-go="avatar" data-i18n="enter">推开山门 · 进入道场</button>
-            <button type="button" class="btn-ghost" data-go="map" data-i18n="quick">快速朝山</button>
+            <button type="button" class="btn-enter-gate-v2" id="btn-v2-enter-gate" data-v2-i18n="enterGateMain">推开山门</button>
           </div>
-          <p class="entry-hint">无需注册 · 愿文仅保存于本机</p>
+          <p class="entry-hint" data-v2-i18n="entryHint">免注册 · 免费 · 仅存本机</p>
         </div>
       </section>
 
@@ -65,7 +70,7 @@
         </header>
         <div class="avatar-stage">
           <div class="avatar-halo" aria-hidden="true"></div>
-          <img class="avatar-image" id="avatar-image" src="./assets/avatar-qing.webp" alt="香客立绘" />
+          <img class="avatar-image" id="avatar-image" src="./assets/avatar-qing.webp?v=20261124-7" alt="香客立绘" />
           <div class="avatar-figure" aria-hidden="true">
             <div class="avatar-head"></div>
             <div class="avatar-beads" id="avatar-beads"></div>
@@ -85,10 +90,10 @@
           <div class="field">
             <label>选择香客</label>
             <div class="avatar-options" id="avatar-options">
-              <button type="button" class="is-on" data-avatar="qing"><img src="./assets/avatar-qing.webp" alt="青年香客" /><span>清行</span></button>
-              <button type="button" data-avatar="shao"><img src="./assets/avatar-shao.webp" alt="少年香客" /><span>澄心</span></button>
-              <button type="button" data-avatar="zhong"><img src="./assets/avatar-zhong.webp" alt="中年香客" /><span>静远</span></button>
-              <button type="button" data-avatar="lao"><img src="./assets/avatar-lao.webp" alt="年长香客" /><span>慧安</span></button>
+              <button type="button" class="is-on" data-avatar="qing"><img src="./assets/avatar-qing.webp?v=20261124-7" alt="青年香客" /><span>清行</span></button>
+              <button type="button" data-avatar="shao"><img src="./assets/avatar-shao.webp?v=20261124-7" alt="少年香客" /><span>澄心</span></button>
+              <button type="button" data-avatar="zhong"><img src="./assets/avatar-zhong.webp?v=20261124-7" alt="中年香客" /><span>静远</span></button>
+              <button type="button" data-avatar="lao"><img src="./assets/avatar-lao.webp?v=20261124-7" alt="年长香客" /><span>慧安</span></button>
             </div>
           </div>
           <div class="field compact-field">
@@ -113,13 +118,24 @@
         </div>
       </section>
 
-      <!-- 3. 朝山图 -->
+      <!-- 3. 朝山世界全景（二图合一） -->
       <section class="screen" id="screen-map" data-screen="map">
-        <header class="topbar">
-          <button type="button" class="brand-mini" data-go="temple" data-mountain="gate">朝山</button>
-          <div class="topbar-actions">
-            <button type="button" class="chip" data-open="book">祈愿簿</button>
-            <button type="button" class="chip" data-go="temple" data-mountain="gate">回山门</button>
+        <header class="map-topbar-v2">
+          <div class="map-topbar-left">
+            <button type="button" class="jianshan-brand" data-go="landing">
+              <strong data-v2-i18n="brandMain">见山</strong>
+              <small data-v2-i18n="mapBackGate">山门</small>
+            </button>
+            <button type="button" class="map-online-pill" data-world-open="room">
+              <i></i><b id="v2-map-online-num">1,286</b> <span data-v2-i18n="onlineSuffix">位同修在线</span>
+            </button>
+          </div>
+          <div class="map-topbar-right">
+            <button type="button" class="jianshan-icon-btn" data-v2-quiet aria-pressed="false"><span data-v2-i18n="quietOff">清净模式</span></button>
+            <button type="button" class="jianshan-icon-btn" data-v2-profile data-v2-i18n="mapProfile">香客档案</button>
+            <button type="button" class="jianshan-icon-btn" data-open="book" data-i18n="bookTitle">祈愿簿</button>
+            <button type="button" class="jianshan-icon-btn" data-v2-sound data-v2-i18n="sound">清音</button>
+            <button type="button" class="jianshan-icon-btn" data-jianshan-nav="learn" data-v2-i18n="navLearn">佛学学习</button>
           </div>
         </header>
         <p class="map-progress"><span data-i18n="mapProgress">四山香印</span> <strong id="seal-count">0</strong> / 4</p>
@@ -162,6 +178,30 @@
               <div class="orb">门</div>
               <div class="name">山门</div>
               <div class="role">大雄宝殿 · 回向</div>
+            </button>
+          </div>
+        </div>
+        <div class="v2-sanctuary-dock" aria-label="四大独立净境">
+          <div class="v2-dock-head">
+            <span data-v2-i18n="dockTitle">朝山净境 · 直达入口</span>
+            <small data-v2-i18n="dockHint">点选四山入殿，或前往净境静修</small>
+          </div>
+          <div class="v2-dock-grid">
+            <button type="button" class="v2-realm-btn" data-world-open="meditation">
+              <b data-v2-i18n="realmMeditation">静心冥想</b>
+              <small data-v2-i18n="realmMeditationSub">真实梵呗 · 呼吸凝神</small>
+            </button>
+            <button type="button" class="v2-realm-btn" data-world-open="backmountain">
+              <b data-v2-i18n="realmLamp">心灯祈福</b>
+              <small data-v2-i18n="realmLampSub">点亮心灯 · 留存愿牌</small>
+            </button>
+            <button type="button" class="v2-realm-btn" data-world-open="pureland">
+              <b data-v2-i18n="realmPureland">追思与极乐</b>
+              <small data-v2-i18n="realmPurelandSub">莲位清供 · 温情陪伴</small>
+            </button>
+            <button type="button" class="v2-realm-btn" data-world-open="ai">
+              <b data-v2-i18n="realmGuidance">解惑殿</b>
+              <small data-v2-i18n="realmGuidanceSub">佛学开示 · 经义启明</small>
             </button>
           </div>
         </div>
@@ -211,7 +251,7 @@
           </div>
           <div class="bow-first-person" id="bow-first-person" aria-hidden="true">
             <span>一心顶礼</span>
-            <img class="bow-hands" src="./assets/hands-jade.webp" alt="" aria-hidden="true" />
+            <img class="bow-hands" src="./assets/hands-jade.webp?v=20261124-7" alt="" aria-hidden="true" />
           </div>
         </div>
 
@@ -221,7 +261,8 @@
             <div class="meta"><span data-i18n="streak">连续朝山</span> 1 日</div>
           </div>
           <div class="hud-tools">
-            <button type="button" class="chip" data-open="book">祈愿簿</button>
+            <button type="button" class="chip" data-v2-quiet aria-pressed="false"><span data-v2-i18n="quietOff">清净模式</span></button>
+            <button type="button" class="chip" data-open="book" data-i18n="bookTitle">祈愿簿</button>
             <button type="button" class="chip" data-open="settings">设定</button>
           </div>
         </div>
@@ -478,14 +519,15 @@
 
       <div class="toast" id="toast" role="status"></div>
     </div>
-    <script src="./app.js?v=20261124-4"></script>
-    <script src="./visual.js?v=20261124-4"></script>
-    <script src="./ritual.js?v=20261124-4"></script>
-    <script src="./ritual-stage.js?v=20261124-4"></script>
+    <script src="./app.js?v=20261125-v2-2"></script>
+    <script src="./visual.js?v=20261124-7"></script>
+    <script src="./ritual.js?v=20261124-7"></script>
+    <script src="./ritual-stage.js?v=20261124-7"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
-    <script src="./world-ui.js?v=20261124-6"></script>
-    <script src="./sanctuary-ui.js?v=20261124-4"></script>
-    <script src="./world.js?v=20261124-6"></script>
-    <script src="./sanctuary.js?v=20261124-4"></script>
+    <script src="./world-ui.js?v=20261124-7"></script>
+    <script src="./sanctuary-ui.js?v=20261124-7"></script>
+    <script src="./world.js?v=20261124-7"></script>
+    <script src="./sanctuary.js?v=20261124-7"></script>
+    <script src="./v2.js?v=20261125-v2-2"></script>
   </body>
 </html>

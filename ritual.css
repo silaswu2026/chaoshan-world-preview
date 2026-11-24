@@ -7,14 +7,14 @@
 .sacred-mist i { position: absolute; left: -25%; bottom: 16%; width: 150%; height: 20%; opacity: .13; border-radius: 50%; background: radial-gradient(ellipse at 25% 50%, #d5dfdc 0, transparent 48%), radial-gradient(ellipse at 70% 50%, #d5dfdc 0, transparent 52%); animation: sacred-mist 18s ease-in-out infinite alternate; }
 .sacred-mist i:nth-child(2) { bottom: 35%; opacity: .07; animation-duration: 24s; animation-direction: alternate-reverse; }
 .temple-halo { border-color: rgba(255,222,141,.3); box-shadow: 0 0 70px rgba(237,187,76,.22), inset 0 0 44px rgba(255,220,127,.16); }
-.temple-scene[data-mountain="memorial"] .temple-art { background-image: url("./assets/scene-hall.webp"); filter: saturate(.6) brightness(.78) hue-rotate(12deg); }
+.temple-scene[data-mountain="memorial"] .temple-art { background-image: url("./assets/scene-hall.webp?v=20261124-7"); filter: saturate(.75) brightness(.96) hue-rotate(12deg); }
 .temple-scene[data-mountain="memorial"] .temple-halo { border-color: rgba(190,215,211,.24); box-shadow: 0 0 60px rgba(151,190,183,.15); }
 .temple-scene[data-mountain="memorial"] .deity-stage { display: none; }
 @keyframes sacred-ray { to { opacity: .24; transform: translateX(5%) rotate(-4deg); } }
 @keyframes sacred-mist { to { transform: translateX(9%) scale(1.08); opacity: .2; } }
 
 /* 渐进过场：门缝、推进、滚云遮蔽、场景显现；仅 transform / opacity。 */
-.gate-destination { position: absolute; z-index: 1; inset: 0; background: url("./assets/scene-path.webp") center / cover no-repeat; opacity: 0; transform: scale(1.22); }
+.gate-destination { position: absolute; z-index: 1; inset: 0; background: url("./assets/scene-path.webp?v=20261124-7") center / cover no-repeat; opacity: 0; transform: scale(1.22); }
 .gate-transition.is-opening .gate-destination { animation: gate-destination-push 1.55s cubic-bezier(.22,1,.36,1) both; }
 .transition-cloud { position: absolute; z-index: 4; pointer-events: none; width: 90%; height: 50%; border-radius: 50%; background: radial-gradient(ellipse at 30% 50%,rgba(211,222,220,.78),transparent 55%),radial-gradient(ellipse at 72% 45%,rgba(189,205,204,.68),transparent 58%); opacity: .65; }
 .cloud-left { left: -24%; top: 17%; }.cloud-right { right: -24%; top: 28%; transform: scaleX(-1); }.cloud-low { left: 5%; bottom: -17%; width: 90%; opacity: .48; }
@@ -98,7 +98,7 @@ body.is-bowing .hud-top, body.is-bowing .hud-dock, body.is-bowing .ritual-action
 .lamp-sheet .btn-primary, .memorial-sheet>.btn-primary { width: 100%; }
 .memorial-node { z-index: 4; }
 .map-node[data-pos="memorial"] { left: 77%; top: 76%; transform: translate(-50%,-50%); }
-.map-node[data-mountain="memorial"] .orb { background-image: linear-gradient(rgba(21,37,39,.28),rgba(21,37,39,.28)), url("./assets/scene-hall.webp"); border-color: rgba(187,211,205,.48); }
+.map-node[data-mountain="memorial"] .orb { background-image: linear-gradient(rgba(21,37,39,.28),rgba(21,37,39,.28)), url("./assets/scene-hall.webp?v=20261124-7"); border-color: rgba(187,211,205,.48); }
 .memorial-entry { position: absolute; z-index: 8; left: 50%; bottom: 205px; transform: translateX(-50%); display: none; width: 230px; padding: 16px; border: 1px solid rgba(195,215,207,.24); background: rgba(9,18,19,.68); text-align: center; }
 .temple-scene[data-mountain="memorial"] .memorial-entry { display: block; }
 .memorial-entry p { margin-bottom: 12px; color: #d5ded6; font-family: var(--font-display); font-size: 14px; letter-spacing: .12em; }

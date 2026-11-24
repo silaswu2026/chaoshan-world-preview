@@ -107,6 +107,30 @@
       practiceTitle: "功課",
       bookTitle: "祈願簿",
     },
+    en: {
+      tagline: "One Incense, Four Sacred Mountains.",
+      enter: "Enter the Gate",
+      quick: "Quick Pilgrimage",
+      avatarTitle: "Pilgrim",
+      avatarNote: "Your name and look stay private on this device. No sign-up required.",
+      nameLabel: "Pilgrim Name",
+      randomName: "Suggest",
+      robeLabel: "Robe",
+      beadLabel: "Mālā Beads",
+      enterGate: "Enter Sanctuary",
+      mapProgress: "Sacred Seals",
+      quickFour: "Quick Four-Mountain Circuit",
+      streak: "Pilgrimage",
+      beads: "Mālā",
+      dockMap: "Mountains",
+      dockIncense: "Incense",
+      dockPractice: "Practice",
+      dockGate: "Main Gate",
+      incenseTitle: "Offer Incense",
+      close: "Close",
+      practiceTitle: "Practice",
+      bookTitle: "Vow Book",
+    },
   };
 
   const state = {
@@ -152,7 +176,7 @@
   }
 
   function applyI18n() {
-    const dict = I18N[state.lang];
+    const dict = I18N[state.lang] || I18N["zh-Hans"];
     $$("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
       if (dict[key]) el.textContent = dict[key];
@@ -161,6 +185,7 @@
       btn.classList.toggle("is-on", btn.dataset.lang === state.lang);
     });
     document.documentElement.lang = state.lang;
+    window.dispatchEvent(new CustomEvent("chaoshan:lang", { detail: { lang: state.lang } }));
   }
 
   function goScreen(name) {

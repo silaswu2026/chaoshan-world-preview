@@ -100,7 +100,7 @@
   }
 
   function bowScene() {
-    return `<div class="bow-scene"><div class="bow-mandala"></div><div class="bow-person"><div class="bow-head"></div><div class="bow-neck"></div><div class="bow-body"></div></div><img class="bow-hands-real" src="./assets/hands-jade.webp" alt="" /></div><div class="rite-floor"></div>`;
+    return `<div class="bow-scene"><div class="bow-mandala"></div><div class="bow-person"><div class="bow-head"></div><div class="bow-neck"></div><div class="bow-body"></div></div><img class="bow-hands-real" src="./assets/hands-jade.webp?v=20261124-7" alt="" /></div><div class="rite-floor"></div>`;
   }
   function incenseScene() {
     return `<div class="incense-scene"><div class="incense-candle"><i class="incense-flame"></i></div><div class="incense-censer"></div><div class="incense-bundle"><i></i><i></i><i></i></div><div class="incense-smoke-3d"><i></i><i></i><i></i></div></div><div class="rite-floor"></div>`;
@@ -109,7 +109,7 @@
     let avatar = "qing";
     try { avatar = JSON.parse(localStorage.getItem("chaoshan-visual-v1") || "{}").avatar || "qing"; } catch (_) { /* 使用默认立绘 */ }
     if (!["qing", "shao", "zhong", "lao"].includes(avatar)) avatar = "qing";
-    return `<div class="chant-scene"><div class="chant-halo"></div><div class="chant-platform"></div><img class="chant-person" src="./assets/avatar-${avatar}.webp" alt="虚拟香客持诵" /><i class="chant-sound"></i><i class="chant-sound"></i><span class="chant-word">南无阿弥陀佛</span></div>`;
+    return `<div class="chant-scene"><div class="chant-halo"></div><div class="chant-platform"></div><img class="chant-person" src="./assets/avatar-${avatar}.webp?v=20261124-7" alt="虚拟香客持诵" /><i class="chant-sound"></i><i class="chant-sound"></i><span class="chant-word">南无阿弥陀佛</span></div>`;
   }
   function muyuScene() {
     return `<div class="muyu-scene"><div class="muyu-base"></div><div class="muyu-body"></div><div class="muyu-mallet"></div><i class="muyu-ring"></i></div><div class="rite-floor"></div>`;

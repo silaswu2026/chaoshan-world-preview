@@ -126,7 +126,7 @@
     }
   }
   function updatePurelandFigure() {
-    const source = uploadedUrl || `./assets/avatar-${state.pureland.avatar}.webp`;
+    const source = uploadedUrl || `./assets/avatar-${state.pureland.avatar}.webp?v=20261124-7`;
     $("#pureland-source-preview").src = source;
     $("#pureland-final-image").src = source;
     $("#pureland-dialog-image").src = source;
@@ -438,7 +438,7 @@
     { image: "scene-map", tag: "中国佛教传统", title: "四大道场不是“四尊佛”", body: "五台、峨眉、九华、普陀分别与文殊、普贤、地藏、观音四位菩萨相联。“四位菩萨”是中国佛教传统中的组合，不宜写成“四佛的由来”。", more: "四大道场的形成经历了经典信仰、历代寺院建设、朝圣活动与地方历史的长期积淀。具体年代和沿革请结合学术研究及各寺方资料阅读。" },
   ];
   function learningMarkup() {
-    return `<section class="culture-section"><div class="culture-section-head"><div><small>LEARN BUDDHISM</small><h2>佛学学习 · 从可靠常识开始</h2></div><p>文字、图片与动态影像结合，区分佛教义理、历史事实和艺术表达。深入学习宜参考完整经典、可靠注疏与学术研究。</p></div><div class="culture-learning-grid">${learning.map((item) => `<article class="culture-learning-card"><img src="./assets/${item.image}.webp" alt="${item.title}" /><div><small>${item.tag}</small><h3>${item.title}</h3><p>${item.body}</p><details><summary>继续阅读</summary><p>${item.more}</p></details></div></article>`).join("")}</div><div class="culture-video" id="culture-video"><div class="culture-video-screen" id="culture-video-screen"><button type="button" class="culture-video-play" id="btn-culture-video" aria-label="播放动态影像导览">▶</button><p class="culture-video-caption" id="culture-video-caption">14 秒动态影像 · 四大道场导览</p></div><div class="culture-video-copy"><small>VISUAL INTRODUCTION</small><h3>从山门到四大道场</h3><p>这是一段由现有原画制作的网页动态影像，不含实拍或寺院官方影像。依次认识文殊的智慧、普贤的行愿、地藏的愿力与观音的慈悲。</p><button type="button" id="btn-culture-video-secondary">播放动态导览</button></div></div></section>`;
+    return `<section class="culture-section"><div class="culture-section-head"><div><small>LEARN BUDDHISM</small><h2>佛学学习 · 从可靠常识开始</h2></div><p>文字、图片与动态影像结合，区分佛教义理、历史事实和艺术表达。深入学习宜参考完整经典、可靠注疏与学术研究。</p></div><div class="culture-learning-grid">${learning.map((item) => `<article class="culture-learning-card"><img src="./assets/${item.image}.webp?v=20261124-7" alt="${item.title}" /><div><small>${item.tag}</small><h3>${item.title}</h3><p>${item.body}</p><details><summary>继续阅读</summary><p>${item.more}</p></details></div></article>`).join("")}</div><div class="culture-video" id="culture-video"><div class="culture-video-screen" id="culture-video-screen"><button type="button" class="culture-video-play" id="btn-culture-video" aria-label="播放动态影像导览">▶</button><p class="culture-video-caption" id="culture-video-caption">14 秒动态影像 · 四大道场导览</p></div><div class="culture-video-copy"><small>VISUAL INTRODUCTION</small><h3>从山门到四大道场</h3><p>这是一段由现有原画制作的网页动态影像，不含实拍或寺院官方影像。依次认识文殊的智慧、普贤的行愿、地藏的愿力与观音的慈悲。</p><button type="button" id="btn-culture-video-secondary">播放动态导览</button></div></div></section>`;
   }
   const cultureRenderers = {
     about() {
@@ -489,7 +489,7 @@
         $("#culture-video-caption").textContent = "导览已播完 · 可重新播放";
         return;
       }
-      screen.style.backgroundImage = `linear-gradient(rgba(14,31,27,.15),rgba(14,31,27,.45)),url('./assets/${backgrounds[index]}.webp')`;
+      screen.style.backgroundImage = `linear-gradient(rgba(14,31,27,.15),rgba(14,31,27,.45)),url('./assets/${backgrounds[index]}.webp?v=20261124-7')`;
       $("#culture-video-caption").textContent = captions[index];
       index += 1;
       videoTimer = setTimeout(advance, 3500);

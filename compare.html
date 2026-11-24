@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>见山 · 朝山 ｜ 版本对比台 (Demo-V1 / Demo-V2)</title>
+  <style>
+    :root {
+      --bg: #0c1214;
+      --panel: #131c1f;
+      --gold: #e4c27a;
+      --text: #f3e8d2;
+      --muted: rgba(243, 232, 210, 0.68);
+      --border: rgba(228, 194, 122, 0.24);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", sans-serif; }
+    body { display: flex; flex-direction: column; overflow: hidden; }
+    header {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: baseline; gap: 10px; }
+    .brand strong { font-size: 16px; letter-spacing: 0.16em; color: var(--gold); }
+    .brand span { font-size: 12px; color: var(--muted); }
+    .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .group {
+      display: inline-flex; padding: 3px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border);
+    }
+    .group button {
+      border: 0; background: transparent; color: var(--muted); font-size: 12px;
+      padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.2s;
+    }
+    .group button.is-on {
+      background: linear-gradient(135deg, rgba(228, 194, 122, 0.28), rgba(164, 118, 46, 0.24));
+      color: #fff6e0; font-weight: 600;
+    }
+    a.open-link {
+      font-size: 12px; color: var(--gold); text-decoration: none;
+      padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border);
+    }
+    a.open-link:hover { background: rgba(228, 194, 122, 0.14); }
+    main {
+      flex: 1; display: grid; grid-template-columns: 1fr; gap: 10px;
+      padding: 10px; min-height: 0; background: #080d0e;
+    }
+    main.is-split { grid-template-columns: 1fr 1fr; }
+    .pane {
+      display: flex; flex-direction: column; min-height: 0;
+      border-radius: 14px; overflow: hidden; border: 1px solid var(--border); background: #000;
+    }
+    .pane.is-hidden { display: none; }
+    .pane-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; background: rgba(19, 28, 31, 0.92); border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .pane-head b { color: var(--gold); letter-spacing: 0.08em; }
+    .pane-head small { color: var(--muted); }
+    .frame-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      min-height: 0; background: #060a0b; overflow: hidden;
+    }
+    iframe { width: 100%; height: 100%; border: 0; background: #0c1214; transition: width 0.25s ease, height 0.25s ease; }
+    body.is-mobile iframe {
+      width: 390px; height: min(844px, 100%);
+      border-radius: 24px; box-shadow: 0 0 0 8px #182226, 0 18px 48px rgba(0,0,0,0.65);
+    }
+    @media (max-width: 900px) {
+      main.is-split { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <strong>见山 · 朝山</strong>
+      <span>版本对比台 / Version Compare</span>
+    </div>
+    <div class="controls">
+      <div class="group" role="group" aria-label="版本模式">
+        <button type="button" data-mode="v2" class="is-on">Demo-V2（最新）</button>
+        <button type="button" data-mode="v1">Demo-V1（基线）</button>
+        <button type="button" data-mode="split">左右分屏对比</button>
+      </div>
+      <div class="group" role="group" aria-label="视口尺寸">
+        <button type="button" data-vp="desktop" class="is-on">全宽桌面</button>
+        <button type="button" data-vp="mobile">手机 390×844</button>
+      </div>
+      <a class="open-link" id="direct-link" href="./" target="_blank" rel="noopener">新窗口打开当前版 ↗</a>
+    </div>
+  </header>
+  <main id="stage">
+    <section class="pane is-hidden" id="pane-v1">
+      <div class="pane-head">
+        <div><b>Demo-V1</b> <small>原始静态演示基线</small></div>
+        <a class="open-link" href="./v1/" target="_blank" rel="noopener">独立打开 V1 ↗</a>
+      </div>
+      <div class="frame-wrap"><iframe id="frame-v1" src="./v1/" title="Demo-V1"></iframe></div>
+    </section>
+    <section class="pane" id="pane-v2">
+      <div class="pane-head">
+        <div><b>Demo-V2</b> <small>见山 5 柱顶栏 · 极简山门 · 推门钟声直入朝山世界 · EN/简/繁 · 清净模式</small></div>
+        <a class="open-link" href="./" target="_blank" rel="noopener">独立打开 V2 ↗</a>
+      </div>
+      <div class="frame-wrap"><iframe id="frame-v2" src="./" title="Demo-V2"></iframe></div>
+    </section>
+  </main>
+  <script>
+    const stage = document.getElementById("stage");
+    const paneV1 = document.getElementById("pane-v1");
+    const paneV2 = document.getElementById("pane-v2");
+    const direct = document.getElementById("direct-link");
+
+    function setMode(mode) {
+      document.querySelectorAll("[data-mode]").forEach((b) => b.classList.toggle("is-on", b.dataset.mode === mode));
+      stage.classList.toggle("is-split", mode === "split");
+      paneV1.classList.toggle("is-hidden", mode === "v2");
+      paneV2.classList.toggle("is-hidden", mode === "v1");
+      direct.href = mode === "v1" ? "./v1/" : "./";
+    }
+
+    function setViewport(vp) {
+      document.querySelectorAll("[data-vp]").forEach((b) => b.classList.toggle("is-on", b.dataset.vp === vp));
+      document.body.classList.toggle("is-mobile", vp === "mobile");
+    }
+
+    document.addEventListener("click", (e) => {
+      const m = e.target.closest("[data-mode]");
+      if (m) setMode(m.dataset.mode);
+      const v = e.target.closest("[data-vp]");
+      if (v) setViewport(v.dataset.vp);
+    });
+  </script>
+</body>
+</html>

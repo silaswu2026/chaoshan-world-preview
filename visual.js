@@ -91,8 +91,8 @@
     visual.avatar = key;
     const image = $("#avatar-image");
     image.classList.remove("is-ready");
-    image.src = `./assets/avatar-${key}.webp`;
-    image.srcset = `./assets/avatar-${key}.webp 1x, ./assets/@2x/avatar-${key}.webp 2x`;
+    image.src = `./assets/avatar-${key}.webp?v=20261124-7`;
+    image.srcset = `./assets/avatar-${key}.webp?v=20261124-7 1x, ./assets/@2x/avatar-${key}.webp?v=20261124-7 2x`;
     image.alt = `${avatarNames[key]}香客立绘`;
     $$("[data-avatar]").forEach((button) => button.classList.toggle("is-on", button.dataset.avatar === key));
     persist();

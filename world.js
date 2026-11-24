@@ -253,7 +253,7 @@
       const card = make("article", "product-card");
       const visual = make("div", "product-visual");
       const image = make("img", "product-photo");
-      image.src = `./assets/product-${product.image}.webp`;
+      image.src = `./assets/product-${product.image}.webp?v=20261124-7`;
       image.alt = `${product.name}实物效果示意`;
       image.loading = "lazy";
       const badge = make("span", "product-photo-note", "效果示意");
