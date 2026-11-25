@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080e10" />
-  <title>大雄宝殿 · 4K 多人共修视觉测试 (3D-v1)</title>
-  <link rel="stylesheet" href="./hall-test.css?v=20261125-3dv1-5" />
+  <title>大雄宝殿 · 佛前四供实时共修 (3D-v1)</title>
+  <link rel="stylesheet" href="./hall-test.css?v=20261125-3dv1-6" />
 </head>
 <body>
   <main class="hall-stage" id="hall-stage">
     <!-- 1. 4K 大雄宝殿底图 + 100% 刚体不变形平滑视差 -->
     <div class="hall-bg-layer" id="hall-bg-layer" aria-hidden="true"></div>
 
-    <!-- 2. 电影光影层：中轴佛光 + 丁达尔光柱 + 实拍丝缕薄雾 + 60fps 金光粒子与环境香烟 -->
+    <!-- 2. 电影光影层：中轴佛光 + 丁达尔光柱 + 实拍丝缕薄雾 + 60fps 丝绸青烟与金光浮尘 -->
     <div class="hall-atmosphere" aria-hidden="true">
       <div class="hall-buddha-glow"></div>
       <div class="hall-rays"><i></i><i></i><i></i></div>
@@ -20,48 +20,78 @@
       <canvas id="hall-fx-canvas"></canvas>
     </div>
 
-    <!-- 3. 环境光影实时联动层：香炉实时新香烟 + 两侧灯台实时亮灯微字 -->
+    <!-- 3. 佛前供案暗木暖光托底（让香、灯、花、茶全部自然着地） -->
+    <div class="altar-plane" aria-hidden="true"></div>
+
+    <!-- 4. 环境联动浮字层（同修实时供养微字） -->
     <div class="hall-live-world" id="hall-live-world" aria-live="polite">
       <div class="live-censer-zone" id="live-censer-zone"></div>
       <div class="live-lamps-left" id="live-lamps-left"></div>
       <div class="live-lamps-right" id="live-lamps-right"></div>
     </div>
 
-    <!-- 4. 前景透视蒲团共修席位（6 位同修背影剪影呼吸/礼拜 + 中央自己主蒲团） -->
-    <section class="hall-cushions" id="hall-cushions" aria-label="殿内共修同修"></section>
+    <!-- 5. 佛前四供实体共修供案（香、灯、花、茶/净水） -->
+    <section class="hall-altar" id="hall-altar" aria-label="佛前四供共修供案">
+      <!-- ① 正中香炉燃香阵 -->
+      <div class="altar-incense-box" id="altar-incense-box" role="button" tabindex="0" aria-label="大雄宝殿香炉"></div>
+      <!-- ② 左右长明酥油灯海 -->
+      <div class="altar-candles-layer" id="altar-candles-layer"></div>
+      <!-- ③ 左右青瓷铜盘供莲 -->
+      <div class="altar-lotus-vessel is-left" id="altar-lotus-left"></div>
+      <div class="altar-lotus-vessel is-right" id="altar-lotus-right"></div>
+      <!-- ④ 佛前最前排：五盏供茶 / 净水碗 -->
+      <div class="altar-tea-row" id="altar-tea-row"></div>
+    </section>
 
-    <!-- 5. 顶栏（极简 V1 暗青玉细金） -->
+    <!-- 点击任意供品弹出的同修祈愿 & 一键随喜卡片 -->
+    <div class="offering-popover" id="offering-popover" role="dialog" aria-hidden="true">
+      <button type="button" class="popover-close" id="popover-close" aria-label="关闭">×</button>
+      <div class="popover-meta" id="popover-meta"></div>
+      <p class="popover-wish" id="popover-wish"></p>
+      <div class="popover-actions">
+        <button type="button" class="popover-bless-btn" id="popover-bless-btn">合十随喜 · <b id="popover-bless-num">0</b></button>
+      </div>
+    </div>
+
+    <!-- 6. 顶栏（极简 V1 暗青玉细金） -->
     <header class="hall-topbar">
       <div class="hall-title">
         <strong id="t-hall-name">大雄宝殿 · 释迦牟尼佛</strong>
-        <small id="t-hall-sub">3D-v1 单页测试 · 4K 刚体视差 + 多人在场感</small>
+        <small id="t-hall-sub">佛前四供实时共修 · 香、灯、花、茶以物见人</small>
       </div>
       <div class="hall-top-tools">
-        <span class="online-pill" id="online-pill"><i></i><b id="online-count">42</b> <span id="t-online">位同修正在殿内</span></span>
+        <span class="online-pill" id="online-pill">
+          <i></i>
+          <b id="online-count">46</b> <span id="t-online">位同修在殿</span>
+          <em class="pill-sep">·</em>
+          <span class="pill-stats" id="altar-stats">香18 灯24 花11 茶14</span>
+        </span>
         <button type="button" class="tool-btn" id="btn-quiet">清净模式</button>
         <button type="button" class="tool-btn" id="btn-sound">清音 · 关</button>
         <button type="button" class="tool-btn" id="btn-lang">EN</button>
       </div>
     </header>
 
-    <!-- 6. 第一人称礼拜玉白合十双手浮层 -->
+    <!-- 7. 第一人称礼拜双手叠层 -->
     <div class="bow-hands-layer" id="bow-hands-layer" aria-hidden="true">
       <div class="bow-mandala"></div>
       <img src="./assets/hands-jade.webp?v=20261124-7" alt="" />
       <span>一心顶礼 · 愿心无散乱</span>
     </div>
 
-    <!-- 7. 底部极简测试操作栏 -->
+    <!-- 8. 底部五键共修操作栏（香、灯、花、茶、礼拜） -->
     <footer class="hall-dock">
       <button type="button" class="dock-btn is-gold" id="btn-act-incense"><b>香</b><span id="t-incense">敬香</span></button>
-      <button type="button" class="dock-btn" id="btn-act-bow"><b>礼</b><span id="t-bow">礼拜</span></button>
       <button type="button" class="dock-btn" id="btn-act-lamp"><b>灯</b><span id="t-lamp">供灯</span></button>
+      <button type="button" class="dock-btn" id="btn-act-lotus"><b>花</b><span id="t-lotus">献花</span></button>
+      <button type="button" class="dock-btn" id="btn-act-tea"><b>茶</b><span id="t-tea">奉茶</span></button>
+      <button type="button" class="dock-btn" id="btn-act-bow"><b>礼</b><span id="t-bow">礼拜</span></button>
     </footer>
 
     <div class="hall-toast" id="hall-toast" role="status"></div>
   </main>
 
   <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
-  <script src="./hall-test.js?v=20261125-3dv1-5"></script>
+  <script src="./hall-test.js?v=20261125-3dv1-6"></script>
 </body>
 </html>
