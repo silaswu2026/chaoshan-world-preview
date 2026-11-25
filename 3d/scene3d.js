@@ -1,8 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 /**
- * 见山 · 朝山 3D 分支版（真三维 WebGL 大雄宝殿 + 可见 3D 同修角色共修空间）
+ * 见山 · 朝山 3D（电影级 4K 混合三维圣境）
+ * - 彻底弃用低模塑料几何体佛像与圆锥小人
+ * - 采用：4K 弧形立体浮雕主殿（带亮度深度位移）+ UnrealBloom 电影泛光 + 镜面青石地面倒影
+ *   + 多层 3D 实拍流动云雾 + 真实写实古风香客 3D 空间角色 + 3D 体积光柱与发光莲灯
  */
 
 const canvas = document.getElementById("scene3d-canvas");
@@ -19,384 +25,292 @@ function showToast(msg) {
   showToast._t = setTimeout(() => toastEl.classList.remove("is-show"), 2600);
 }
 
-/* ===== 1. 场景、渲染器与大气雾 ===== */
+/* ===== 1. 渲染器 + UnrealBloom 电影后期泛光 ===== */
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.18;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMappingExposure = 1.08;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0b1417);
-scene.fog = new THREE.FogExp2(0x0d181c, 0.024);
+scene.background = new THREE.Color(0x070d10);
+scene.fog = new THREE.FogExp2(0x091114, 0.022);
 
-const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 140);
-camera.position.set(0, 5.2, 22.5);
+const camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 120);
+camera.position.set(0, 2.8, 13.8);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.055;
-controls.maxPolarAngle = Math.PI * 0.49;
-controls.minPolarAngle = Math.PI * 0.14;
-controls.minDistance = 4.2;
-controls.maxDistance = 30;
-controls.target.set(0, 3.2, -4.5);
+controls.enablePan = false;
+controls.minDistance = 6.2;
+controls.maxDistance = 17.5;
+controls.minAzimuthAngle = -Math.PI * 0.24;
+controls.maxAzimuthAngle = Math.PI * 0.24;
+controls.minPolarAngle = Math.PI * 0.34;
+controls.maxPolarAngle = Math.PI * 0.51;
+controls.target.set(0, 3.0, -5.0);
 
-/* ===== 2. 电影级三点灯光体系 ===== */
-scene.add(new THREE.HemisphereLight(0x52737c, 0x16120c, 0.85));
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.42, // strength: 柔和圣光泛光，不过曝
+  0.75, // radius
+  0.72  // threshold: 只让暖金高光、莲灯、粒子发光
+);
+composer.addPass(bloomPass);
 
-// 主尊暖金圣光聚光灯
-const mainSpot = new THREE.SpotLight(0xffe19c, 95, 45, Math.PI * 0.34, 0.65, 1.4);
-mainSpot.position.set(0, 14.5, 4.5);
-mainSpot.target.position.set(0, 3.8, -8.5);
-mainSpot.castShadow = true;
-mainSpot.shadow.mapSize.set(1024, 1024);
-scene.add(mainSpot, mainSpot.target);
+/* ===== 2. 柔和电影照明 ===== */
+scene.add(new THREE.AmbientLight(0xd9ccb2, 0.95));
+const keyLight = new THREE.SpotLight(0xffe1a0, 58, 36, Math.PI * 0.45, 0.75, 1.3);
+keyLight.position.set(0, 12, 8);
+keyLight.target.position.set(0, 3.2, -9);
+scene.add(keyLight, keyLight.target);
 
-// 主尊背后暖金背光点源
-const haloLight = new THREE.PointLight(0xffcb66, 26, 22, 1.6);
-haloLight.position.set(0, 4.8, -10.2);
-scene.add(haloLight);
+const texLoader = new THREE.TextureLoader();
 
-// 香炉暖橘炭火光
-const censerLight = new THREE.PointLight(0xff8e3c, 9, 10, 1.8);
-censerLight.position.set(0, 1.9, 1.8);
-scene.add(censerLight);
+/* ===== 3. 4K 弧形立体浮雕主殿（支持五座 4K 圣殿实时切换） ===== */
+const HALLS = {
+  gate:   { name: "大雄宝殿 · 释迦牟尼佛", en: "Mahāvīra Hall · Shakyamuni Buddha", url: "./assets/scene-hall-4k.jpg?v=20261125-v2-11" },
+  putuo:  { name: "普陀山 · 观世音菩萨",   en: "Mt. Putuo · Guanyin Bodhisattva",   url: "./assets/scene-putuo-4k.jpg?v=20261125-v2-11" },
+  wutai:  { name: "五台山 · 文殊菩萨",     en: "Mt. Wutai · Mañjuśrī Bodhisattva",  url: "./assets/scene-wutai-4k.jpg?v=20261125-v2-11" },
+  emei:   { name: "峨眉山 · 普贤菩萨",     en: "Mt. Emei · Samantabhadra",          url: "./assets/scene-emei-4k.jpg?v=20261125-v2-11" },
+  jiuhua: { name: "九华山 · 地藏王菩萨",   en: "Mt. Jiuhua · Kṣitigarbha",          url: "./assets/scene-jiuhua-4k.jpg?v=20261125-v2-11" },
+};
+let currentHallKey = "gate";
 
-/* ===== 3. 庄严大雄宝殿空间与青石香道 ===== */
-// 程序化青石纹理
-function makeStoneTexture() {
+// 弧形 3D 环幕（内凹曲面 + 细分网格支持 3D 深度浮雕凹凸，营造强包裹立体纵深！）
+const domeGeo = new THREE.CylinderGeometry(18, 18, 13.8, 72, 36, true, Math.PI * 0.66, Math.PI * 0.68);
+domeGeo.scale(-1, 1, 1); // 内表面朝向镜头
+const domeMat = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  roughness: 0.58,
+  metalness: 0.08,
+  displacementScale: 0.65,
+  displacementBias: -0.25,
+  side: THREE.FrontSide,
+});
+const hallDome = new THREE.Mesh(domeGeo, domeMat);
+hallDome.position.set(0, 5.4, 5.2);
+scene.add(hallDome);
+
+function loadHallTexture(key, onReady) {
+  const info = HALLS[key] || HALLS.gate;
+  currentHallKey = key;
+  texLoader.load(info.url, (tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    domeMat.map = tex;
+    domeMat.displacementMap = tex; // 亮部主尊金身与烛光自然凸出立体浮雕感
+    domeMat.needsUpdate = true;
+    const sub = document.getElementById("s3d-hall-sub");
+    if (sub) sub.textContent = isEn ? info.en : `${info.name} · 4K 三维共修空间`;
+    if (onReady) onReady();
+  });
+}
+
+/* ===== 4. 镜面微反光暗青玉青石地面（倒映 4K 金光与莲灯） ===== */
+function makeReflectiveFloorTexture() {
   const c = document.createElement("canvas");
-  c.width = 256; c.height = 256;
+  c.width = 512; c.height = 512;
   const g = c.getContext("2d");
-  g.fillStyle = "#1a2326";
-  g.fillRect(0, 0, 256, 256);
-  for (let y = 0; y < 256; y += 32) {
-    for (let x = 0; x < 256; x += 64) {
-      const shade = 26 + Math.floor(Math.random() * 14);
-      g.fillStyle = `rgb(${shade},${shade + 7},${shade + 9})`;
-      g.fillRect(x + ((y / 32) % 2) * 32 + 1, y + 1, 62, 30);
+  g.fillStyle = "#0e171a";
+  g.fillRect(0, 0, 512, 512);
+  for (let y = 0; y < 512; y += 64) {
+    for (let x = 0; x < 512; x += 128) {
+      const v = 14 + Math.floor(Math.random() * 10);
+      g.fillStyle = `rgb(${v},${v + 7},${v + 9})`;
+      g.fillRect(x + ((y / 64) % 2) * 64 + 2, y + 2, 124, 60);
     }
   }
-  const tex = new THREE.CanvasTexture(c);
-  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(14, 14);
-  return tex;
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(8, 8);
+  return t;
 }
 
-const stoneMat = new THREE.MeshStandardMaterial({
-  map: makeStoneTexture(),
-  roughness: 0.72,
-  metalness: 0.12,
+const floorMat = new THREE.MeshStandardMaterial({
+  map: makeReflectiveFloorTexture(),
+  roughness: 0.22,
+  metalness: 0.62,
 });
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), stoneMat);
-ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
-scene.add(ground);
+const floor = new THREE.Mesh(new THREE.CircleGeometry(24, 64), floorMat);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = 0;
+scene.add(floor);
 
-// 中轴汉白玉香道与三级高台
-const marbleMat = new THREE.MeshStandardMaterial({ color: 0xc8c2b4, roughness: 0.58, metalness: 0.08 });
-const walkway = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.14, 24), marbleMat);
-walkway.position.set(0, 0.07, 4);
-walkway.receiveShadow = true;
-scene.add(walkway);
-
-// 大殿三级须弥石台
-for (let i = 0; i < 3; i++) {
-  const step = new THREE.Mesh(new THREE.BoxGeometry(16 - i * 1.4, 0.42, 11 - i * 1.1), marbleMat);
-  step.position.set(0, 0.21 + i * 0.42, -8.5);
-  step.receiveShadow = true;
-  scene.add(step);
+// 地面柔和暖金倒影光晕
+function makeRadialTex(c0, c1) {
+  const c = document.createElement("canvas");
+  c.width = 128; c.height = 128;
+  const g = c.getContext("2d");
+  const grad = g.createRadialGradient(64, 64, 2, 64, 64, 64);
+  grad.addColorStop(0, c0);
+  grad.addColorStop(0.45, c1);
+  grad.addColorStop(1, "rgba(0,0,0,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
 }
+const floorGlow = new THREE.Mesh(
+  new THREE.PlaneGeometry(14, 14),
+  new THREE.MeshBasicMaterial({
+    map: makeRadialTex("rgba(255,220,136,0.32)", "rgba(220,164,68,0.09)"),
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  })
+);
+floorGlow.rotation.x = -Math.PI / 2;
+floorGlow.position.set(0, 0.02, -3.2);
+scene.add(floorGlow);
 
-// 8 根朱红漆木巨柱 + 鎏金柱础
-const pillarMat = new THREE.MeshStandardMaterial({ color: 0x5c1916, roughness: 0.42, metalness: 0.15 });
-const goldMat = new THREE.MeshStandardMaterial({ color: 0xe6bc62, roughness: 0.26, metalness: 0.84, emissive: 0x3b2606, emissiveIntensity: 0.32 });
-const darkWoodMat = new THREE.MeshStandardMaterial({ color: 0x1d1612, roughness: 0.65, metalness: 0.1 });
+/* ===== 5. 多层 3D 空间实拍流动云雾 + 体积丁达尔光柱 + 320 颗金光浮尘 ===== */
+const cloudTex = texLoader.load("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-9");
+cloudTex.colorSpace = THREE.SRGBColorSpace;
 
-const pillarCoords = [
-  [-6.4, -4.6], [-2.8, -4.6], [2.8, -4.6], [6.4, -4.6],
-  [-6.4, -12.2], [-2.8, -12.2], [2.8, -12.2], [6.4, -12.2],
-];
-pillarCoords.forEach(([x, z]) => {
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.56, 0.45, 16), marbleMat);
-  base.position.set(x, 1.45, z);
-  scene.add(base);
-  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 7.6, 20), pillarMat);
-  col.position.set(x, 5.4, z);
-  col.castShadow = true;
-  scene.add(col);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.04, 10, 24), goldMat);
-  ring.rotation.x = Math.PI / 2;
-  ring.position.set(x, 8.6, z);
-  scene.add(ring);
+const mistPlanes = [];
+[
+  { z: -6.5, y: 1.4, w: 26, h: 7.5, op: 0.22, speed: 0.14 },
+  { z: -1.5, y: 0.9, w: 22, h: 5.5, op: 0.18, speed: -0.11 },
+  { z:  3.8, y: 0.6, w: 20, h: 4.8, op: 0.14, speed: 0.09 },
+].forEach((cfg) => {
+  const mat = new THREE.MeshBasicMaterial({
+    map: cloudTex,
+    transparent: true,
+    opacity: cfg.op,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(cfg.w, cfg.h), mat);
+  mesh.position.set(0, cfg.y, cfg.z);
+  scene.add(mesh);
+  mistPlanes.push({ mesh, cfg });
 });
 
-// 大殿重檐屋顶结构
-const roofLower = new THREE.Mesh(new THREE.ConeGeometry(12.2, 3.0, 4), darkWoodMat);
-roofLower.rotation.y = Math.PI / 4;
-roofLower.position.set(0, 10.6, -8.4);
-scene.add(roofLower);
-
-const roofUpper = new THREE.Mesh(new THREE.ConeGeometry(8.6, 2.4, 4), darkWoodMat);
-roofUpper.rotation.y = Math.PI / 4;
-roofUpper.position.set(0, 12.6, -8.4);
-scene.add(roofUpper);
-
-/* ===== 4. 巍峨鎏金主尊佛像 + 双层立体莲台 + 三层旋转曼陀罗背光 ===== */
-const buddhaGroup = new THREE.Group();
-buddhaGroup.position.set(0, 1.32, -8.8);
-scene.add(buddhaGroup);
-
-// 立体双层莲花宝座
-const lotusBase = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.35, 0.85, 24), goldMat);
-lotusBase.position.y = 0.42;
-buddhaGroup.add(lotusBase);
-
-for (let i = 0; i < 16; i++) {
-  const angle = (i / 16) * Math.PI * 2;
-  const petal = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.95, 6), goldMat);
-  petal.position.set(Math.cos(angle) * 1.85, 0.85, Math.sin(angle) * 1.85);
-  petal.rotation.z = -Math.cos(angle) * 0.45;
-  petal.rotation.x = Math.sin(angle) * 0.45;
-  buddhaGroup.add(petal);
-}
-
-// 鎏金结跏趺坐主尊法相（庄严雕塑比例）
-const legs = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.46, 16, 32), goldMat);
-legs.rotation.x = Math.PI / 2;
-legs.scale.set(1.12, 0.92, 0.82);
-legs.position.y = 1.36;
-buddhaGroup.add(legs);
-
-const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.92, 1.95, 24), goldMat);
-torso.position.y = 2.45;
-torso.castShadow = true;
-buddhaGroup.add(torso);
-
-const shoulders = new THREE.Mesh(new THREE.SphereGeometry(0.86, 24, 16), goldMat);
-shoulders.scale.set(1.22, 0.56, 0.72);
-shoulders.position.y = 3.25;
-buddhaGroup.add(shoulders);
-
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.56, 24, 24), goldMat);
-head.position.y = 4.05;
-buddhaGroup.add(head);
-
-const ushnisha = new THREE.Mesh(new THREE.SphereGeometry(0.24, 18, 18), goldMat);
-ushnisha.position.y = 4.62;
-buddhaGroup.add(ushnisha);
-
-// 三层动态金色背光曼陀罗
-const haloRing1 = new THREE.Mesh(
-  new THREE.RingGeometry(1.75, 1.95, 48),
-  new THREE.MeshBasicMaterial({ color: 0xffe49c, side: THREE.DoubleSide, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending })
-);
-haloRing1.position.set(0, 3.65, -0.95);
-buddhaGroup.add(haloRing1);
-
-const haloRing2 = new THREE.Mesh(
-  new THREE.RingGeometry(2.6, 2.74, 64),
-  new THREE.MeshBasicMaterial({ color: 0xf4c35e, side: THREE.DoubleSide, transparent: true, opacity: 0.48, blending: THREE.AdditiveBlending })
-);
-haloRing2.position.set(0, 3.65, -1.05);
-buddhaGroup.add(haloRing2);
-
-const haloDisc = new THREE.Mesh(
-  new THREE.CircleGeometry(2.6, 48),
-  new THREE.MeshBasicMaterial({ color: 0xffd274, side: THREE.DoubleSide, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending })
-);
-haloDisc.position.set(0, 3.65, -1.12);
-buddhaGroup.add(haloDisc);
-
-// 4 束体积丁达尔光柱
+// 4 束 3D 体积光柱
 const rayMat = new THREE.MeshBasicMaterial({
-  color: 0xffe29c,
+  color: 0xffe4a0,
   transparent: true,
-  opacity: 0.065,
+  opacity: 0.048,
   side: THREE.DoubleSide,
   depthWrite: false,
   blending: THREE.AdditiveBlending,
 });
-[-3.2, -1.1, 1.1, 3.2].forEach((rx, idx) => {
-  const ray = new THREE.Mesh(new THREE.ConeGeometry(2.1, 16, 16, 1, true), rayMat);
-  ray.position.set(rx, 8.2, -5.8 - idx * 0.4);
-  ray.rotation.z = (idx - 1.5) * 0.12;
+[-3.5, -1.2, 1.2, 3.5].forEach((rx, i) => {
+  const ray = new THREE.Mesh(new THREE.ConeGeometry(2.4, 15, 16, 1, true), rayMat);
+  ray.position.set(rx, 7.6, -5.8);
+  ray.rotation.z = (i - 1.5) * 0.14;
   scene.add(ray);
 });
 
-/* ===== 5. 香道两侧 8 盏发光石灯笼 ===== */
-const lanternFlames = [];
-[-3.4, 3.4].forEach((lx) => {
-  [12, 7.5, 3, -1.5].forEach((lz) => {
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.2, 1.7, 10), marbleMat);
-    post.position.set(lx, 0.85, lz);
-    scene.add(post);
-    const cap = new THREE.Mesh(new THREE.ConeGeometry(0.45, 0.34, 6), darkWoodMat);
-    cap.position.set(lx, 2.15, lz);
-    scene.add(cap);
-    const flame = new THREE.Mesh(
-      new THREE.SphereGeometry(0.16, 12, 12),
-      new THREE.MeshBasicMaterial({ color: 0xffd27a })
-    );
-    flame.position.set(lx, 1.82, lz);
-    scene.add(flame);
-    lanternFlames.push(flame);
-  });
-});
-
-/* ===== 6. 殿前巨型古铜香炉 + 实时 3D 香烟 ===== */
-const bronzeMat = new THREE.MeshStandardMaterial({ color: 0x3b2b1a, roughness: 0.38, metalness: 0.78 });
-const censerGroup = new THREE.Group();
-censerGroup.position.set(0, 0, 1.8);
-scene.add(censerGroup);
-
-const censerBody = new THREE.Mesh(new THREE.CylinderGeometry(1.18, 0.88, 1.15, 24), bronzeMat);
-censerBody.position.y = 1.05;
-censerBody.castShadow = true;
-censerGroup.add(censerBody);
-
-const censerRim = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.1, 12, 32), goldMat);
-censerRim.rotation.x = Math.PI / 2;
-censerRim.position.y = 1.62;
-censerGroup.add(censerRim);
-
-for (let i = 0; i < 3; i++) {
-  const a = (i / 3) * Math.PI * 2;
-  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.1, 0.65, 10), bronzeMat);
-  leg.position.set(Math.cos(a) * 0.68, 0.32, Math.sin(a) * 0.68);
-  censerGroup.add(leg);
-}
-
-// 炉中常驻香炷
-const offeredSticksGroup = new THREE.Group();
-censerGroup.add(offeredSticksGroup);
-function addIncenseSticksToCenser(spread = 0.2) {
-  [-0.14, 0, 0.14].forEach((offset) => {
-    const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.9, 6), new THREE.MeshStandardMaterial({ color: 0x7c542c }));
-    stick.position.set(offset + (Math.random() - 0.5) * spread, 1.92, (Math.random() - 0.5) * spread);
-    const ember = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), new THREE.MeshBasicMaterial({ color: 0xff6e2b }));
-    ember.position.y = 0.45;
-    stick.add(ember);
-    offeredSticksGroup.add(stick);
-  });
-}
-addIncenseSticksToCenser(0.05);
-
-// 柔和圆形光晕贴图（避免近景粒子呈方形）
-function makeSoftCircleTexture(innerColor, outerColor) {
-  const c = document.createElement("canvas");
-  c.width = 64; c.height = 64;
-  const g = c.getContext("2d");
-  const grad = g.createRadialGradient(32, 32, 2, 32, 32, 32);
-  grad.addColorStop(0, innerColor);
-  grad.addColorStop(0.45, outerColor);
-  grad.addColorStop(1, "rgba(0,0,0,0)");
-  g.fillStyle = grad;
-  g.fillRect(0, 0, 64, 64);
-  return new THREE.CanvasTexture(c);
-}
-const smokeTex = makeSoftCircleTexture("rgba(240,234,218,0.55)", "rgba(220,224,220,0.18)");
-const dustTex = makeSoftCircleTexture("rgba(255,238,184,0.95)", "rgba(244,196,92,0.35)");
-
-// 3D 香烟粒子
-const smokeGeo = new THREE.BufferGeometry();
-const smokeCount = 55;
-const smokePos = new Float32Array(smokeCount * 3);
-for (let i = 0; i < smokeCount; i++) {
-  smokePos[i * 3] = (Math.random() - 0.5) * 0.6;
-  smokePos[i * 3 + 1] = 2.1 + Math.random() * 5.2;
-  smokePos[i * 3 + 2] = 1.8 + (Math.random() - 0.5) * 0.6;
-}
-smokeGeo.setAttribute("position", new THREE.BufferAttribute(smokePos, 3));
-const smokePoints = new THREE.Points(
-  smokeGeo,
-  new THREE.PointsMaterial({ map: smokeTex, size: 0.95, transparent: true, opacity: 0.42, depthWrite: false })
-);
-scene.add(smokePoints);
-
-/* ===== 7. 260 颗 3D 空间金光浮尘 ===== */
-const dustCount = 260;
+// 320 颗柔和 3D 金光浮尘
+const dustCount = 320;
 const dustPos = new Float32Array(dustCount * 3);
 for (let i = 0; i < dustCount; i++) {
-  dustPos[i * 3] = (Math.random() - 0.5) * 26;
-  dustPos[i * 3 + 1] = 0.4 + Math.random() * 14;
-  dustPos[i * 3 + 2] = -14 + Math.random() * 32;
+  dustPos[i * 3] = (Math.random() - 0.5) * 20;
+  dustPos[i * 3 + 1] = 0.2 + Math.random() * 11;
+  dustPos[i * 3 + 2] = -9 + Math.random() * 18;
 }
 const dustGeo = new THREE.BufferGeometry();
 dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+const dustTex = makeRadialTex("rgba(255,242,196,0.95)", "rgba(245,196,88,0.36)");
 const dustPoints = new THREE.Points(
   dustGeo,
-  new THREE.PointsMaterial({ map: dustTex, size: 0.24, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false })
+  new THREE.PointsMaterial({ map: dustTex, size: 0.22, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false })
 );
 scene.add(dustPoints);
 
-/* ===== 8. 核心亮点：8 位可见的 3D 同修角色（礼拜 / 敬香 / 绕行 + 头顶实时标签） ===== */
+// 实时 3D 香烟粒子（敬香时加浓）
+const smokeCount = 48;
+const smokePos = new Float32Array(smokeCount * 3);
+for (let i = 0; i < smokeCount; i++) {
+  smokePos[i * 3] = (Math.random() - 0.5) * 0.7;
+  smokePos[i * 3 + 1] = 0.6 + Math.random() * 6.5;
+  smokePos[i * 3 + 2] = -2.2 + (Math.random() - 0.5) * 0.7;
+}
+const smokeGeo = new THREE.BufferGeometry();
+smokeGeo.setAttribute("position", new THREE.BufferAttribute(smokePos, 3));
+const smokeTex = makeRadialTex("rgba(238,232,218,0.42)", "rgba(208,218,216,0.12)");
+const smokeMat = new THREE.PointsMaterial({ map: smokeTex, size: 1.1, transparent: true, opacity: 0.34, depthWrite: false });
+const smokePoints = new THREE.Points(smokeGeo, smokeMat);
+scene.add(smokePoints);
+
+/* ===== 6. 核心升级：8 位真正写实的古风 3D 同修角色（告别塑料圆锥人！） ===== */
 const peersGroup = new THREE.Group();
 scene.add(peersGroup);
 
+const avatarKeys = ["qing", "shao", "zhong", "lao"];
+const avatarTextures = {};
+const alphaMaskCanvas = document.createElement("canvas");
+alphaMaskCanvas.width = 256; alphaMaskCanvas.height = 384;
+const amg = alphaMaskCanvas.getContext("2d");
+const amGrad = amg.createRadialGradient(128, 178, 36, 128, 186, 150);
+amGrad.addColorStop(0, "#ffffff");
+amGrad.addColorStop(0.68, "#ffffff");
+amGrad.addColorStop(1, "#000000");
+amg.fillStyle = amGrad;
+amg.fillRect(0, 0, 256, 384);
+const softPortraitAlpha = new THREE.CanvasTexture(alphaMaskCanvas);
+
+avatarKeys.forEach((k) => {
+  const t = texLoader.load(`./assets/avatar-${k}.webp?v=20261124-7`);
+  t.colorSpace = THREE.SRGBColorSpace;
+  avatarTextures[k] = t;
+});
+
 const PEER_CONFIGS = [
-  { name: "清和", wish: "愿父母岁岁安康", mode: "kneel", robe: 0x263d42, x: -3.1, z: -2.4, rotY: 0.2 },
-  { name: "Maya", wish: "Peace & Clarity", mode: "kneel", robe: 0x4c3a2d, x: 3.1, z: -2.4, rotY: -0.2 },
-  { name: "林安", wish: "静坐共修 08:42", mode: "sit", robe: 0x2a3b34, x: -4.8, z: 0.6, rotY: 0.4 },
-  { name: "David", wish: "Mindful Breath", mode: "sit", robe: 0x3a3444, x: 4.8, z: 0.6, rotY: -0.4 },
-  { name: "静远", wish: "敬香一炷 · 祈福", mode: "stand", robe: 0x5c2e28, x: -1.8, z: 3.3, rotY: 0.45 },
-  { name: "Grace", wish: "Blessings for Family", mode: "stand", robe: 0x2f434a, x: 1.8, z: 3.3, rotY: -0.45 },
-  { name: "慧心", wish: "朝山行愿中", mode: "walk", robe: 0x463a2a, x: -2.4, z: 9.2, rotY: Math.PI, dir: -1 },
-  { name: "Alex", wish: "Walking in Peace", mode: "walk", robe: 0x2d3f44, x: 2.4, z: 6.4, rotY: Math.PI, dir: -1 },
+  { name: "清和",  wish: "愿父母岁岁安康",       avatar: "qing",  mode: "pray", x: -3.2, z: -2.4 },
+  { name: "Maya",  wish: "Peace & Clarity",       avatar: "shao",  mode: "pray", x:  3.2, z: -2.4 },
+  { name: "林安",  wish: "静坐共修 · 08:42",      avatar: "zhong", mode: "pray", x: -5.2, z:  0.6 },
+  { name: "David", wish: "Mindful Breath",        avatar: "lao",   mode: "pray", x:  5.2, z:  0.6 },
+  { name: "静远",  wish: "敬香一炷 · 祈福",       avatar: "lao",   mode: "pray", x: -2.0, z:  2.2 },
+  { name: "Grace", wish: "Blessings for Family",  avatar: "qing",  mode: "pray", x:  2.0, z:  2.2 },
+  { name: "慧心",  wish: "朝山行愿中",            avatar: "shao",  mode: "walk", x: -3.4, z:  5.8, dir: -1 },
+  { name: "Alex",  wish: "Walking in Peace",      avatar: "zhong", mode: "walk", x:  3.4, z:  4.2, dir: -1 },
 ];
 
 const peerEntities = [];
+const lotusRingTex = makeRadialTex("rgba(255,228,150,0.75)", "rgba(232,178,74,0.22)");
 
-function create3DPilgrim(cfg, isSelf = false) {
+function createPhotoreal3DPilgrim(cfg, isSelf = false) {
   const g = new THREE.Group();
-  const robeMat = new THREE.MeshStandardMaterial({ color: cfg.robe, roughness: 0.68, metalness: 0.08 });
-  const skinMat = new THREE.MeshStandardMaterial({ color: 0xe2c3a4, roughness: 0.55 });
-  const padMat = new THREE.MeshStandardMaterial({ color: 0x7b5626, roughness: 0.72 });
 
-  // 脚下暖金莲光环
+  // 地面发光暖金莲环（真实倒映在青石地面上）
   const aura = new THREE.Mesh(
-    new THREE.RingGeometry(0.45, 0.62, 24),
-    new THREE.MeshBasicMaterial({ color: isSelf ? 0xffe49c : 0xe4be6c, side: THREE.DoubleSide, transparent: true, opacity: isSelf ? 0.85 : 0.42, blending: THREE.AdditiveBlending })
+    new THREE.PlaneGeometry(isSelf ? 2.1 : 1.65, isSelf ? 2.1 : 1.65),
+    new THREE.MeshBasicMaterial({
+      map: lotusRingTex,
+      transparent: true,
+      opacity: isSelf ? 0.92 : 0.52,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
   );
   aura.rotation.x = -Math.PI / 2;
-  aura.position.y = 0.06;
+  aura.position.y = 0.03;
   g.add(aura);
 
-  const bodyWrap = new THREE.Group();
-  g.add(bodyWrap);
+  // 真实写实古风香客 3D 精灵（带柔边羽化遮罩，自然融入殿内光影，绝无硬方框）
+  const spriteMat = new THREE.SpriteMaterial({
+    map: avatarTextures[cfg.avatar] || avatarTextures.qing,
+    alphaMap: softPortraitAlpha,
+    transparent: true,
+    opacity: isSelf ? 0.96 : 0.86,
+    color: isSelf ? 0xfff6df : 0xe9ddc4,
+    depthWrite: false,
+  });
+  const sprite = new THREE.Sprite(spriteMat);
+  sprite.scale.set(1.55, 2.32, 1);
+  sprite.position.y = 1.18;
+  g.add(sprite);
 
-  if (cfg.mode === "kneel" || cfg.mode === "sit") {
-    const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.14, 18), padMat);
-    pad.position.y = 0.08;
-    g.add(pad);
-
-    const lower = new THREE.Mesh(new THREE.ConeGeometry(0.5, 0.78, 14), robeMat);
-    lower.position.y = 0.52;
-    lower.castShadow = true;
-    bodyWrap.add(lower);
-
-    const pHead = new THREE.Mesh(new THREE.SphereGeometry(0.21, 16, 16), skinMat);
-    pHead.position.y = 1.06;
-    bodyWrap.add(pHead);
-  } else {
-    const robe = new THREE.Mesh(new THREE.ConeGeometry(0.44, 1.48, 14), robeMat);
-    robe.position.y = 0.78;
-    robe.castShadow = true;
-    bodyWrap.add(robe);
-
-    const pHead = new THREE.Mesh(new THREE.SphereGeometry(0.21, 16, 16), skinMat);
-    pHead.position.y = 1.66;
-    bodyWrap.add(pHead);
-  }
-
-  g.position.set(cfg.x, 0.12, cfg.z);
-  g.rotation.y = cfg.rotY || 0;
+  g.position.set(cfg.x, 0, cfg.z);
   peersGroup.add(g);
 
-  // DOM 实时投影标签
+  // 实时 3D 投影姓名 + 心愿气泡
   const label = document.createElement("button");
   label.type = "button";
   label.className = `peer-tag ${isSelf ? "is-self" : ""}`;
@@ -404,76 +318,67 @@ function create3DPilgrim(cfg, isSelf = false) {
   label.addEventListener("click", () => {
     aura.material.opacity = 1.0;
     aura.scale.set(1.5, 1.5, 1);
-    setTimeout(() => { aura.scale.set(1, 1, 1); aura.material.opacity = isSelf ? 0.85 : 0.42; }, 700);
+    setTimeout(() => { aura.scale.set(1, 1, 1); aura.material.opacity = isSelf ? 0.92 : 0.52; }, 750);
     showToast(`已向同修「${cfg.name}」随喜共愿 · 莲光相应`);
   });
   peerLabelsEl.appendChild(label);
 
-  const entity = { group: g, bodyWrap, aura, label, cfg, phase: Math.random() * Math.PI * 2 };
+  const entity = { group: g, sprite, aura, label, cfg, phase: Math.random() * Math.PI * 2 };
   peerEntities.push(entity);
   return entity;
 }
 
-PEER_CONFIGS.forEach((cfg) => create3DPilgrim(cfg, false));
+PEER_CONFIGS.forEach((c) => createPhotoreal3DPilgrim(c, false));
 
-/* ===== 9. 殿前 3D 供灯（用户点击「殿前供灯」时真实新增一盏发光莲灯） ===== */
-const userLampsGroup = new THREE.Group();
-scene.add(userLampsGroup);
-let userLampCount = 0;
+/* ===== 7. 殿前 3D 发光莲花心灯 ===== */
+const lampsGroup = new THREE.Group();
+scene.add(lampsGroup);
+let lampCount = 0;
 
-function spawn3DLamp() {
-  const idx = userLampCount++;
+function spawnGlowing3DLamp() {
+  const idx = lampCount++;
   const side = idx % 2 === 0 ? -1 : 1;
   const row = Math.floor(idx / 2);
-  const lx = side * (1.55 + (row % 3) * 0.72);
-  const lz = 4.6 - Math.floor(row / 3) * 1.1;
+  const lx = side * (1.2 + (row % 4) * 0.95);
+  const lz = 3.2 - Math.floor(row / 4) * 1.1;
 
   const lamp = new THREE.Group();
-  const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.24, 0.24, 16), goldMat);
-  cup.position.y = 0.12;
-  lamp.add(cup);
-  const halo = new THREE.Mesh(
-    new THREE.RingGeometry(0.38, 0.65, 24),
-    new THREE.MeshBasicMaterial({ color: 0xffe296, side: THREE.DoubleSide, transparent: true, opacity: 0.65, blending: THREE.AdditiveBlending })
+  const baseGlow = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.1, 1.1),
+    new THREE.MeshBasicMaterial({ map: lotusRingTex, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false })
   );
-  halo.rotation.x = -Math.PI / 2;
-  halo.position.y = 0.04;
-  lamp.add(halo);
-  const flame = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshBasicMaterial({ color: 0xfff0b2 }));
-  flame.position.y = 0.38;
+  baseGlow.rotation.x = -Math.PI / 2;
+  baseGlow.position.y = 0.04;
+  lamp.add(baseGlow);
+
+  const flame = new THREE.Sprite(
+    new THREE.SpriteMaterial({ map: dustTex, color: 0xffe08a, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false })
+  );
+  flame.scale.set(0.62, 0.78, 1);
+  flame.position.y = 0.28;
   lamp.add(flame);
-  const pt = new THREE.PointLight(0xffcb66, 6.5, 7, 1.8);
-  pt.position.y = 0.45;
+
+  const pt = new THREE.PointLight(0xffcb66, 4.5, 5.5, 1.8);
+  pt.position.y = 0.35;
   lamp.add(pt);
 
-  lamp.position.set(lx, 0.14, lz);
-  userLampsGroup.add(lamp);
-  showToast(`已于大殿前点亮第 ${userLampCount} 盏三维莲花心灯`);
+  lamp.position.set(lx, 0, lz);
+  lampsGroup.add(lamp);
+  showToast(`已于殿前点亮第 ${lampCount} 盏三维莲花心灯`);
 }
 
-/* ===== 10. 电影机位平滑飞镜 ===== */
-const CAM_PRESETS = {
-  overview: { pos: new THREE.Vector3(0, 4.8, 14.5), target: new THREE.Vector3(0, 3.2, -6.5) },
-  buddha:   { pos: new THREE.Vector3(0, 4.6, -2.4), target: new THREE.Vector3(0, 4.4, -8.8) },
-  censer:   { pos: new THREE.Vector3(2.8, 2.8, 5.4), target: new THREE.Vector3(0, 1.8, 1.6) },
-  cushion:  { pos: new THREE.Vector3(0, 1.9, 0.4), target: new THREE.Vector3(0, 4.0, -8.8) },
-};
-let flyGoal = { pos: CAM_PRESETS.overview.pos.clone(), target: CAM_PRESETS.overview.target.clone(), active: true };
-
-function flyToCamera(key) {
-  const p = CAM_PRESETS[key];
-  if (!p) return;
-  flyGoal = { pos: p.pos.clone(), target: p.target.clone(), active: true };
-  document.querySelectorAll("[data-cam]").forEach((b) => b.classList.toggle("is-on", b.dataset.cam === key));
+// 预置 4 盏初始殿前长明莲灯，开场即有温暖星火氛围
+for (let i = 0; i < 4; i++) {
+  const side = i % 2 === 0 ? -1 : 1;
+  const lx = side * (1.6 + Math.floor(i / 2) * 2.2);
+  const lz = -3.8 + Math.floor(i / 2) * 1.6;
+  const flame = new THREE.Sprite(new THREE.SpriteMaterial({ map: dustTex, color: 0xffd778, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
+  flame.scale.set(0.55, 0.7, 1);
+  flame.position.set(lx, 0.24, lz);
+  lampsGroup.add(flame);
 }
 
-controls.addEventListener("start", () => { flyGoal.active = false; });
-
-document.querySelectorAll("[data-cam]").forEach((btn) => {
-  btn.addEventListener("click", () => flyToCamera(btn.dataset.cam));
-});
-
-/* ===== 11. 按钮交互（敬香 / 第一人称礼拜 / 供灯 / 发愿 / 同修开关 / 佛音 / 双语） ===== */
+/* ===== 8. 按钮交互 ===== */
 let bellCtx = null;
 function playBell() {
   try {
@@ -495,24 +400,30 @@ function playBell() {
   } catch (_) {}
 }
 
+document.querySelectorAll("[data-hall]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const key = btn.dataset.hall;
+    document.querySelectorAll("[data-hall]").forEach((b) => b.classList.toggle("is-on", b.dataset.hall === key));
+    playBell();
+    loadHallTexture(key, () => showToast(`已步入 4K 三维圣殿 · ${HALLS[key].name}`));
+  });
+});
+
 document.getElementById("btn-3d-incense")?.addEventListener("click", () => {
   playBell();
-  flyToCamera("censer");
-  addIncenseSticksToCenser(0.45);
-  showToast("清香三炷已敬入三维青铜香炉 · 香云供养");
+  smokeMat.opacity = 0.62;
+  setTimeout(() => { smokeMat.opacity = 0.34; }, 4200);
+  showToast("清香三炷已敬上 · 殿内香云袅袅供养");
 });
 
 document.getElementById("btn-3d-bow")?.addEventListener("click", () => {
-  flyToCamera("cushion");
   const bowEl = document.getElementById("s3d-bow-overlay");
   bowEl?.classList.add("is-show");
   setTimeout(() => bowEl?.classList.remove("is-show"), 2600);
   showToast("一心顶礼 · 愿心无散乱");
 });
 
-document.getElementById("btn-3d-lamp")?.addEventListener("click", () => {
-  spawn3DLamp();
-});
+document.getElementById("btn-3d-lamp")?.addEventListener("click", spawnGlowing3DLamp);
 
 const wishModal = document.getElementById("s3d-wish-modal");
 document.getElementById("btn-3d-wish")?.addEventListener("click", () => wishModal?.classList.add("is-open"));
@@ -520,20 +431,20 @@ document.getElementById("btn-3d-wish-close")?.addEventListener("click", () => wi
 document.getElementById("btn-3d-wish-submit")?.addEventListener("click", () => {
   const name = (document.getElementById("s3d-wish-name")?.value || "清风").trim().slice(0, 8) || "清风";
   const text = (document.getElementById("s3d-wish-text")?.value || "愿家人平安顺遂").trim().slice(0, 36) || "愿家人平安顺遂";
-  create3DPilgrim({ name, wish: text, mode: "kneel", robe: 0x6a4b1f, x: (Math.random() - 0.5) * 3.2, z: -0.2 + Math.random() * 1.4, rotY: 0 }, true);
+  createPhotoreal3DPilgrim({ name, wish: text, avatar: "qing", mode: "pray", x: (Math.random() - 0.5) * 3.4, z: 0.6 + Math.random() * 1.4 }, true);
   const numEl = document.getElementById("s3d-peer-num");
   if (numEl) numEl.textContent = String(peerEntities.length);
   wishModal?.classList.remove("is-open");
-  showToast(`你的 3D 行者与心愿「${text}」已入驻大雄宝殿`);
+  showToast(`你的香客形象与心愿「${text}」已入驻三维圣殿`);
 });
 
 const togglePeersBtn = document.getElementById("btn-toggle-peers");
 togglePeersBtn?.addEventListener("click", () => {
   const hidden = document.body.classList.toggle("peers-hidden");
   peersGroup.visible = !hidden;
-  togglePeersBtn.textContent = hidden ? "显示同修" : "隐藏同修";
+  togglePeersBtn.textContent = isEn ? (hidden ? "Show Peers" : "Hide Peers") : (hidden ? "显示同修" : "隐藏同修");
   togglePeersBtn.classList.toggle("is-on", hidden);
-  showToast(hidden ? "已隐藏殿内同修 · 独享清净" : "已恢复殿内 3D 同修共修");
+  showToast(hidden ? "已隐藏殿内同修 · 独享清净" : "已恢复殿内同修共修");
 });
 
 const audioBtn = document.getElementById("btn-s3d-audio");
@@ -542,12 +453,12 @@ audioBtn?.addEventListener("click", () => {
   if (bgm.paused) {
     bgm.volume = 0.36;
     bgm.play().then(() => {
-      audioBtn.textContent = "清音 · 开";
+      audioBtn.textContent = isEn ? "Chant · On" : "清音 · 开";
       audioBtn.classList.add("is-on");
     }).catch(() => showToast("请再次点击开启清净梵呗"));
   } else {
     bgm.pause();
-    audioBtn.textContent = "清音 · 关";
+    audioBtn.textContent = isEn ? "Chant · Off" : "清音 · 关";
     audioBtn.classList.remove("is-on");
   }
 });
@@ -557,33 +468,23 @@ document.getElementById("btn-s3d-lang")?.addEventListener("click", (e) => {
   isEn = !isEn;
   e.target.textContent = isEn ? "中文" : "EN";
   document.querySelector(".s3d-brand strong").textContent = isEn ? "Jianshan · Chaoshan 3D" : "见山 · 朝山 3D";
-  document.querySelector(".s3d-brand small").textContent = isEn ? "Mahāvīra Hall · Live 3D Sanctuary" : "大雄宝殿 · 真三维共修空间";
+  document.getElementById("s3d-hall-sub").textContent = isEn ? HALLS[currentHallKey].en : `${HALLS[currentHallKey].name} · 4K 三维共修空间`;
   document.getElementById("s3d-hint").textContent = isEn
-    ? "Drag to orbit · Pinch to zoom · Tap any 3D pilgrim to share blessings"
-    : "单指拖动环绕 · 双指缩放 · 点击殿内 3D 同修可随喜共愿";
+    ? "Drag to orbit 3D sanctuary · Pinch to zoom · Tap any pilgrim to share blessings"
+    : "单指拖动环绕 3D 空间 · 双指推近瞻仰 4K 主尊 · 点击同修随喜共愿";
   const badge = document.getElementById("s3d-online-badge");
   if (badge) badge.innerHTML = isEn
-    ? `<i></i><b id="s3d-peer-num">${peerEntities.length}</b> 3D Pilgrims Inside`
-    : `<i></i><b id="s3d-peer-num">${peerEntities.length}</b> 位 3D 同修正在殿内`;
-  if (togglePeersBtn) {
-    const hidden = document.body.classList.contains("peers-hidden");
-    togglePeersBtn.textContent = isEn ? (hidden ? "Show Peers" : "Hide Peers") : (hidden ? "显示同修" : "隐藏同修");
-  }
-  if (audioBtn) {
-    const on = !bgm?.paused;
-    audioBtn.textContent = isEn ? (on ? "Chant · On" : "Chant · Off") : (on ? "清音 · 开" : "清音 · 关");
-  }
-  const camLabels = isEn
-    ? { overview: "Overview", buddha: "Main Buddha", censer: "Censer", cushion: "Seated View" }
-    : { overview: "全景漫游", buddha: "瞻仰主尊", censer: "香炉敬香", cushion: "蒲团静坐" };
-  document.querySelectorAll("[data-cam]").forEach((b) => { if (camLabels[b.dataset.cam]) b.textContent = camLabels[b.dataset.cam]; });
-  document.querySelector("#btn-3d-incense span").textContent = isEn ? "Offer Incense" : "敬香入炉";
+    ? `<i></i><b id="s3d-peer-num">${peerEntities.length}</b> Pilgrims Inside`
+    : `<i></i><b id="s3d-peer-num">${peerEntities.length}</b> 位同修正在殿内`;
+  if (togglePeersBtn) togglePeersBtn.textContent = isEn ? (document.body.classList.contains("peers-hidden") ? "Show Peers" : "Hide Peers") : (document.body.classList.contains("peers-hidden") ? "显示同修" : "隐藏同修");
+  if (audioBtn) audioBtn.textContent = isEn ? (bgm?.paused ? "Chant · Off" : "Chant · On") : (bgm?.paused ? "清音 · 关" : "清音 · 开");
+  document.querySelector("#btn-3d-incense span").textContent = isEn ? "Offer Incense" : "敬香生烟";
   document.querySelector("#btn-3d-bow span").textContent = isEn ? "Bow in Prayer" : "第一人称礼拜";
-  document.querySelector("#btn-3d-lamp span").textContent = isEn ? "Light a Lamp" : "殿前供灯";
-  document.querySelector("#btn-3d-wish span").textContent = isEn ? "Make a Vow" : "发愿飘屏";
+  document.querySelector("#btn-3d-lamp span").textContent = isEn ? "Light Lotus Lamp" : "殿前供莲灯";
+  document.querySelector("#btn-3d-wish span").textContent = isEn ? "Enter with Vow" : "发愿入殿";
 });
 
-/* ===== 12. 60fps 主循环与 3D 标签投影 ===== */
+/* ===== 9. 60fps 电影渲染循环 ===== */
 const projVec = new THREE.Vector3();
 const clock = new THREE.Clock();
 
@@ -592,71 +493,51 @@ function animate() {
   const dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
 
-  // 平滑飞镜
-  if (flyGoal.active) {
-    camera.position.lerp(flyGoal.pos, 0.045);
-    controls.target.lerp(flyGoal.target, 0.045);
-    if (camera.position.distanceTo(flyGoal.pos) < 0.08) flyGoal.active = false;
-  }
   controls.update();
 
-  // 主尊背光缓慢旋转与呼吸
-  haloRing1.rotation.z = t * 0.14;
-  haloRing2.rotation.z = -t * 0.09;
-  haloLight.intensity = 24 + Math.sin(t * 1.4) * 4;
-  censerLight.intensity = 8.5 + Math.sin(t * 3.2) * 1.6;
-
-  // 石灯微焰
-  lanternFlames.forEach((f, idx) => {
-    const s = 0.9 + Math.sin(t * 4.2 + idx) * 0.12;
-    f.scale.set(s, s * 1.15, s);
+  // 多层 3D 实拍云雾在空间中缓缓横漂
+  mistPlanes.forEach(({ mesh, cfg }) => {
+    mesh.position.x = Math.sin(t * cfg.speed) * 2.2;
   });
 
-  // 3D 香烟袅袅上升
+  // 3D 香烟与金光浮尘上升
   const sArr = smokeGeo.attributes.position.array;
   for (let i = 0; i < smokeCount; i++) {
-    sArr[i * 3 + 1] += dt * 0.65;
+    sArr[i * 3 + 1] += dt * 0.55;
     sArr[i * 3] += Math.sin(t + i) * dt * 0.12;
-    if (sArr[i * 3 + 1] > 7.4) {
-      sArr[i * 3] = (Math.random() - 0.5) * 0.55;
-      sArr[i * 3 + 1] = 2.05;
-      sArr[i * 3 + 2] = 1.8 + (Math.random() - 0.5) * 0.55;
+    if (sArr[i * 3 + 1] > 7.2) {
+      sArr[i * 3] = (Math.random() - 0.5) * 0.7;
+      sArr[i * 3 + 1] = 0.6;
     }
   }
   smokeGeo.attributes.position.needsUpdate = true;
 
-  // 3D 金光浮尘上升
   const dArr = dustGeo.attributes.position.array;
   for (let i = 0; i < dustCount; i++) {
-    dArr[i * 3 + 1] += dt * 0.24;
-    if (dArr[i * 3 + 1] > 14.2) dArr[i * 3 + 1] = 0.5;
+    dArr[i * 3 + 1] += dt * 0.22;
+    if (dArr[i * 3 + 1] > 11.2) dArr[i * 3 + 1] = 0.25;
   }
   dustGeo.attributes.position.needsUpdate = true;
 
-  // 3D 同修角色呼吸、礼拜、缓慢绕行 + 实时投影标签
+  // 写实古风同修角色呼吸、沿香道缓步漫行 + 实时标签投影
   const w = window.innerWidth;
   const h = window.innerHeight;
   peerEntities.forEach((p) => {
-    if (p.cfg.mode === "kneel") {
-      p.bodyWrap.rotation.x = Math.max(0, Math.sin(t * 0.7 + p.phase)) * 0.36;
-    } else if (p.cfg.mode === "sit") {
-      p.bodyWrap.scale.y = 1 + Math.sin(t * 1.3 + p.phase) * 0.025;
-    } else if (p.cfg.mode === "walk") {
-      p.group.position.z += dt * 0.48 * p.cfg.dir;
-      p.bodyWrap.position.y = Math.abs(Math.sin(t * 3.8 + p.phase)) * 0.04;
-      if (p.group.position.z < 3.6) { p.cfg.dir = 1; p.group.rotation.y = 0; }
-      if (p.group.position.z > 13.0) { p.cfg.dir = -1; p.group.rotation.y = Math.PI; }
+    if (p.cfg.mode === "walk") {
+      p.group.position.z += dt * 0.35 * p.cfg.dir;
+      p.sprite.position.y = 1.18 + Math.abs(Math.sin(t * 3.4 + p.phase)) * 0.04;
+      if (p.group.position.z < 1.2) p.cfg.dir = 1;
+      if (p.group.position.z > 6.8) p.cfg.dir = -1;
+    } else {
+      p.sprite.position.y = 1.18 + Math.sin(t * 1.4 + p.phase) * 0.025;
     }
 
     if (peersGroup.visible) {
-      projVec.set(p.group.position.x, p.group.position.y + (p.cfg.mode === "walk" || p.cfg.mode === "stand" ? 2.15 : 1.5), p.group.position.z);
+      projVec.set(p.group.position.x, p.group.position.y + 2.45, p.group.position.z);
       projVec.project(camera);
-      const visible = projVec.z > -1 && projVec.z < 1;
-      if (visible) {
-        const rawX = (projVec.x * 0.5 + 0.5) * w;
-        const rawY = (-projVec.y * 0.5 + 0.5) * h;
-        const sx = Math.max(66, Math.min(w - 66, rawX));
-        const sy = Math.max(96, Math.min(h - 110, rawY));
+      if (projVec.z > -1 && projVec.z < 1) {
+        const sx = Math.max(66, Math.min(w - 66, (projVec.x * 0.5 + 0.5) * w));
+        const sy = Math.max(96, Math.min(h - 110, (-projVec.y * 0.5 + 0.5) * h));
         p.label.style.display = "inline-flex";
         p.label.style.left = `${sx.toFixed(1)}px`;
         p.label.style.top = `${sy.toFixed(1)}px`;
@@ -667,14 +548,17 @@ function animate() {
     }
   });
 
-  renderer.render(scene, camera);
+  composer.render();
 }
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
 });
 
+loadHallTexture("gate", () => {
+  setTimeout(() => loaderEl?.classList.add("is-done"), 400);
+});
 animate();
-setTimeout(() => loaderEl?.classList.add("is-done"), 900);
