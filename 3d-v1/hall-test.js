@@ -16,22 +16,35 @@
     showToast._t = setTimeout(() => toastEl.classList.remove("is-show"), 2500);
   }
 
-  /* ===== 1. 真实光影同修烛火海（彻底移除假剪影人偶，每盏摇曳烛火对应一位在场同修） ===== */
+  /* ===== 1. 透视半透明暖金琉璃写实同修 + 真实摇曳同修烛火海 ===== */
+  const peerHolos = [
+    // 远排两侧（近大远小：尺寸更小、更透、微虚化，贴合大殿纵深）
+    { name: "清和",  action: "合十祈愿",   avatar: "qing",  x: 27, y: 69, h: 122, op: 0.30, blur: "0.6px" },
+    { name: "Maya",  action: "Meditation", avatar: "shao",  x: 73, y: 69, h: 122, op: 0.30, blur: "0.6px" },
+    // 近排两侧（稍大、更清晰，左右对称绝不挡中轴释迦牟尼佛）
+    { name: "静远",  action: "持诵经文",   avatar: "zhong", x: 14, y: 84, h: 178, op: 0.42, blur: "0px" },
+    { name: "慧安",  action: "礼佛回向",   avatar: "lao",   x: 86, y: 84, h: 178, op: 0.42, blur: "0px" },
+  ];
+
   const peerCandles = [
-    { name: "清和",  tag: "平安",     x: 15, y: 69, scale: 0.78 },
-    { name: "Maya",  tag: "Peace",    x: 24, y: 74, scale: 0.90 },
-    { name: "林安",  tag: "静心",     x: 33, y: 78, scale: 1.00 },
-    { name: "周宁",  tag: "康健",     x: 19, y: 81, scale: 1.06 },
-    { name: "苏明",  tag: "考学",     x: 29, y: 66, scale: 0.72 },
-    { name: "David", tag: "Clarity",  x: 71, y: 66, scale: 0.72 },
-    { name: "静远",  tag: "顺遂",     x: 67, y: 78, scale: 1.00 },
-    { name: "Grace", tag: "Family",   x: 76, y: 74, scale: 0.90 },
-    { name: "慧心",  tag: "安宁",     x: 85, y: 69, scale: 0.78 },
-    { name: "Alex",  tag: "Hope",     x: 81, y: 81, scale: 1.06 },
+    { name: "林安",  tag: "平安",     x: 22, y: 76, scale: 0.88 },
+    { name: "周宁",  tag: "康健",     x: 34, y: 78, scale: 0.96 },
+    { name: "苏明",  tag: "考学",     x: 31, y: 67, scale: 0.72 },
+    { name: "David", tag: "Clarity",  x: 69, y: 67, scale: 0.72 },
+    { name: "Grace", tag: "Family",   x: 66, y: 78, scale: 0.96 },
+    { name: "Alex",  tag: "Hope",     x: 78, y: 76, scale: 0.88 },
   ];
 
   function renderPeerCandles() {
-    cushionsEl.innerHTML = peerCandles.map((p, idx) => `
+    const holoMarkup = peerHolos.map((h, idx) => `
+      <button type="button" class="peer-holo" style="left:${h.x}%;top:${h.y}%;--holo-h:${h.h}px;--holo-op:${h.op};--holo-blur:${h.blur}" data-holo="${idx}">
+        <img class="peer-holo-img" style="animation-delay:${-(idx * 1.1)}s" src="./assets/avatar-${h.avatar}.webp?v=20261124-7" alt="" />
+        <span class="peer-holo-aura"></span>
+        <span class="peer-holo-name"><b>${h.name}</b> · ${h.action}</span>
+      </button>
+    `).join("");
+
+    const candleMarkup = peerCandles.map((p, idx) => `
       <button type="button" class="peer-candle" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-50%) scale(${p.scale})" data-peer="${idx}">
         <span class="candle-halo" style="animation-delay:${-(idx * 0.4)}s"><i class="candle-flame-tip" style="animation-delay:${-(idx * 0.35)}s"></i></span>
         <span class="candle-wax"></span>
@@ -39,7 +52,18 @@
       </button>
     `).join("");
 
+    cushionsEl.innerHTML = holoMarkup + candleMarkup;
+
     cushionsEl.onclick = (e) => {
+      const holoBtn = e.target.closest("[data-holo]");
+      if (holoBtn) {
+        const h = peerHolos[Number(holoBtn.dataset.holo)];
+        holoBtn.classList.remove("is-blessed");
+        void holoBtn.offsetWidth;
+        holoBtn.classList.add("is-blessed");
+        showToast(`已与同修「${h.name}」合十相应 · 同愿共修`);
+        return;
+      }
       const btn = e.target.closest("[data-peer]");
       if (!btn) return;
       const p = peerCandles[Number(btn.dataset.peer)];
