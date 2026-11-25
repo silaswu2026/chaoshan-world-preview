@@ -16,53 +16,52 @@
     showToast._t = setTimeout(() => toastEl.classList.remove("is-show"), 2500);
   }
 
-  /* ===== 1. 前景透视蒲团共修席位（6 位同修背影剪影 + 中央自己主蒲团） ===== */
-  const peers = [
-    { name: "清和",  action: "礼拜中",         mode: "bowing",  x: 16, y: 74, scale: 0.86 },
-    { name: "Maya",  action: "Meditation 08:42", mode: "sitting", x: 30, y: 70, scale: 0.78 },
-    { name: "林安",  action: "念珠 42/108",    mode: "sitting", x: 22, y: 83, scale: 0.96 },
-    { name: "David", action: "Praying",        mode: "bowing",  x: 70, y: 70, scale: 0.78 },
-    { name: "静远",  action: "合十静坐",       mode: "sitting", x: 84, y: 74, scale: 0.86 },
-    { name: "Grace", action: "敬香祈福中",     mode: "bowing",  x: 78, y: 83, scale: 0.96 },
+  /* ===== 1. 真实光影同修烛火海（彻底移除假剪影人偶，每盏摇曳烛火对应一位在场同修） ===== */
+  const peerCandles = [
+    { name: "清和",  tag: "平安",     x: 15, y: 69, scale: 0.78 },
+    { name: "Maya",  tag: "Peace",    x: 24, y: 74, scale: 0.90 },
+    { name: "林安",  tag: "静心",     x: 33, y: 78, scale: 1.00 },
+    { name: "周宁",  tag: "康健",     x: 19, y: 81, scale: 1.06 },
+    { name: "苏明",  tag: "考学",     x: 29, y: 66, scale: 0.72 },
+    { name: "David", tag: "Clarity",  x: 71, y: 66, scale: 0.72 },
+    { name: "静远",  tag: "顺遂",     x: 67, y: 78, scale: 1.00 },
+    { name: "Grace", tag: "Family",   x: 76, y: 74, scale: 0.90 },
+    { name: "慧心",  tag: "安宁",     x: 85, y: 69, scale: 0.78 },
+    { name: "Alex",  tag: "Hope",     x: 81, y: 81, scale: 1.06 },
   ];
 
-  function renderCushions() {
-    cushionsEl.innerHTML = peers.map((p, idx) => `
-      <button type="button" class="peer-seat is-${p.mode}" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-50%) scale(${p.scale})" data-peer="${idx}">
-        <span class="peer-seat-tag"><b>${p.name}</b><span>${p.action}</span></span>
-        <span class="peer-silhouette"><i class="p-head"></i><i class="p-body"></i></span>
-        <span class="peer-pad"></span>
+  function renderPeerCandles() {
+    cushionsEl.innerHTML = peerCandles.map((p, idx) => `
+      <button type="button" class="peer-candle" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-50%) scale(${p.scale})" data-peer="${idx}">
+        <span class="candle-halo" style="animation-delay:${-(idx * 0.4)}s"><i class="candle-flame-tip" style="animation-delay:${-(idx * 0.35)}s"></i></span>
+        <span class="candle-wax"></span>
+        <span class="peer-candle-label"><b>${p.name}</b> · ${p.tag}</span>
       </button>
-    `).join("") + `
-      <div class="peer-seat is-self" id="self-seat" style="left:50%;top:82%">
-        <span class="peer-seat-tag"><b>你 · 主蒲团</b><span id="self-status">静候礼佛</span></span>
-        <span class="peer-pad"></span>
-      </div>
-    `;
+    `).join("");
 
-    cushionsEl.addEventListener("click", (e) => {
+    cushionsEl.onclick = (e) => {
       const btn = e.target.closest("[data-peer]");
       if (!btn) return;
-      const p = peers[Number(btn.dataset.peer)];
+      const p = peerCandles[Number(btn.dataset.peer)];
       btn.classList.remove("is-blessed");
       void btn.offsetWidth;
       btn.classList.add("is-blessed");
-      showToast(`已向同修「${p.name}」随喜共愿 · 莲光相应`);
-    });
+      showToast(`已为同修「${p.name}」的平安烛随喜添光`);
+    };
   }
-  renderCushions();
+  renderPeerCandles();
 
-  /* ===== 2. 环境光影实时联动他人动作（香炉实时新烟 + 两侧灯台亮灯） ===== */
+  /* ===== 2. 环境光影实时联动他人动作（香炉丝烟加浓 + 两侧烛火微字） ===== */
   const liveEvents = [
     { type: "incense", text: "苏明轩 刚刚敬了一炷清香" },
-    { type: "lamp",    side: "left",  text: "Grace 刚刚点亮一盏平安灯" },
+    { type: "lamp",    side: "left",  text: "Grace 刚刚点亮一盏平安烛" },
     { type: "incense", text: "Maya 刚刚合十敬香 · Peace" },
     { type: "lamp",    side: "right", text: "周静安 刚刚供灯祈愿家人康健" },
     { type: "incense", text: "陈志远 刚刚于大雄宝殿敬香回向" },
     { type: "lamp",    side: "left",  text: "David 刚刚点亮智慧心灯" },
   ];
   let liveIdx = 0;
-  let smokeBoost = 0;
+  let extraStrands = 0;
 
   function triggerLiveAction(ev) {
     if (document.body.classList.contains("quiet-mode") || document.hidden) return;
@@ -71,7 +70,7 @@
     whisper.textContent = ev.text;
 
     if (ev.type === "incense") {
-      smokeBoost = 1.0;
+      extraStrands = 1.0;
       censerZone.appendChild(whisper);
       setTimeout(() => whisper.remove(), 3600);
     } else {
@@ -80,22 +79,30 @@
       dot.className = "live-lamp-dot";
       target.appendChild(dot);
       target.appendChild(whisper);
-      while (target.querySelectorAll(".live-lamp-dot").length > 4) {
+      while (target.querySelectorAll(".live-lamp-dot").length > 3) {
         target.querySelector(".live-lamp-dot")?.remove();
       }
       setTimeout(() => whisper.remove(), 3600);
     }
   }
 
-  setTimeout(() => triggerLiveAction(liveEvents[liveIdx++ % liveEvents.length]), 1200);
-  setInterval(() => triggerLiveAction(liveEvents[liveIdx++ % liveEvents.length]), 4800);
+  setTimeout(() => triggerLiveAction(liveEvents[liveIdx++ % liveEvents.length]), 1400);
+  setInterval(() => triggerLiveAction(liveEvents[liveIdx++ % liveEvents.length]), 5200);
 
-  /* ===== 3. 60fps Canvas 金光浮尘 + 香炉实时升烟 + 刚体阻尼视差 ===== */
+  /* ===== 3. 重构香烟：纤细丝绸状缠绕青烟丝缕 + 60fps 金光微尘 + 刚体视差 ===== */
   const canvas = document.getElementById("hall-fx-canvas");
   const ctx = canvas.getContext("2d");
   let w = 0, h = 0, dpr = 1;
   const motes = [];
-  const smokes = [];
+
+  // 5 条真实丝绸状檀香青烟丝缕参数
+  const strands = [
+    { ox: -8,  freq: 0.014, amp: 14, speed: 1.15, phase: 0.0, width: 1.6, alpha: 0.24 },
+    { ox:  0,  freq: 0.011, amp: 20, speed: 0.92, phase: 1.7, width: 2.2, alpha: 0.30 },
+    { ox:  8,  freq: 0.016, amp: 16, speed: 1.28, phase: 3.1, width: 1.5, alpha: 0.22 },
+    { ox: -4,  freq: 0.009, amp: 26, speed: 0.78, phase: 4.4, width: 3.4, alpha: 0.14 },
+    { ox:  5,  freq: 0.012, amp: 22, speed: 0.85, phase: 5.5, width: 2.8, alpha: 0.16 },
+  ];
 
   function resize() {
     w = window.innerWidth;
@@ -105,24 +112,14 @@
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (!motes.length) {
-      for (let i = 0; i < 64; i++) {
+      for (let i = 0; i < 58; i++) {
         motes.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          r: 0.9 + Math.random() * 1.9,
-          vy: -(0.16 + Math.random() * 0.34),
+          r: 0.8 + Math.random() * 1.7,
+          vy: -(0.14 + Math.random() * 0.30),
           phase: Math.random() * Math.PI * 2,
-          alpha: 0.25 + Math.random() * 0.55,
-        });
-      }
-      for (let i = 0; i < 24; i++) {
-        smokes.push({
-          x: w * 0.5 + (Math.random() - 0.5) * 28,
-          y: h * (0.42 + Math.random() * 0.22),
-          r: 10 + Math.random() * 18,
-          vy: -(0.35 + Math.random() * 0.35),
-          phase: Math.random() * Math.PI * 2,
-          alpha: 0.06 + Math.random() * 0.08,
+          alpha: 0.22 + Math.random() * 0.52,
         });
       }
     }
@@ -133,63 +130,92 @@
   let targetX = 0, targetY = 0, curX = 0, curY = 0;
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
-    targetX = (e.clientX / Math.max(1, w) - 0.5) * 24;
-    targetY = (e.clientY / Math.max(1, h) - 0.5) * 14;
+    targetX = (e.clientX / Math.max(1, w) - 0.5) * 20;
+    targetY = (e.clientY / Math.max(1, h) - 0.5) * 12;
   });
   if (typeof DeviceOrientationEvent !== "undefined") {
     window.addEventListener("deviceorientation", (e) => {
       if (typeof e.gamma === "number" && typeof e.beta === "number") {
-        targetX = Math.max(-24, Math.min(24, (e.gamma / 25) * 24));
-        targetY = Math.max(-14, Math.min(14, ((e.beta - 45) / 25) * 14));
+        targetX = Math.max(-20, Math.min(20, (e.gamma / 25) * 20));
+        targetY = Math.max(-12, Math.min(12, ((e.beta - 45) / 25) * 12));
       }
     });
+  }
+
+  function drawSilkIncenseSmoke(t) {
+    const baseX = w * 0.5 - curX * 0.55;
+    const baseY = h * 0.67 - curY * 0.35;
+    const topY = h * 0.24;
+    const heightSpan = Math.max(120, baseY - topY);
+    const boost = 1 + extraStrands * 0.55;
+
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    for (let s = 0; s < strands.length; s++) {
+      const st = strands[s];
+      const steps = 42;
+      // 分段绘制，让烟缕从底部纤细凝实 -> 顶部随风轻盈拉宽消散
+      for (let i = 0; i < steps; i++) {
+        const p0 = i / steps;
+        const p1 = (i + 1) / steps;
+        const y0 = baseY - p0 * heightSpan;
+        const y1 = baseY - p1 * heightSpan;
+
+        // 越往上摆幅越大、烟丝越飘渺
+        const sway0 = Math.sin(p0 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p0 * 1.35)
+                    + Math.cos(p0 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.5 * p0;
+        const sway1 = Math.sin(p1 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p1 * 1.35)
+                    + Math.cos(p1 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.5 * p1;
+
+        const x0 = baseX + st.ox * (1 + p0 * 1.4) + sway0;
+        const x1 = baseX + st.ox * (1 + p1 * 1.4) + sway1;
+
+        const fadeIn = Math.min(1, p0 * 7);
+        const fadeOut = Math.pow(1 - p0, 1.45);
+        const alpha = st.alpha * fadeIn * fadeOut * boost;
+        if (alpha < 0.004) continue;
+
+        ctx.strokeStyle = `rgba(234, 232, 224, ${alpha.toFixed(3)})`;
+        ctx.lineWidth = st.width * (0.7 + p0 * 4.2);
+        ctx.shadowColor = `rgba(236, 232, 220, ${(alpha * 0.85).toFixed(3)})`;
+        ctx.shadowBlur = 4 + p0 * 14;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
   }
 
   function tick(now) {
     requestAnimationFrame(tick);
     if (document.hidden) return;
     const t = now * 0.001;
-    curX += (targetX + Math.sin(t * 0.4) * 3 - curX) * 0.06;
-    curY += (targetY + Math.cos(t * 0.32) * 2 - curY) * 0.06;
+    curX += (targetX + Math.sin(t * 0.38) * 2.6 - curX) * 0.06;
+    curY += (targetY + Math.cos(t * 0.3) * 1.8 - curY) * 0.06;
     stage.style.setProperty("--px", `${curX.toFixed(2)}px`);
     stage.style.setProperty("--py", `${curY.toFixed(2)}px`);
 
-    smokeBoost *= 0.985;
+    extraStrands *= 0.988;
     ctx.clearRect(0, 0, w, h);
 
-    // 香炉实时青烟
-    for (let i = 0; i < smokes.length; i++) {
-      const s = smokes[i];
-      s.phase += 0.02;
-      s.y += s.vy * (1 + smokeBoost * 0.7);
-      s.x += Math.sin(s.phase) * 0.35;
-      if (s.y < h * 0.34) {
-        s.y = h * 0.64;
-        s.x = w * 0.5 + (Math.random() - 0.5) * 26;
-      }
-      const progress = (h * 0.64 - s.y) / (h * 0.30);
-      const fade = Math.sin(Math.max(0, Math.min(1, progress)) * Math.PI);
-      const a = s.alpha * fade * (1 + smokeBoost * 1.4);
-      const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * (1 + progress * 0.6));
-      g.addColorStop(0, `rgba(236, 232, 222, ${a})`);
-      g.addColorStop(1, "rgba(236, 232, 222, 0)");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r * (1 + progress * 0.6), 0, Math.PI * 2);
-      ctx.fill();
-    }
+    // 1. 重构后的丝绸状檀香青烟
+    drawSilkIncenseSmoke(t);
 
-    // 殿内金光浮尘
+    // 2. 殿内金光浮尘
     for (let i = 0; i < motes.length; i++) {
       const m = motes[i];
-      m.phase += 0.025;
+      m.phase += 0.024;
       m.y += m.vy;
-      m.x += Math.sin(m.phase) * 0.2;
+      m.x += Math.sin(m.phase) * 0.18;
       if (m.y < -10) { m.y = h + 10; m.x = Math.random() * w; }
       const a = m.alpha * (0.55 + 0.45 * Math.sin(m.phase * 1.4));
       ctx.fillStyle = `rgba(255, 234, 174, ${a})`;
       ctx.beginPath();
-      ctx.arc(m.x + curX * 0.4, m.y + curY * 0.3, m.r, 0, Math.PI * 2);
+      ctx.arc(m.x + curX * 0.35, m.y + curY * 0.25, m.r, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -220,26 +246,28 @@
   document.getElementById("btn-act-incense").addEventListener("click", () => {
     playBell();
     triggerLiveAction({ type: "incense", text: "你 刚刚敬了一炷清香 · 香云供养" });
-    document.getElementById("self-status").textContent = "已敬清香";
-    showToast("清香已奉上 · 炉中青烟袅袅升起");
+    showToast("清香已奉上 · 丝缕青烟徐徐升空");
   });
 
   document.getElementById("btn-act-bow").addEventListener("click", () => {
     const bow = document.getElementById("bow-hands-layer");
     bow.classList.add("is-show");
-    document.getElementById("self-seat").classList.add("is-blessed");
-    document.getElementById("self-status").textContent = "一心顶礼中";
-    setTimeout(() => {
-      bow.classList.remove("is-show");
-      document.getElementById("self-seat").classList.remove("is-blessed");
-    }, 2600);
+    setTimeout(() => bow.classList.remove("is-show"), 2600);
     showToast("一心顶礼 · 愿心无散乱");
   });
 
   document.getElementById("btn-act-lamp").addEventListener("click", () => {
-    triggerLiveAction({ type: "lamp", side: Math.random() > 0.5 ? "left" : "right", text: "你 刚刚于大雄宝殿点亮一盏心灯" });
-    document.getElementById("self-status").textContent = "已供心灯";
-    showToast("心灯已于殿前点亮");
+    peerCandles.push({
+      name: "你",
+      tag: "心灯",
+      x: 44 + Math.random() * 12,
+      y: 77 + Math.random() * 6,
+      scale: 1.08,
+    });
+    if (peerCandles.length > 14) peerCandles.splice(10, 1);
+    renderPeerCandles();
+    triggerLiveAction({ type: "lamp", side: Math.random() > 0.5 ? "left" : "right", text: "你 刚刚于大雄宝殿点亮一盏长明烛" });
+    showToast("你的长明烛已融入大殿烛海");
   });
 
   const quietBtn = document.getElementById("btn-quiet");
@@ -247,7 +275,7 @@
     const on = document.body.classList.toggle("quiet-mode");
     quietBtn.classList.toggle("is-on", on);
     quietBtn.textContent = on ? "已清净" : "清净模式";
-    showToast(on ? "已开启清净模式 · 隐藏同修与联动动态" : "已恢复多人共修同在感");
+    showToast(on ? "已开启清净模式 · 隐藏同修烛火与联动动态" : "已恢复满殿同修烛火与香火氛围");
   });
 
   const soundBtn = document.getElementById("btn-sound");
@@ -267,10 +295,10 @@
     isEn = !isEn;
     e.target.textContent = isEn ? "中文" : "EN";
     document.getElementById("t-hall-name").textContent = isEn ? "Mahāvīra Hall · Shakyamuni Buddha" : "大雄宝殿 · 释迦牟尼佛";
-    document.getElementById("t-hall-sub").textContent = isEn ? "3D-v1 Single-Hall Test · 4K Rigid Parallax + Live Presence" : "3D-v1 单页测试 · 4K 刚体视差 + 多人在场感";
+    document.getElementById("t-hall-sub").textContent = isEn ? "3D-v1 Single-Hall Test · Candlelight Presence & Silk Incense" : "3D-v1 单页测试 · 同修长明烛海与丝缕青烟";
     document.getElementById("t-online").textContent = isEn ? "Pilgrims in Hall" : "位同修正在殿内";
     document.getElementById("t-incense").textContent = isEn ? "Incense" : "敬香";
     document.getElementById("t-bow").textContent = isEn ? "Bow" : "礼拜";
-    document.getElementById("t-lamp").textContent = isEn ? "Lamp" : "供灯";
+    document.getElementById("t-lamp").textContent = isEn ? "Candle" : "供灯";
   });
 })();

@@ -452,3 +452,96 @@ body.quiet-mode .hall-live-world {
   .live-lamps-left { left: 6%; }
   .live-lamps-right { right: 6%; }
 }
+
+
+/* ===== 3D-v1 精修：移除假剪影人偶，改为与 4K 大殿浑然一体的真实摇曳同修烛火海 ===== */
+.peer-candle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+}
+.candle-halo {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  mix-blend-mode: screen;
+}
+.candle-halo::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 206, 112, 0.52) 0%, rgba(236, 152, 46, 0.16) 44%, transparent 74%);
+  animation: candle-aura 2.8s ease-in-out infinite alternate;
+}
+.candle-flame-tip {
+  position: relative;
+  width: 8px;
+  height: 15px;
+  border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
+  background: radial-gradient(ellipse at 50% 72%, #fffef4 0%, #ffe08a 42%, #f49b2c 84%, rgba(235, 118, 22, 0) 100%);
+  box-shadow: 0 0 12px #ffd87a, 0 0 26px rgba(246, 168, 54, 0.78);
+  transform-origin: center bottom;
+  animation: candle-sway 1.9s ease-in-out infinite alternate;
+}
+.candle-wax {
+  width: 7px;
+  height: 12px;
+  margin-top: -18px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(245, 214, 156, 0.72), rgba(140, 56, 32, 0.72));
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
+}
+@keyframes candle-aura {
+  0%   { opacity: 0.62; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+@keyframes candle-sway {
+  0%   { transform: rotate(-3deg) scaleY(0.94); }
+  50%  { transform: rotate(2.5deg) scaleY(1.06); }
+  100% { transform: rotate(-1.5deg) scaleY(0.98); }
+}
+
+.peer-candle-label {
+  margin-top: 2px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(9, 15, 17, 0.56);
+  border: 1px solid rgba(238, 204, 130, 0.22);
+  color: rgba(246, 236, 212, 0.86);
+  font-size: 10px;
+  white-space: nowrap;
+  backdrop-filter: blur(3px);
+  opacity: 0.76;
+  transition: opacity 0.22s, border-color 0.22s, transform 0.22s;
+}
+.peer-candle:hover .peer-candle-label {
+  opacity: 1;
+  border-color: rgba(250, 222, 152, 0.78);
+  transform: translateY(-2px);
+}
+.peer-candle-label b {
+  color: #f6d58b;
+  font-weight: 500;
+}
+.peer-candle.is-blessed .candle-halo::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid #fae09e;
+  animation: blessing-ripple 0.95s ease-out forwards;
+}
+
+body.quiet-mode .peer-candle {
+  display: none !important;
+}
