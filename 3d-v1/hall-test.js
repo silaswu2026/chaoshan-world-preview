@@ -20,7 +20,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261125-3dv1-7";
+  const V = "20261125-3dv1-8";
   const counts = { incense: 18, lamp: 24, lotus: 11, tea: 14 };
   let isEn = false;
 
@@ -149,14 +149,12 @@
     renderIncense(idx);
   }
 
-  /* ===== ② 写实古铜酥油灯海（实拍铜灯 + 动态烛光晕，左右对称透视排布） ===== */
+  /* ===== ② 写实古铜酥油灯（严格中轴对称：须弥座石台左右各1 + 木质供桌两角各1，共4盏） ===== */
   const peerCandles = [
-    { name: "清和",  city: "台北",   tag: "平安",    wish: "愿一家老小四季平安，夜夜好眠", x: 14, y: 69, scale: 0.78, bless: 9 },
-    { name: "Maya",  city: "Seattle",tag: "Peace",   wish: "May everyone in this hall find quiet peace", x: 22, y: 74, scale: 0.92, bless: 12 },
-    { name: "周宁",  city: "上海",   tag: "康健",    wish: "愿母亲早日康复，身心轻安", x: 15, y: 80, scale: 1.05, bless: 15 },
-    { name: "Grace", city: "Toronto",tag: "Family",  wish: "Blessings for my parents and children", x: 78, y: 74, scale: 0.92, bless: 11 },
-    { name: "慧心",  city: "洛杉矶", tag: "安宁",    wish: "一灯能除千年暗，愿心里常明", x: 86, y: 69, scale: 0.78, bless: 13 },
-    { name: "Alex",  city: "NYC",    tag: "Hope",    wish: "Sending warmth to those who feel alone", x: 85, y: 80, scale: 1.05, bless: 10 },
+    { name: "清和",  city: "台北",   tag: "平安",    wish: "愿一家老小四季平安，夜夜好眠", x: 29.2, y: 62.6, scale: 0.86, bless: 9 },
+    { name: "Maya",  city: "Seattle",tag: "Peace",   wish: "May everyone in this hall find quiet peace", x: 36.6, y: 67.6, scale: 0.96, bless: 12 },
+    { name: "Grace", city: "Toronto",tag: "Family",  wish: "Blessings for my parents and children", x: 63.4, y: 67.6, scale: 0.96, bless: 11 },
+    { name: "慧心",  city: "洛杉矶", tag: "安宁",    wish: "一灯能除千年暗，愿心里常明", x: 70.8, y: 62.6, scale: 0.86, bless: 13 },
   ];
 
   function renderCandles(newIdx = -1) {
@@ -180,12 +178,10 @@
     openPopover({ ...item, kindLabel: "供灯" }, btn);
   });
 
-  /* ===== ③ 写实宋瓷水盘白莲（供案左右对称摆放，避开正中前景人物） ===== */
+  /* ===== ③ 写实宋瓷水盘白莲（左右对称安放于须弥座石台，端庄不凌乱） ===== */
   const lotusItems = [
-    { x: 29, y: 76, scale: 0.92, side: "left",  name: "清岚", city: "杭州",   wish: "心如白莲，不染尘埃", bless: 8 },
-    { x: 37, y: 72, scale: 0.78, side: "left",  name: "Elena",city: "London", wish: "Grace and serenity for all", bless: 11 },
-    { x: 63, y: 72, scale: 0.78, side: "right", name: "知行", city: "新加坡", wish: "愿得清净心，常生欢喜意", bless: 7 },
-    { x: 71, y: 76, scale: 0.92, side: "right", name: "若水", city: "温哥华", wish: "愿家人岁岁长安，花开见佛", bless: 13 },
+    { x: 35.0, y: 62.2, scale: 0.92, side: "left",  name: "清岚", city: "杭州",   wish: "心如白莲，不染尘埃", bless: 8 },
+    { x: 65.0, y: 62.2, scale: 0.92, side: "right", name: "若水", city: "温哥华", wish: "愿家人岁岁长安，花开见佛", bless: 13 },
   ];
 
   function renderLotus(freshIdx = -1) {
@@ -217,17 +213,18 @@
     return lotusItems[idx].side;
   }
 
-  /* ===== ④ 写实宋代青瓷开片贡茶（供桌前排，四盏实拍青瓷茶盏 + 暖茶雾 + 水纹） ===== */
+  /* ===== ④ 写实宋代青瓷开片贡茶（严格落于木质供桌台面，左二右二对称排布，中轴留白给前景行者） ===== */
   const teaCups = [
-    { filled: true,  name: "明觉", city: "旧金山", wish: "奉一盏清茶，愿心如止水", bless: 9 },
-    { filled: true,  name: "静远", city: "成都",   wish: "禅茶一味，去除烦躁昏沉", bless: 12 },
-    { filled: true,  name: "Chloe",city: "LA",     wish: "Still water, clear mind", bless: 14 },
-    { filled: false, name: "虚位", city: "",       wish: "点击下方「奉茶」，在佛前注满这一盏清茶", bless: 0 },
+    { x: 41.2, y: 67.8, filled: true,  name: "明觉", city: "旧金山", wish: "奉一盏清茶，愿心如止水", bless: 9 },
+    { x: 45.3, y: 67.8, filled: true,  name: "静远", city: "成都",   wish: "禅茶一味，去除烦躁昏沉", bless: 12 },
+    { x: 54.7, y: 67.8, filled: true,  name: "Chloe",city: "LA",     wish: "Still water, clear mind", bless: 14 },
+    { x: 58.8, y: 67.8, filled: false, name: "虚位", city: "",       wish: "点击下方「奉茶」，在佛前注满这一盏清茶", bless: 0 },
   ];
 
   function renderTeaRow(rippleIdx = -1) {
     teaRowEl.innerHTML = teaCups.map((c, i) => `
       <button type="button" class="tea-cup ${c.filled ? "is-filled" : ""} ${i === rippleIdx ? "is-rippling" : ""}"
+              style="left:${c.x}%;top:${c.y}%"
               data-offering="tea" data-idx="${i}">
         <span class="tea-steam"><i></i><i></i></span>
         <span class="tea-visual">
@@ -260,7 +257,7 @@
       idx = teaCups.findIndex((c) => !c.filled);
       if (idx < 0) idx = Math.floor(Math.random() * teaCups.length);
     }
-    teaCups[idx] = { filled: true, name, city, wish, bless: 1 };
+    teaCups[idx] = { ...teaCups[idx], filled: true, name, city, wish, bless: 1 };
     counts.tea += 1;
     updateStats();
     renderTeaRow(idx);
@@ -278,13 +275,14 @@
   let liveIdx = 0;
   let extraStrands = 0;
 
-  function showWhisper(text, zone = "center") {
+  function showWhisper(text) {
     if (document.body.classList.contains("quiet-mode") || document.hidden) return;
+    // 统一在正中上方仅展示一行克制浮字，避免满屏叠字凌乱
+    censerZone.innerHTML = "";
     const whisper = document.createElement("div");
     whisper.className = "live-whisper";
     whisper.textContent = text;
-    const target = zone === "left" ? lampsLeft : zone === "right" ? lampsRight : censerZone;
-    target.appendChild(whisper);
+    censerZone.appendChild(whisper);
     setTimeout(() => whisper.remove(), 3800);
   }
 
@@ -436,24 +434,21 @@
 
   document.getElementById("btn-act-lamp").addEventListener("click", () => {
     playTone("lamp");
-    const isLeft = Math.random() > 0.5;
-    const newCandle = {
+    // 严格保持对称格局：依次在对称主灯位点亮刷新，绝不随机散落
+    const idx = counts.lamp % peerCandles.length;
+    peerCandles[idx] = {
+      ...peerCandles[idx],
       name: "你",
       city: "此刻",
       tag: "心灯",
       wish: "点亮一盏长明酥油灯，愿光明温暖常伴",
-      x: isLeft ? 20 + Math.random() * 7 : 73 + Math.random() * 7,
-      y: 78 + Math.random() * 4,
-      scale: 0.98,
       bless: 1,
     };
-    peerCandles.push(newCandle);
-    if (peerCandles.length > 10) peerCandles.splice(6, 1);
     counts.lamp += 1;
     updateStats();
-    renderCandles(peerCandles.length - 1);
-    showWhisper("你 刚刚点亮一盏古铜酥油灯", isLeft ? "left" : "right");
-    showToast("你的古铜酥油灯已融入佛前烛海");
+    renderCandles(idx);
+    showWhisper("你 刚刚于佛前供台点亮一盏古铜酥油灯");
+    showToast("你的古铜酥油灯已端正点亮于佛前供台");
   });
 
   document.getElementById("btn-act-lotus").addEventListener("click", () => {

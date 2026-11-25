@@ -131,9 +131,9 @@ html, body, .hall-stage {
 .altar-incense-box {
   position: absolute;
   left: 50%;
-  top: 56.5%;
-  width: 92px;
-  height: 44px;
+  top: 55.2%;
+  width: 84px;
+  height: 40px;
   transform: translate(-50%, -50%);
   pointer-events: auto;
   cursor: pointer;
@@ -194,8 +194,8 @@ html, body, .hall-stage {
 
 .lamp-visual {
   position: relative;
-  width: 66px;
-  height: 66px;
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
 }
@@ -204,28 +204,28 @@ html, body, .hall-stage {
   position: absolute;
   left: 50%;
   bottom: 2px;
-  width: 52px;
-  height: 12px;
+  width: 40px;
+  height: 10px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.72) 0%, transparent 72%);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.78) 0%, transparent 72%);
 }
 .lamp-img {
   position: relative;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: contrast(1.06) saturate(1.08) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.65));
+  filter: contrast(1.06) saturate(1.08) drop-shadow(0 5px 8px rgba(0, 0, 0, 0.68));
 }
 .lamp-flame-glow {
   position: absolute;
   left: 50%;
   top: 22%;
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 224, 140, 0.62) 0%, rgba(244, 162, 48, 0.22) 44%, transparent 74%);
+  background: radial-gradient(circle, rgba(255, 224, 140, 0.58) 0%, rgba(244, 162, 48, 0.2) 44%, transparent 74%);
   mix-blend-mode: screen;
   pointer-events: none;
   animation: candle-aura 2.2s ease-in-out infinite alternate;
@@ -235,7 +235,7 @@ html, body, .hall-stage {
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1.14); }
 }
 
-/* ③ 写实宋瓷水盘白莲（实拍白莲 + 轻风微动 + 桌面着地影） */
+/* ③ 写实宋瓷水盘白莲（对称安放于须弥座石台两侧） */
 .lotus-item {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -250,8 +250,8 @@ html, body, .hall-stage {
 }
 .lotus-visual {
   position: relative;
-  width: 84px;
-  height: 84px;
+  width: 68px;
+  height: 68px;
   display: grid;
   place-items: center;
 }
@@ -259,19 +259,19 @@ html, body, .hall-stage {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: 8px;
-  width: 72px;
-  height: 14px;
+  bottom: 7px;
+  width: 58px;
+  height: 12px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.78) 0%, transparent 74%);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.82) 0%, transparent 74%);
 }
 .lotus-img {
   position: relative;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: brightness(0.94) contrast(1.06) saturate(1.04) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.72));
+  filter: brightness(0.92) contrast(1.06) saturate(1.04) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.72));
   transform-origin: center bottom;
   animation: lotus-sway 5.2s ease-in-out infinite alternate;
 }
@@ -283,20 +283,15 @@ html, body, .hall-stage {
   100% { transform: scale(1.015); }
 }
 
-/* ④ 写实宋代青瓷开片贡茶（实拍青瓷茶盏 + 暖白茶雾 + 金色水纹） */
+/* ④ 写实宋代青瓷开片贡茶（严格落于木质供桌台面，左二右二对称排布） */
 .altar-tea-row {
   position: absolute;
-  left: 50%;
-  top: 69.5%;
-  width: min(420px, 68vw);
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  inset: 0;
   pointer-events: none;
 }
 .tea-cup {
-  position: relative;
+  position: absolute;
+  transform: translate(-50%, -50%);
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -308,8 +303,8 @@ html, body, .hall-stage {
 }
 .tea-visual {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
 }
@@ -317,62 +312,62 @@ html, body, .hall-stage {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: 5px;
-  width: 48px;
-  height: 11px;
+  bottom: 4px;
+  width: 36px;
+  height: 9px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75) 0%, transparent 72%);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.8) 0%, transparent 72%);
 }
 .tea-img {
   position: relative;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: brightness(0.95) contrast(1.06) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.72));
+  filter: brightness(0.94) contrast(1.06) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.72));
   transition: filter 0.35s, opacity 0.35s;
 }
 .tea-cup:not(.is-filled) .tea-img {
-  filter: brightness(0.62) saturate(0.45) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.7));
+  filter: brightness(0.62) saturate(0.45) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.7));
   opacity: 0.78;
 }
 
 .tea-steam {
   position: absolute;
-  top: -10px;
+  top: -12px;
   left: 50%;
-  width: 24px;
-  height: 28px;
+  width: 20px;
+  height: 24px;
   transform: translateX(-50%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.6s ease;
 }
-.tea-cup.is-filled .tea-steam { opacity: 0.78; }
+.tea-cup.is-filled .tea-steam { opacity: 0.72; }
 .tea-steam i {
   position: absolute;
   bottom: 0;
   left: 50%;
-  width: 2px;
-  height: 18px;
+  width: 1.8px;
+  height: 16px;
   border-radius: 99px;
-  background: linear-gradient(180deg, transparent, rgba(248, 240, 224, 0.62), transparent);
-  filter: blur(1.6px);
+  background: linear-gradient(180deg, transparent, rgba(248, 240, 224, 0.58), transparent);
+  filter: blur(1.5px);
   animation: tea-steam-rise 3.4s ease-in-out infinite;
 }
-.tea-steam i:nth-child(2) { left: 36%; height: 14px; animation-delay: -1.6s; }
+.tea-steam i:nth-child(2) { left: 36%; height: 12px; animation-delay: -1.6s; }
 @keyframes tea-steam-rise {
   0%   { opacity: 0; transform: translate(-50%, 6px) scaleY(0.7); }
-  40%  { opacity: 0.85; transform: translate(-42%, -4px) scaleY(1.08); }
-  100% { opacity: 0; transform: translate(-58%, -18px) scaleY(1.25); }
+  40%  { opacity: 0.82; transform: translate(-42%, -4px) scaleY(1.08); }
+  100% { opacity: 0; transform: translate(-58%, -16px) scaleY(1.25); }
 }
 
 .tea-ripple {
   position: absolute;
   left: 50%;
   top: 40%;
-  width: 26px;
-  height: 10px;
+  width: 22px;
+  height: 8px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 232, 166, 0.9);
   transform: translate(-50%, -50%) scale(0.35);
@@ -387,26 +382,29 @@ html, body, .hall-stage {
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1.75); }
 }
 
-/* 供品精致微标（默认克制柔和，悬停清晰亮起） */
+/* 供品名牌默认隐去（彻底告别满屏浮签凌乱），悬停时柔和显现 */
 .peer-offering-tag {
-  margin-top: -6px;
-  padding: 2px 7px;
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(9, 15, 17, 0.66);
-  border: 1px solid rgba(238, 204, 130, 0.24);
-  color: rgba(246, 236, 212, 0.88);
-  font-size: 9.5px;
+  background: rgba(9, 15, 17, 0.84);
+  border: 1px solid rgba(246, 214, 140, 0.45);
+  color: rgba(248, 238, 214, 0.96);
+  font-size: 10px;
   white-space: nowrap;
-  backdrop-filter: blur(3px);
-  opacity: 0.72;
-  transition: opacity 0.22s, border-color 0.22s, transform 0.22s;
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .peer-candle:hover .peer-offering-tag,
 .lotus-item:hover .peer-offering-tag,
 .tea-cup:hover .peer-offering-tag {
   opacity: 1;
-  border-color: rgba(250, 222, 152, 0.86);
-  transform: translateY(-2px);
+  transform: translate(-50%, 0);
 }
 .peer-offering-tag b { color: #f6d58b; font-weight: 500; }
 
@@ -433,14 +431,14 @@ html, body, .hall-stage {
   100% { opacity: 1; }
 }
 
-/* ===== 4. 前景实像礼佛行者（100% 不透明实体 + 真实地面投影 + 更快前景视差） ===== */
+/* ===== 4. 前景实像礼佛行者（稳立于莲花地砖圆心，不遮挡供桌器物） ===== */
 .hall-foreground-pilgrim {
   position: absolute;
   left: 50%;
-  bottom: 5.5%;
+  bottom: 4.5%;
   z-index: 14;
   pointer-events: none;
-  transform: translate3d(calc(-50% + var(--px) * 1.15), calc(var(--py) * 0.72), 0);
+  transform: translate3d(calc(-50% + var(--px) * 1.1), calc(var(--py) * 0.65), 0);
   will-change: transform;
   display: flex;
   flex-direction: column;
@@ -448,11 +446,11 @@ html, body, .hall-stage {
 }
 .pilgrim-img {
   position: relative;
-  height: clamp(190px, 34vh, 330px);
+  height: clamp(148px, 25vh, 238px);
   width: auto;
   display: block;
   opacity: 1; /* 永久硬红线：100% 实像不透明 */
-  filter: brightness(0.95) contrast(1.06) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.72));
+  filter: brightness(0.95) contrast(1.06) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.74));
   transform-origin: center bottom;
   animation: pilgrim-breathe 5.6s ease-in-out infinite alternate;
   transition: transform 0.8s ease;
@@ -745,13 +743,12 @@ body.quiet-mode .offering-popover {
 
 @media (max-width: 720px) {
   .pill-sep, .pill-stats { display: none; }
-  .lamp-visual { width: 48px; height: 48px; }
-  .lotus-visual { width: 62px; height: 62px; }
-  .tea-visual { width: 46px; height: 46px; }
-  .altar-tea-row { width: 82vw; top: 69%; }
-  .pilgrim-img { height: clamp(165px, 27vh, 230px); }
-  .hall-foreground-pilgrim { bottom: 8%; }
-  .peer-offering-tag { font-size: 8.5px; padding: 1.5px 6px; }
+  .lamp-visual { width: 38px; height: 38px; }
+  .lotus-visual { width: 50px; height: 50px; }
+  .tea-visual { width: 34px; height: 34px; }
+  .pilgrim-img { height: clamp(135px, 23vh, 195px); }
+  .hall-foreground-pilgrim { bottom: 7.5%; }
+  .peer-offering-tag { font-size: 9px; padding: 1.5px 6px; }
   .dock-btn { padding: 8px 11px; font-size: 11.5px; gap: 4px; }
   .live-lamps-left { left: 4%; }
   .live-lamps-right { right: 4%; }
