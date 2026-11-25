@@ -1,0 +1,2558 @@
+/* Demo-V2: 见山 (Jianshan) × 朝山 (Chaoshan) Stage 1 Styles */
+
+/* ===== 1. 见山 5 柱对称顶栏 ===== */
+.jianshan-topbar {
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: max(14px, env(safe-area-inset-top)) 20px 10px;
+  background: linear-gradient(180deg, rgba(8, 13, 15, 0.72) 0%, rgba(8, 13, 15, 0.28) 68%, transparent 100%);
+}
+
+.jianshan-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #f3e5c3;
+  cursor: pointer;
+  padding: 4px 2px;
+  text-align: left;
+}
+.jianshan-brand strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+.jianshan-brand small {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgba(232, 208, 156, 0.72);
+  text-transform: uppercase;
+}
+
+.jianshan-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.jianshan-nav-btn {
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(242, 232, 210, 0.82);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+.jianshan-nav-btn:hover {
+  color: #fff3d6;
+  background: rgba(226, 190, 114, 0.12);
+}
+
+.jianshan-nav-btn.is-center {
+  color: #fff3d4;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  padding: 7px 20px;
+  background: linear-gradient(135deg, rgba(212, 173, 94, 0.28), rgba(164, 118, 46, 0.18));
+  border-color: rgba(236, 201, 126, 0.52);
+  box-shadow: 0 0 22px rgba(220, 176, 84, 0.22), inset 0 1px 0 rgba(255, 240, 200, 0.26);
+}
+.jianshan-nav-btn.is-center::before {
+  content: "✦";
+  margin-right: 6px;
+  font-size: 10px;
+  color: #f3cf7a;
+}
+
+.jianshan-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jianshan-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(227, 198, 138, 0.28);
+  background: rgba(14, 21, 23, 0.56);
+  color: #efe2c4;
+  font-size: 12px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.jianshan-icon-btn:hover {
+  background: rgba(212, 173, 94, 0.2);
+  border-color: rgba(236, 201, 126, 0.55);
+}
+.jianshan-icon-btn.is-on {
+  background: rgba(212, 173, 94, 0.26);
+  border-color: rgba(243, 210, 138, 0.72);
+  color: #fff6df;
+}
+
+/* ===== 2. 首页山门：极致留白与震撼 ===== */
+#screen-landing .landing-world-entry,
+#screen-landing .landing-extra-channels,
+#screen-landing .landing-mountains {
+  display: none !important;
+}
+
+#screen-landing .scene-shade {
+  background: linear-gradient(
+    180deg,
+    rgba(9, 14, 16, 0.36) 0%,
+    rgba(9, 14, 16, 0.04) 34%,
+    rgba(9, 14, 16, 0.14) 64%,
+    rgba(9, 14, 16, 0.68) 100%
+  ) !important;
+}
+
+/* 中轴主殿方向极克制暖金呼吸光，引导视线往门里看 */
+#screen-landing .hero-atmosphere::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: min(42vw, 320px);
+  height: min(42vw, 320px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 224, 152, 0.34) 0%, rgba(226, 178, 86, 0.12) 42%, transparent 72%);
+  pointer-events: none;
+  z-index: 2;
+  animation: v2-gate-beacon 5.4s ease-in-out infinite alternate;
+}
+
+@keyframes v2-gate-beacon {
+  0% { opacity: 0.45; transform: translate(-50%, -50%) scale(0.94); }
+  100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+#screen-landing .landing-content {
+  justify-content: flex-end;
+  padding-bottom: max(46px, env(safe-area-inset-bottom) + 28px);
+  gap: 10px;
+}
+
+#screen-landing .landing-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  color: rgba(247, 232, 198, 0.88);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+#screen-landing .brand-hero {
+  font-size: clamp(54px, 11vw, 84px);
+  letter-spacing: 0.28em;
+  margin: 0;
+  text-shadow: 0 8px 34px rgba(0, 0, 0, 0.52), 0 0 32px rgba(232, 190, 102, 0.26);
+}
+
+#screen-landing .tagline {
+  font-size: clamp(15px, 2.4vw, 18px);
+  letter-spacing: 0.22em;
+  color: rgba(246, 236, 214, 0.92);
+  margin-bottom: 14px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+#screen-landing .landing-actions {
+  margin-top: 6px;
+}
+
+#screen-landing .btn-enter-gate-v2 {
+  position: relative;
+  min-width: 224px;
+  padding: 15px 38px;
+  font-size: 16px;
+  letter-spacing: 0.24em;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 224, 162, 0.72);
+  background: linear-gradient(135deg, rgba(214, 170, 82, 0.92), rgba(164, 118, 42, 0.92));
+  color: #161108;
+  font-weight: 600;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.42), 0 0 28px rgba(235, 192, 102, 0.36);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  animation: v2-cta-breathe 3.8s ease-in-out infinite alternate;
+}
+#screen-landing .btn-enter-gate-v2:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.48), 0 0 38px rgba(245, 206, 122, 0.55);
+}
+
+@keyframes v2-cta-breathe {
+  0% { box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4), 0 0 22px rgba(235, 192, 102, 0.28); }
+  100% { box-shadow: 0 12px 38px rgba(0, 0, 0, 0.45), 0 0 36px rgba(245, 206, 122, 0.52); }
+}
+
+#screen-landing .entry-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: rgba(235, 224, 198, 0.74);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+
+/* 修复推门过场左右门缝边缘：用暖暗门缘渐变柔化中轴切缝 */
+.gate-door {
+  background-repeat: no-repeat !important;
+  background-size: 202% 100% !important;
+  background-color: #0b1214;
+}
+.gate-left::after,
+.gate-right::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28%;
+  pointer-events: none;
+}
+.gate-left::after {
+  right: 0;
+  background: linear-gradient(90deg, transparent, rgba(10, 16, 18, 0.92));
+}
+.gate-right::after {
+  left: 0;
+  background: linear-gradient(270deg, transparent, rgba(10, 16, 18, 0.92));
+}
+
+/* 首页与朝山世界全景中，隐藏右上角重复悬浮按钮，避免与见山顶栏重叠 */
+#screen-landing.is-active ~ .music-fab,
+#screen-landing.is-active ~ .world-tools,
+#screen-map.is-active ~ .music-fab {
+  display: none !important;
+}
+#screen-map.is-active ~ .world-tools {
+  top: auto !important;
+  bottom: 196px !important;
+  right: 12px !important;
+}
+
+/* ===== 3. 二图合一：朝山世界全景 (#screen-map) ===== */
+#screen-map .map-topbar-v2 {
+  position: relative;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 8px;
+  background: linear-gradient(180deg, rgba(8, 13, 15, 0.82) 0%, rgba(8, 13, 15, 0.32) 78%, transparent 100%);
+}
+
+#screen-map .map-progress {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  z-index: 20;
+  width: fit-content;
+  margin: 4px auto 0 !important;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(10, 16, 18, 0.62);
+  border: 1px solid rgba(232, 198, 128, 0.24);
+  backdrop-filter: blur(4px);
+}
+
+#screen-map .map-footer {
+  display: none !important;
+}
+
+.map-topbar-left,
+.map-topbar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.map-online-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(232, 198, 128, 0.34);
+  background: rgba(14, 22, 24, 0.66);
+  color: #f3e4c2;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.map-online-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+}
+
+/* 增强四大道场地标在亮云雾上的文字对比度 */
+#screen-map .map-node .name,
+#screen-map .map-node .role {
+  background: rgba(10, 16, 18, 0.68);
+  border: 1px solid rgba(234, 202, 136, 0.24);
+  padding: 2px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
+}
+#screen-map .map-node .role {
+  margin-top: 3px;
+  font-size: 11px;
+  color: rgba(244, 232, 202, 0.92);
+}
+
+/* 隐藏旧版单调的缅怀堂重复节点（已合并进下方四大净境） */
+#screen-map .memorial-node {
+  display: none;
+}
+
+/* 四大独立净境底栏：固定锚定在底部，绝不遮挡上方峨眉山 */
+.v2-sanctuary-dock {
+  position: absolute;
+  left: 50%;
+  bottom: max(14px, env(safe-area-inset-bottom) + 10px);
+  transform: translateX(-50%);
+  z-index: 24;
+  width: min(860px, calc(100% - 24px));
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(13, 20, 22, 0.82), rgba(9, 15, 17, 0.92));
+  border: 1px solid rgba(228, 196, 130, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px);
+}
+
+.v2-dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: rgba(235, 214, 168, 0.78);
+}
+
+.v2-dock-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.v2-realm-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 198, 128, 0.24);
+  background: rgba(255, 245, 224, 0.05);
+  color: #f4e7ca;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
+.v2-realm-btn:hover {
+  background: rgba(226, 186, 102, 0.16);
+  border-color: rgba(242, 210, 138, 0.56);
+  transform: translateY(-1px);
+}
+.v2-realm-btn b {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #fff2d2;
+}
+.v2-realm-btn small {
+  font-size: 11px;
+  color: rgba(235, 220, 186, 0.72);
+  line-height: 1.3;
+}
+
+/* ===== 4. 一键「清净模式」 ===== */
+body.quiet-mode .prayer-bubbles,
+body.quiet-mode .world-presence,
+body.quiet-mode .map-online-pill,
+body.quiet-mode .world-tools [data-world-open="room"],
+body.quiet-mode .ritual-peers {
+  display: none !important;
+}
+
+/* 英语模式下优化字距 */
+html[lang="en"] #screen-landing .brand-hero {
+  letter-spacing: 0.14em;
+  font-size: clamp(42px, 8vw, 68px);
+}
+html[lang="en"] #screen-landing .landing-eyebrow {
+  letter-spacing: 0.18em;
+}
+html[lang="en"] #screen-landing .tagline,
+html[lang="en"] #screen-landing .btn-enter-gate-v2 {
+  letter-spacing: 0.08em;
+}
+html[lang="en"] .jianshan-nav-btn {
+  letter-spacing: 0.04em;
+  font-size: 12px;
+  padding: 7px 11px;
+}
+html[lang="en"] .jianshan-nav-btn.is-center {
+  letter-spacing: 0.1em;
+  font-size: 13px;
+}
+
+/* ===== 5. 手机端响应式（390×844 零横向溢出） ===== */
+@media (max-width: 780px) {
+  .jianshan-topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    padding: max(10px, env(safe-area-inset-top)) 12px 6px;
+    gap: 8px;
+  }
+  .jianshan-brand strong {
+    font-size: 17px;
+    letter-spacing: 0.16em;
+  }
+  .jianshan-brand small {
+    display: none;
+  }
+  .jianshan-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 4px 2px 2px;
+    border-top: 1px solid rgba(232, 198, 128, 0.16);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .jianshan-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .jianshan-nav-btn {
+    font-size: 12px;
+    padding: 6px 8px;
+    letter-spacing: 0.04em;
+  }
+  .jianshan-nav-btn.is-center {
+    font-size: 13px;
+    padding: 6px 12px;
+    letter-spacing: 0.12em;
+  }
+  .jianshan-nav-btn.is-center::before {
+    display: none;
+  }
+  .v2-dock-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .v2-realm-btn {
+    padding: 8px 10px;
+  }
+  .v2-realm-btn b {
+    font-size: 13px;
+  }
+  #screen-map .map-footer {
+    display: none;
+  }
+}
+
+
+/* ===== 6. Demo-V2 电影级 4K 首页：双山门画卷 + 三层光影 + 五层景深 + 粒子引擎 ===== */
+#screen-landing .hero-atmosphere {
+  --v2-far-x: 0px;
+  --v2-far-y: 0px;
+  --v2-mid-x: 0px;
+  --v2-mid-y: 0px;
+  --v2-near-x: 0px;
+  --v2-near-y: 0px;
+}
+
+/* 隐藏旧版 6 个僵硬 CSS 圆点，交给 60fps Canvas 粒子系统 */
+#screen-landing .gold-dust,
+#screen-landing .landing-foreground-left,
+#screen-landing .landing-foreground-right,
+#screen-landing .landing-foreground-path {
+  display: none !important;
+}
+
+/* 4K 背景图（支持路线 B 新电影山门 & 路线 A 原经典 4K 山门 平滑切换） */
+#screen-landing .landing-bg {
+  background-image: url("./assets/scene-gate-4k-cinema.jpg?v=20261125-v2-5") !important;
+  background-position: center center;
+  background-size: cover;
+  translate: var(--v2-far-x) var(--v2-far-y) !important;
+  transform: scale(1.07);
+  animation: v2-ken-burns 26s ease-in-out infinite alternate !important;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease;
+}
+
+#screen-landing[data-gate-theme="classic"] .landing-bg {
+  background-image: url("./assets/scene-gate-4k-classic.jpg?v=20261125-v2-5") !important;
+}
+
+@media (max-width: 700px) and (orientation: portrait) {
+  #screen-landing[data-gate-theme="cinema"] .landing-bg {
+    background-image: url("./assets/scene-gate-4k-cinema-mobile.jpg?v=20261125-v2-5") !important;
+  }
+}
+
+/* 同步推门过场门板底图与当前所选 4K 山门保持一致 */
+body[data-gate-theme="cinema"] .gate-door {
+  background-image: linear-gradient(180deg, rgba(5,10,12,.06), rgba(5,10,12,.26)), url("./assets/scene-gate-4k-cinema.jpg?v=20261125-v2-4") !important;
+}
+body[data-gate-theme="classic"] .gate-door {
+  background-image: linear-gradient(180deg, rgba(5,10,12,.06), rgba(5,10,12,.26)), url("./assets/scene-gate-4k-classic.jpg?v=20261125-v2-4") !important;
+}
+
+@keyframes v2-ken-burns {
+  0% { transform: scale(1.055); }
+  100% { transform: scale(1.125); }
+}
+
+/* 鼠标悬停「推开山门」联动：镜头缓慢前推 + 暖金天光呼应 */
+#screen-landing.v2-gate-hover .landing-bg {
+  filter: brightness(1.08) contrast(1.03);
+}
+#screen-landing.v2-gate-hover .hero-atmosphere::after {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1.22) !important;
+  transition: transform 0.9s ease, opacity 0.9s ease;
+}
+
+/* 电影光影、石灯、丝绒云海与 Canvas 粒子容器 */
+.v2-cinema-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 丁达尔斜射光柱 (Volumetric God Rays) */
+.v2-god-rays {
+  position: absolute;
+  inset: -12%;
+  translate: var(--v2-mid-x) var(--v2-mid-y);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+  transition: opacity 0.8s ease;
+}
+#screen-landing.v2-gate-hover .v2-god-rays {
+  opacity: 1;
+}
+.v2-god-rays i {
+  position: absolute;
+  top: -10%;
+  height: 112%;
+  background: linear-gradient(180deg, rgba(255, 236, 182, 0.36) 0%, rgba(242, 206, 128, 0.1) 52%, transparent 88%);
+  filter: blur(8px);
+  transform-origin: top center;
+}
+.v2-god-rays i:nth-child(1) { left: 22%; width: 16%; transform: rotate(-14deg); animation: v2-ray-sway 14s ease-in-out infinite alternate; }
+.v2-god-rays i:nth-child(2) { left: 42%; width: 18%; transform: rotate(-4deg); opacity: 0.85; animation: v2-ray-sway 17s ease-in-out infinite alternate-reverse; }
+.v2-god-rays i:nth-child(3) { left: 58%; width: 13%; transform: rotate(9deg); opacity: 0.7; animation: v2-ray-sway 19s ease-in-out infinite alternate; }
+.v2-god-rays i:nth-child(4) { left: 72%; width: 11%; transform: rotate(17deg); opacity: 0.55; animation: v2-ray-sway 15s ease-in-out infinite alternate-reverse; }
+
+@keyframes v2-ray-sway {
+  0% { opacity: 0.25; transform: rotate(-8deg) scaleX(0.92); }
+  100% { opacity: 0.72; transform: rotate(8deg) scaleX(1.12); }
+}
+
+/* 两侧石灯真实摇曳暖光 */
+.v2-lantern {
+  position: absolute;
+  width: min(16vw, 150px);
+  height: min(16vw, 150px);
+  border-radius: 50%;
+  translate: var(--v2-mid-x) var(--v2-mid-y);
+  background: radial-gradient(circle, rgba(255, 206, 118, 0.62) 0%, rgba(240, 152, 54, 0.24) 38%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: v2-lantern-flicker 3.6s ease-in-out infinite alternate;
+}
+.v2-lantern-left { left: 26%; bottom: 26%; }
+.v2-lantern-right { right: 26%; bottom: 26%; animation-delay: -1.7s; }
+
+@keyframes v2-lantern-flicker {
+  0% { opacity: 0.45; transform: scale(0.92); }
+  35% { opacity: 0.78; transform: scale(1.04); }
+  68% { opacity: 0.56; transform: scale(0.96); }
+  100% { opacity: 0.88; transform: scale(1.08); }
+}
+
+/* 中近景丝绒流动云海 */
+.v2-velvet-mist {
+  position: absolute;
+  left: -25%;
+  width: 150%;
+  height: 44%;
+  bottom: -6%;
+  translate: var(--v2-near-x) var(--v2-near-y);
+  background:
+    radial-gradient(ellipse 38% 60% at 22% 72%, rgba(210, 228, 226, 0.22), transparent 68%),
+    radial-gradient(ellipse 42% 55% at 54% 80%, rgba(235, 224, 198, 0.16), transparent 72%),
+    radial-gradient(ellipse 36% 62% at 84% 70%, rgba(202, 222, 222, 0.2), transparent 68%);
+  filter: blur(18px);
+  opacity: 0.78;
+}
+.v2-mist-a { animation: v2-mist-drift 28s ease-in-out infinite alternate; }
+.v2-mist-b { bottom: 12%; height: 34%; opacity: 0.52; animation: v2-mist-drift 36s ease-in-out infinite alternate-reverse; }
+
+@keyframes v2-mist-drift {
+  0% { transform: translateX(-6%) scaleY(0.96); }
+  100% { transform: translateX(6%) scaleY(1.06); }
+}
+
+/* 60fps Canvas 粒子层 */
+.v2-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+}
+
+/* 近景大光圈柔焦暗角框架（增强 3D 镜头景深） */
+.v2-foreground-vignette {
+  position: absolute;
+  inset: -4%;
+  z-index: 5;
+  translate: var(--v2-near-x) var(--v2-near-y);
+  background:
+    radial-gradient(ellipse 84% 76% at 50% 46%, transparent 56%, rgba(6, 11, 13, 0.62) 100%);
+}
+
+/* A/B 4K 山门一键切换胶囊 */
+.v2-gate-switcher {
+  position: absolute;
+  right: 18px;
+  bottom: max(16px, env(safe-area-inset-bottom) + 10px);
+  z-index: 25;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 16, 18, 0.66);
+  border: 1px solid rgba(232, 198, 128, 0.32);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+}
+.v2-gate-switcher button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: rgba(242, 232, 210, 0.72);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 6px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+.v2-gate-switcher button .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(232, 198, 128, 0.35);
+}
+.v2-gate-switcher button.is-on {
+  background: linear-gradient(135deg, rgba(226, 186, 102, 0.3), rgba(164, 118, 46, 0.24));
+  color: #fff5db;
+}
+.v2-gate-switcher button.is-on .dot {
+  background: #f6cf78;
+  box-shadow: 0 0 8px #f6cf78;
+}
+
+@media (max-width: 780px) {
+  .v2-gate-switcher {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: max(8px, env(safe-area-inset-bottom) + 4px);
+  }
+  #screen-landing .landing-content {
+    padding-bottom: max(72px, env(safe-area-inset-bottom) + 56px);
+  }
+  .v2-lantern-left { left: 12%; bottom: 30%; }
+  .v2-lantern-right { right: 12%; bottom: 30%; }
+}
+
+
+/* ===== 7. 2.5D × 3D 近景苍松透视 + 飘渺云海 + 随机禅语 + InPeace 声音引导 + Persepolis 穿门过场 ===== */
+#screen-landing .hero-atmosphere {
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  --v2-rot-x: 0deg;
+  --v2-rot-y: 0deg;
+}
+
+#screen-landing .landing-bg {
+  transform: scale(1.07) rotateX(var(--v2-rot-x)) rotateY(var(--v2-rot-y));
+  transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s ease;
+}
+
+/* 独立近景左右苍松透视图层（2.8× 视差速率 + 大光圈焦外虚化） */
+.v2-pine-layer {
+  position: absolute;
+  top: -6%;
+  bottom: -6%;
+  width: min(30vw, 340px);
+  z-index: 6;
+  pointer-events: none;
+  filter: blur(1.4px);
+  opacity: 0.88;
+  will-change: transform;
+  transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+}
+.v2-pine-left {
+  left: -3%;
+  transform: translate3d(calc(var(--v2-near-x) * 1.15), calc(var(--v2-near-y) * 0.9), 0) scale(1.04);
+}
+.v2-pine-right {
+  right: -3%;
+  transform: translate3d(calc(var(--v2-near-x) * 1.15), calc(var(--v2-near-y) * 0.9), 0) scale(1.04);
+}
+.v2-pine-layer svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 第三层极飘渺水墨云海 */
+.v2-mist-c {
+  bottom: 24%;
+  height: 40%;
+  opacity: 0.44;
+  filter: blur(26px);
+  animation: v2-mist-drift 44s ease-in-out infinite alternate;
+}
+
+/* 远殿暖金佛光核 */
+.v2-sanctuary-glow {
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  width: min(36vw, 300px);
+  height: min(36vw, 300px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 232, 168, 0.44) 0%, rgba(235, 182, 82, 0.16) 44%, transparent 74%);
+  mix-blend-mode: screen;
+  animation: v2-gate-beacon 5.6s ease-in-out infinite alternate;
+  transition: transform 1.1s ease, opacity 1.1s ease;
+}
+
+/* Persepolis 式 3D 镜头沿中轴穿入山门 */
+#screen-landing.is-entering-3d .landing-bg {
+  animation: none !important;
+  transform: scale(1.36) translateY(-2%) !important;
+  filter: brightness(1.22) contrast(1.04);
+}
+#screen-landing.is-entering-3d .v2-pine-left {
+  transform: translate3d(-44%, 4%, 0) scale(1.45) !important;
+  opacity: 0;
+}
+#screen-landing.is-entering-3d .v2-pine-right {
+  transform: translate3d(44%, 4%, 0) scale(1.45) !important;
+  opacity: 0;
+}
+#screen-landing.is-entering-3d .v2-sanctuary-glow {
+  transform: translate(-50%, -50%) scale(2.4);
+  opacity: 1;
+}
+#screen-landing.is-entering-3d .landing-content,
+#screen-landing.is-entering-3d .jianshan-topbar,
+#screen-landing.is-entering-3d .v2-gate-switcher {
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+
+/* 随机「朝山意境禅语」 */
+.v2-hero-quote {
+  max-width: min(560px, 88vw);
+  margin: -6px auto 14px;
+  font-size: clamp(13px, 1.7vw, 15px);
+  line-height: 1.75;
+  letter-spacing: 0.12em;
+  color: rgba(246, 234, 206, 0.88);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.72);
+  font-family: var(--font-display);
+}
+html[lang="en"] .v2-hero-quote {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+/* InPeace 式声音开启轻提示按钮 */
+.v2-sound-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(235, 204, 138, 0.28);
+  background: rgba(10, 17, 19, 0.52);
+  color: rgba(244, 232, 204, 0.86);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.v2-sound-cue:hover,
+.v2-sound-cue.is-playing {
+  background: rgba(214, 174, 92, 0.2);
+  border-color: rgba(245, 212, 138, 0.58);
+  color: #fff6df;
+}
+.v2-sound-cue em {
+  font-style: normal;
+}
+.v2-sound-waves {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.v2-sound-waves span {
+  width: 2px;
+  height: 5px;
+  border-radius: 2px;
+  background: #f0c975;
+  transition: height 0.25s ease;
+}
+.v2-sound-waves span:nth-child(2) { height: 10px; }
+.v2-sound-waves span:nth-child(3) { height: 7px; }
+.v2-sound-cue.is-playing .v2-sound-waves span {
+  animation: v2-wave-dance 1.1s ease-in-out infinite alternate;
+}
+.v2-sound-cue.is-playing .v2-sound-waves span:nth-child(2) { animation-delay: -0.35s; }
+.v2-sound-cue.is-playing .v2-sound-waves span:nth-child(3) { animation-delay: -0.7s; }
+
+@keyframes v2-wave-dance {
+  0% { height: 3px; opacity: 0.6; }
+  100% { height: 12px; opacity: 1; }
+}
+
+/* Persepolis 式全屏飘渺云雾缭绕过场 */
+.v2-mist-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 48%, rgba(28, 42, 46, 0.92), rgba(9, 15, 17, 0.98));
+  transition: opacity 0.72s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.72s;
+}
+.v2-mist-transition.is-quick {
+  transition: opacity 0.36s ease, visibility 0s linear 0.36s;
+}
+.v2-mist-transition.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.v2-mist-transition.is-clearing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.v2-mt-cloud {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 46% 36% at 24% 48%, rgba(226, 238, 236, 0.34), transparent 68%),
+    radial-gradient(ellipse 52% 40% at 72% 54%, rgba(246, 232, 196, 0.28), transparent 70%),
+    radial-gradient(ellipse 40% 34% at 50% 68%, rgba(206, 226, 228, 0.3), transparent 68%);
+  filter: blur(28px);
+  transform: scale(0.92);
+  transition: transform 2.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s ease;
+}
+.v2-mt-c2 {
+  transform: scale(1.06) translateX(-6%);
+  opacity: 0.8;
+}
+.v2-mt-c3 {
+  transform: scale(1.12) translateX(6%);
+  opacity: 0.65;
+}
+.v2-mist-transition.is-active .v2-mt-c1 { transform: scale(1.18) translateX(5%); }
+.v2-mist-transition.is-active .v2-mt-c2 { transform: scale(1.24) translateX(-7%); }
+.v2-mist-transition.is-active .v2-mt-c3 { transform: scale(1.3) translateY(-4%); }
+.v2-mist-transition.is-clearing .v2-mt-cloud { transform: scale(1.48); opacity: 0; }
+
+.v2-mt-glow {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(56vw, 480px);
+  height: min(56vw, 480px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 226, 152, 0.36) 0%, rgba(224, 174, 78, 0.1) 46%, transparent 72%);
+  filter: blur(12px);
+}
+
+.v2-mt-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  z-index: 3;
+}
+.v2-mt-copy small {
+  font-size: 12px;
+  letter-spacing: 0.36em;
+  color: rgba(242, 212, 146, 0.86);
+  margin-bottom: 14px;
+}
+.v2-mt-copy p {
+  max-width: min(560px, 86vw);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.8vw, 26px);
+  line-height: 1.7;
+  letter-spacing: 0.14em;
+  color: #fbf2de;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+}
+html[lang="en"] .v2-mt-copy p {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+/* 全新 4K 庄严实拍朝山世界全景地图 (#screen-map) */
+#screen-map .map-painted-bg {
+  background-image:
+    linear-gradient(180deg, rgba(7, 12, 14, 0.32), rgba(7, 12, 14, 0.06) 40%, rgba(7, 12, 14, 0.62)),
+    url("./assets/world-panorama-4k.jpg?v=20261125-v2-8") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+}
+/* 收敛旧版游戏感旋转光环，保持庄严肃穆的纪录片气场 */
+#screen-map .map-auras {
+  opacity: 0.22 !important;
+}
+#screen-map .map-rings {
+  opacity: 0.32 !important;
+  border-color: rgba(226, 204, 154, 0.22) !important;
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  #screen-map .map-painted-bg {
+    background-image:
+      linear-gradient(180deg, rgba(7, 12, 14, 0.34), rgba(7, 12, 14, 0.06) 40%, rgba(7, 12, 14, 0.66)),
+      url("./assets/world-panorama-4k-mobile.jpg?v=20261125-v2-8") !important;
+  }
+}
+
+
+/* ===== 8. WebGL 实时分形体积云雾过场（Persepolis 风格：装载完成再拨云） ===== */
+.v2-webgl-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.v2-webgl-mist.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+.v2-webgl-mist-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.v2-webgl-mist-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.v2-webgl-mist.is-copy-show .v2-webgl-mist-copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+.v2-webgl-mist-copy small {
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  color: rgba(246, 222, 162, 0.9);
+  margin-bottom: 14px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+}
+.v2-webgl-mist-copy p {
+  max-width: min(560px, 86vw);
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.8vw, 26px);
+  line-height: 1.75;
+  letter-spacing: 0.14em;
+  color: #fff6e2;
+  text-shadow: 0 4px 26px rgba(0, 0, 0, 0.62);
+}
+html[lang="en"] .v2-webgl-mist-copy p {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+.v2-wm-loader {
+  width: 120px;
+  height: 2px;
+  margin-top: 22px;
+  border-radius: 999px;
+  background: rgba(246, 222, 162, 0.2);
+  overflow: hidden;
+}
+.v2-wm-loader i {
+  display: block;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #f7d98c, transparent);
+  animation: v2-loader-sweep 1.3s ease-in-out infinite;
+}
+@keyframes v2-loader-sweep {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(260%); }
+}
+
+
+/* ===== 9. Persepolis 风格「晨雾白 · 飘渺云海」淡进淡出（彻底去黑墙、去贴图边界感） ===== */
+#screen-landing .cloud-sea {
+  display: none !important;
+}
+
+/* 首页常驻的极轻柔山岚：超柔化无边界、极慢漂移，像真实空气水汽 */
+#screen-landing .v2-velvet-mist {
+  left: -24% !important;
+  width: 148% !important;
+  height: 52% !important;
+  bottom: -14% !important;
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-12") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  mix-blend-mode: screen;
+  filter: blur(14px) brightness(1.12) contrast(0.88) !important;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.45) 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.45) 100%);
+  opacity: 0.24 !important;
+}
+#screen-landing .v2-mist-b {
+  bottom: 4% !important;
+  height: 46% !important;
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-12") !important;
+  filter: blur(18px) brightness(1.1) contrast(0.82) !important;
+  opacity: 0.16 !important;
+  transform: scaleX(-1);
+}
+#screen-landing .v2-mist-c {
+  display: none !important;
+}
+
+/* 全屏「晨雾漫境」淡进 / 淡出过场（亮雾通透美学，绝不发黑发脏） */
+.v2-photo-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 1.05s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 1.05s;
+}
+.v2-photo-mist.is-quick {
+  transition: opacity 0.52s ease, visibility 0s linear 0.52s;
+}
+.v2-photo-mist.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.v2-photo-mist.is-in {
+  opacity: 1;
+}
+.v2-photo-mist.is-out {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 1.3s;
+}
+.v2-photo-mist.is-quick.is-out {
+  transition: opacity 0.65s ease, visibility 0s linear 0.65s;
+}
+
+/* 亮雾底韵：如晨曦阳光照透的玉白宣纸云海，柔和通透 */
+.v2-pm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 45%,
+    rgba(244, 241, 232, 0.94) 0%,
+    rgba(220, 228, 226, 0.95) 54%,
+    rgba(186, 200, 202, 0.96) 100%
+  );
+  backdrop-filter: blur(14px);
+}
+
+/* 柔和多层亮雾丝缕：顺风单向飘过，绝无硬边 */
+.v2-pm-layer {
+  position: absolute;
+  inset: -24%;
+  background-size: cover;
+  background-position: center center;
+  mix-blend-mode: soft-light;
+  filter: blur(16px) brightness(1.25) contrast(0.9);
+  will-change: transform, opacity;
+  transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.25s ease;
+}
+
+.v2-pm-far {
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-12");
+  opacity: 0.65;
+  transform: scale(1.06) translateX(-6%);
+}
+.v2-pm-mid-left {
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-12");
+  opacity: 0.58;
+  transform: scale(1.16) translate(-12%, 2%);
+}
+.v2-pm-mid-right {
+  background-image: url("./assets/vfx-cloud-billow.jpg?v=20261125-v2-12");
+  opacity: 0.5;
+  transform: scaleX(-1.18) scaleY(1.18) translate(-10%, -3%);
+}
+.v2-pm-front {
+  background-image: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-12");
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  filter: blur(22px) brightness(1.3);
+  transform: scale(1.26) translate(-14%, 4%);
+}
+
+/* 淡进时顺风向右缓慢漫过 */
+.v2-photo-mist.is-in .v2-pm-far { transform: scale(1.12) translateX(2%); }
+.v2-photo-mist.is-in .v2-pm-mid-left { transform: scale(1.22) translate(0%, -1%); }
+.v2-photo-mist.is-in .v2-pm-mid-right { transform: scaleX(-1.24) scaleY(1.24) translate(0%, 1%); }
+.v2-photo-mist.is-in .v2-pm-front { transform: scale(1.34) translate(2%, -1%); }
+
+/* 淡出时继续顺风轻盈飘散，而非生硬回弹 */
+.v2-photo-mist.is-out .v2-pm-far { transform: scale(1.24) translateX(12%); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-mid-left { transform: scale(1.34) translate(16%, -4%); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-mid-right { transform: scaleX(-1.36) scaleY(1.36) translate(14%, 4%); opacity: 0; }
+.v2-photo-mist.is-out .v2-pm-front { transform: scale(1.48) translate(22%, -5%); opacity: 0; }
+
+.v2-pm-glow {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(64vw, 560px);
+  height: min(64vw, 560px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 244, 212, 0.72) 0%, rgba(242, 222, 168, 0.18) 48%, transparent 74%);
+}
+
+/* 亮雾上的禅意墨韵文字：古铜金眉标 + 深墨青禅语（像晨雾宣纸） */
+.v2-pm-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.v2-photo-mist.is-copy-show .v2-pm-copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+.v2-pm-copy small {
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  color: #8a6c34;
+  margin-bottom: 16px;
+  text-shadow: none;
+}
+.v2-pm-copy p {
+  max-width: min(560px, 86vw);
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2.8vw, 27px);
+  line-height: 1.78;
+  letter-spacing: 0.14em;
+  color: #1c292c;
+  text-shadow: 0 2px 18px rgba(255, 255, 255, 0.85);
+}
+html[lang="en"] .v2-pm-copy p {
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+.v2-photo-mist .v2-wm-loader {
+  background: rgba(138, 108, 52, 0.22);
+}
+.v2-photo-mist .v2-wm-loader i {
+  background: linear-gradient(90deg, transparent, #a47e39, transparent);
+}
+
+
+/* ===== 10. 朝山世界全景电影调色统一（与首页 4K 山门同源青玉暖金画意）+ 四山动态点缀 ===== */
+#screen-map .map-painted-bg {
+  /* 统一暗青玉与柔暖金电影调色，柔和衔接首页 4K 山门画风 */
+  filter: contrast(1.06) saturate(0.84) brightness(0.9) sepia(0.08);
+  transform: scale(1.04);
+  animation: v2-map-breathe 28s ease-in-out infinite alternate !important;
+}
+
+@keyframes v2-map-breathe {
+  0% { transform: scale(1.03); }
+  100% { transform: scale(1.08); }
+}
+
+.v2-map-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 与首页完全同源的青玉/暖金柔光暗角，统一两屏视觉气质 */
+.v2-map-fx::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 52% 38% at 50% 18%, rgba(255, 224, 148, 0.14), transparent 72%),
+    radial-gradient(ellipse 86% 78% at 50% 48%, transparent 52%, rgba(7, 13, 15, 0.56) 100%);
+}
+
+/* 全景山谷缓慢流动的真实摄影薄雾 */
+.v2-map-mist-drift {
+  position: absolute;
+  left: -18%;
+  width: 136%;
+  top: 14%;
+  height: 70%;
+  background: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-10") center / cover no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.28;
+  -webkit-mask-image: radial-gradient(ellipse 70% 62% at 50% 50%, #000 32%, transparent 90%);
+  mask-image: radial-gradient(ellipse 70% 62% at 50% 50%, #000 32%, transparent 90%);
+  animation: v2-mist-drift 38s ease-in-out infinite alternate;
+}
+
+/* 峨眉山金顶斜射佛光光束 */
+.v2-map-emei-rays {
+  position: absolute;
+  left: 34%;
+  top: -8%;
+  width: 32%;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 234, 174, 0.24) 0%, rgba(242, 198, 108, 0.08) 54%, transparent 100%);
+  clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);
+  mix-blend-mode: screen;
+  filter: blur(8px);
+  animation: v2-ray-sway 14s ease-in-out infinite alternate;
+}
+
+.v2-map-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
+/* ===== 11. 五大殿堂真 4K 超清画质升级（大雄宝殿 / 峨眉 / 普陀 / 五台 / 九华） ===== */
+#temple-scene .temple-art {
+  background-image: url("./assets/scene-hall-4k.jpg?v=20261125-v2-11") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  filter: contrast(1.04) saturate(1.03);
+}
+#temple-scene[data-mountain="putuo"] .temple-art {
+  background-image: url("./assets/scene-putuo-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="wutai"] .temple-art {
+  background-image: url("./assets/scene-wutai-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="emei"] .temple-art {
+  background-image: url("./assets/scene-emei-4k.jpg?v=20261125-v2-11") !important;
+}
+#temple-scene[data-mountain="jiuhua"] .temple-art {
+  background-image: url("./assets/scene-jiuhua-4k.jpg?v=20261125-v2-11") !important;
+}
+
+/* 殿内薄雾替换为真实摄影丝缕云雾，提升层次感与庄严质感 */
+#temple-scene .sacred-mist i {
+  background: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-11") center / cover no-repeat !important;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse 68% 60% at 50% 56%, #000 30%, transparent 90%);
+  mask-image: radial-gradient(ellipse 68% 60% at 50% 56%, #000 30%, transparent 90%);
+  opacity: 0.24 !important;
+}
+
+/* 殿内光影压暗边缘、突出中心 4K 主尊法相 */
+#temple-scene::after {
+  background:
+    radial-gradient(ellipse 76% 68% at 50% 42%, transparent 48%, rgba(5, 10, 12, 0.56) 100%),
+    linear-gradient(180deg, rgba(5, 10, 12, 0.38) 0%, transparent 22%, transparent 64%, rgba(5, 10, 12, 0.68) 100%) !important;
+}
+
+
+/* ===== 12. 全站回归 V1 暗青玉细金统一风格 + 五殿主尊立体感 + 四大净境 4K 沉浸重做 ===== */
+/* A. 统一过场雾气回 V1 暗青玉晨岚（与全站深色视觉完全一致，不刺眼跳白） */
+.v2-photo-mist .v2-pm-backdrop {
+  background: radial-gradient(
+    ellipse 82% 72% at 50% 45%,
+    rgba(24, 38, 42, 0.90) 0%,
+    rgba(13, 21, 24, 0.95) 56%,
+    rgba(8, 13, 15, 0.98) 100%
+  ) !important;
+  backdrop-filter: blur(12px);
+}
+.v2-photo-mist .v2-pm-layer {
+  mix-blend-mode: screen !important;
+  filter: blur(14px) brightness(0.92) contrast(0.95) !important;
+  opacity: 0.42 !important;
+}
+.v2-photo-mist .v2-pm-glow {
+  background: radial-gradient(circle, rgba(242, 206, 132, 0.24) 0%, rgba(196, 152, 72, 0.08) 46%, transparent 74%) !important;
+}
+.v2-photo-mist .v2-pm-copy small {
+  color: #e4c37b !important;
+}
+.v2-photo-mist .v2-pm-copy p {
+  color: #f6ebd4 !important;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.72) !important;
+}
+.v2-photo-mist .v2-wm-loader {
+  background: rgba(228, 195, 123, 0.22) !important;
+}
+.v2-photo-mist .v2-wm-loader i {
+  background: linear-gradient(90deg, transparent, #f3d285, transparent) !important;
+}
+
+/* B. 五座大殿：4K 主尊立体突出聚焦（柔和中轴高光 + 四周暗角纵深） */
+#temple-scene .temple-art {
+  filter: contrast(1.07) saturate(1.05) brightness(1.02) !important;
+}
+#temple-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 38% 48% at 50% 40%,
+    rgba(255, 236, 184, 0.14) 0%,
+    rgba(232, 192, 108, 0.04) 48%,
+    transparent 76%
+  );
+  mix-blend-mode: screen;
+}
+#temple-scene .ritual-actions {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+}
+
+/* C. 静心冥想：高清晰背景 + 地面共修蒲团阵列（同修名字 + 实时倒计时） */
+#overlay-world-meditation .meditation-backdrop {
+  filter: contrast(1.06) brightness(1.04) saturate(1.04);
+}
+.v2-meditation-cushions {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.v2-med-peer-bar {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.72);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  color: #efe2c4;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+.v2-med-peer-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+}
+.v2-cushion-field {
+  position: absolute;
+  inset: 0;
+}
+.v2-cushion {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.v2-cushion-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.74);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  font-size: 10px;
+  color: #efe2c4;
+  white-space: nowrap;
+}
+.v2-cushion-tag b {
+  color: #f6d58b;
+  font-weight: 500;
+}
+.v2-cushion-tag time {
+  font-variant-numeric: tabular-nums;
+  color: rgba(242, 232, 206, 0.8);
+}
+.v2-cushion-pad {
+  width: 44px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 42%, rgba(212, 168, 86, 0.42), rgba(74, 54, 28, 0.84) 72%, rgba(20, 26, 28, 0.92));
+  border: 1px solid rgba(235, 200, 126, 0.48);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.52), 0 0 14px rgba(236, 192, 98, 0.22);
+  position: relative;
+}
+.v2-cushion-pad i {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 8px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c6, rgba(240, 190, 92, 0.3) 65%, transparent);
+  animation: v2-lantern-flicker 3.2s ease-in-out infinite alternate;
+}
+.v2-cushion.is-self .v2-cushion-pad {
+  width: 64px;
+  height: 22px;
+  border-color: rgba(248, 218, 146, 0.85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 24px rgba(246, 206, 114, 0.45);
+}
+.v2-cushion.is-self.is-active .v2-cushion-pad {
+  animation: v2-cta-breathe 2.6s ease-in-out infinite alternate;
+}
+
+/* D. 后山（心灯祈福海 + 高僧解惑）：统一 V1 4K 沉浸范式 */
+#overlay-world-backmountain .backmountain-sheet {
+  padding: 0 !important;
+  overflow: hidden;
+  background: #0d1518 !important;
+}
+.v2-sanctuary-hero {
+  position: relative;
+  min-height: min(84vh, 760px);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px 22px;
+  color: #f3e8d2;
+  overflow-y: auto;
+}
+.v2-sh-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+.v2-bm-bg {
+  background-image: url("./assets/backmountain-4k.jpg?v=20261125-v2-13");
+}
+.v2-sh-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(9, 15, 17, 0.84) 0%, rgba(9, 15, 17, 0.46) 38%, rgba(9, 15, 17, 0.88) 100%);
+}
+.v2-sh-top,
+.v2-bm-panel {
+  position: relative;
+  z-index: 2;
+}
+.v2-sh-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.v2-sh-top small {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #d7b874;
+}
+.v2-sh-top h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 500;
+  margin: 4px 0;
+  color: #fbf2de;
+}
+.v2-sh-top p {
+  font-size: 13px;
+  color: rgba(242, 232, 210, 0.78);
+}
+.v2-sh-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.v2-bm-tabs {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 17, 19, 0.72);
+  border: 1px solid rgba(228, 194, 122, 0.32);
+}
+.v2-bm-tabs button {
+  border: 0;
+  background: transparent;
+  color: rgba(242, 232, 210, 0.76);
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.v2-bm-tabs button.is-on {
+  background: linear-gradient(135deg, #b88c42, #d8b56b);
+  color: #151008;
+  font-weight: 600;
+}
+
+.v2-bm-panel {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+.v2-bm-panel.is-on {
+  display: flex;
+}
+
+.v2-lamp-presence {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(11, 18, 20, 0.68);
+  border: 1px solid rgba(228, 194, 122, 0.24);
+  font-size: 12px;
+  color: #e8dcc0;
+}
+.v2-lamp-presence i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+}
+.v2-inline-switch {
+  margin-left: auto;
+  border: 1px solid rgba(235, 200, 126, 0.42);
+  background: rgba(212, 172, 92, 0.16);
+  color: #f8dfa2;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* 千灯祈福海 */
+.v2-lamp-sea {
+  position: relative;
+  min-height: 290px;
+  flex: 1;
+  border-radius: 16px;
+  border: 1px solid rgba(228, 194, 122, 0.22);
+  background: radial-gradient(ellipse at 50% 62%, rgba(242, 190, 86, 0.14), rgba(8, 14, 16, 0.56) 76%);
+  overflow: hidden;
+}
+.v2-sea-lamp {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  animation: v2-lamp-float 4.8s ease-in-out infinite alternate;
+}
+@keyframes v2-lamp-float {
+  0% { transform: translate(-50%, -50%) translateY(0px); }
+  100% { transform: translate(-50%, -50%) translateY(-5px); }
+}
+.v2-lamp-flame {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(255, 228, 148, 0.72), rgba(235, 162, 54, 0.24) 55%, transparent 74%);
+  box-shadow: 0 0 18px rgba(246, 194, 82, 0.55);
+}
+.v2-lamp-flame i {
+  width: 7px;
+  height: 11px;
+  border-radius: 50% 50% 45% 45%;
+  background: linear-gradient(180deg, #fffbe2, #f8be56);
+  box-shadow: 0 0 8px #ffd478;
+}
+.v2-lamp-label {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(9, 15, 17, 0.78);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  color: rgba(244, 234, 210, 0.9);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.v2-lamp-label b {
+  color: #f6d58b;
+  font-weight: 500;
+}
+.v2-sea-lamp.is-self .v2-lamp-flame {
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 0 26px rgba(255, 218, 118, 0.9);
+}
+.v2-sea-lamp.is-self .v2-lamp-label {
+  border-color: rgba(250, 220, 142, 0.78);
+  background: rgba(54, 38, 14, 0.88);
+  color: #fff6de;
+}
+
+.v2-lamp-inspect {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(12, 20, 22, 0.78);
+  border: 1px solid rgba(228, 194, 122, 0.24);
+  font-size: 13px;
+  color: #efe2c4;
+}
+.v2-lamp-inspect strong {
+  color: #f5d284;
+}
+.v2-lamp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(11, 18, 20, 0.82);
+  border: 1px solid rgba(228, 194, 122, 0.26);
+}
+.v2-lamp-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.v2-lamp-cats button,
+.v2-master-topics button {
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  background: rgba(255, 245, 224, 0.05);
+  color: #e6d9ba;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.v2-lamp-cats button.is-on,
+.v2-master-topics button.is-on {
+  background: rgba(214, 174, 92, 0.26);
+  border-color: #ebc97c;
+  color: #fff6df;
+}
+.v2-lamp-input-row,
+.v2-master-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.v2-lamp-input-row input,
+.v2-master-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  background: rgba(7, 12, 14, 0.74);
+  color: #f6ebd4;
+  font-size: 13px;
+}
+.v2-gold-btn {
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(248, 218, 148, 0.72) !important;
+  background: linear-gradient(135deg, #c89f4e, #9f7530) !important;
+  color: #161006 !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 高僧解惑面板 */
+.v2-master-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 14px;
+  flex: 1;
+}
+.v2-master-card,
+.v2-master-reply {
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(11, 18, 20, 0.8);
+  border: 1px solid rgba(228, 194, 122, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.v2-master-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(242, 208, 134, 0.62);
+  background: radial-gradient(circle, rgba(220, 178, 92, 0.28), rgba(14, 22, 24, 0.9));
+  font-family: var(--font-display);
+  color: #f6d58b;
+  letter-spacing: 0.1em;
+}
+.v2-master-card h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: #fbf2de;
+}
+.v2-master-intro {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(242, 232, 210, 0.84);
+}
+.v2-master-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.v2-master-note {
+  font-size: 11px;
+  color: rgba(226, 214, 188, 0.62);
+}
+.v2-master-reply small {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #d8b874;
+}
+.v2-master-reply blockquote {
+  margin: 0;
+  padding: 12px 14px;
+  border-left: 2px solid #d8b56b;
+  background: rgba(216, 181, 107, 0.08);
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: #fae6b6;
+  line-height: 1.7;
+}
+.v2-master-reply p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: #efe4cc;
+}
+.v2-mr-practice {
+  margin-top: auto;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(228, 194, 122, 0.12);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  font-size: 13px;
+  color: #f8e5b8;
+  line-height: 1.65;
+}
+
+/* E. 西方极乐 · 归莲净土：4K 莲境背景统一 */
+#overlay-world-pureland .pureland-sheet {
+  background:
+    linear-gradient(180deg, rgba(10, 17, 19, 0.84) 0%, rgba(10, 17, 19, 0.72) 50%, rgba(10, 17, 19, 0.92) 100%),
+    url("./assets/pureland-4k.jpg?v=20261125-v2-13") center / cover no-repeat !important;
+}
+#overlay-world-pureland .sanctuary-primary {
+  background: linear-gradient(135deg, #c89f4e, #9f7530) !important;
+  color: #161006 !important;
+  border: 1px solid rgba(248, 218, 148, 0.72) !important;
+  font-weight: 600 !important;
+}
+
+/* 清净模式同步隐藏净境中的他人共修动态 */
+body.quiet-mode .v2-cushion.is-peer,
+body.quiet-mode .v2-med-peer-bar,
+body.quiet-mode .v2-lamp-presence {
+  display: none !important;
+}
+
+@media (max-width: 780px) {
+  .v2-master-layout {
+    grid-template-columns: 1fr;
+  }
+  .v2-cushion-tag {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .v2-lamp-sea {
+    min-height: 240px;
+  }
+  #temple-scene .ritual-actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+
+/* ===== 13. 推门震撼升级：真 4K 四尊百丈菩萨云海圣境合理构图（四尊全览不裁头 + 五殿独立缩略图 + 3D 动感） ===== */
+#screen-map {
+  background: radial-gradient(ellipse at 50% 38%, #263133 0%, #121a1d 65%, #090e10 100%) !important;
+}
+#screen-map .map-canvas {
+  perspective: 1100px;
+}
+/* 桌面宽屏使用完整纵幅构图 + 两侧云雾羽化衔接，确保顶部普贤菩萨与底部地藏菩萨 100% 完整可见、绝不裁切！ */
+#screen-map .map-painted-bg {
+  background-image:
+    linear-gradient(180deg, rgba(8, 13, 16, 0.42) 0%, rgba(8, 13, 16, 0.0) 16%, rgba(8, 13, 16, 0.0) 76%, rgba(8, 13, 16, 0.78) 100%),
+    url("./assets/world-realm-4k.jpg?v=20261125-v2-15") !important;
+  background-position: center center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  filter: contrast(1.06) saturate(1.05) brightness(1.04) !important;
+  transform: translate3d(var(--map-px, 0px), var(--map-py, 0px), 0) scale(1.04) !important;
+  animation: v2-map-breathe 22s ease-in-out infinite alternate !important;
+  will-change: transform;
+}
+/* 桌面两侧自动用同一张图的柔焦云海补齐宽屏，零黑边、浑然一体 */
+#screen-map .map-canvas::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  z-index: 0;
+  background: url("./assets/world-realm-4k.jpg?v=20261125-v2-15") center 30% / cover no-repeat;
+  filter: blur(28px) brightness(0.42) saturate(0.85);
+  pointer-events: none;
+}
+#screen-map .map-painted-bg {
+  z-index: 1;
+}
+
+@media (max-width: 820px) and (orientation: portrait) {
+  #screen-map .map-painted-bg {
+    background-image:
+      linear-gradient(180deg, rgba(8, 13, 16, 0.42) 0%, rgba(8, 13, 16, 0.0) 18%, rgba(8, 13, 16, 0.06) 74%, rgba(8, 13, 16, 0.78) 100%),
+      url("./assets/world-realm-4k-mobile.jpg?v=20261125-v2-15") !important;
+    background-size: cover !important;
+    background-position: center 22% !important;
+  }
+}
+
+/* 顶部四山香印轻量化，不挡顶部普贤菩萨 */
+#screen-map .map-progress {
+  position: absolute !important;
+  top: 56px !important;
+  left: 16px !important;
+  margin: 0 !important;
+  z-index: 26;
+}
+
+/* 压缩底部四大净境栏为极简紧凑单行，腾出更多纵深给九华山地藏尊像 */
+.v2-sanctuary-dock {
+  bottom: max(10px, env(safe-area-inset-bottom) + 6px) !important;
+  padding: 7px 10px !important;
+  border-radius: 14px !important;
+}
+.v2-dock-head {
+  display: none !important;
+}
+.v2-realm-btn {
+  padding: 7px 10px !important;
+}
+
+/* 五座大殿（大雄宝殿 + 四大道场）：5 张完全不同且清晰的 4K 代表图 + 精准不挡佛面落位 */
+#screen-map .map-rings {
+  display: none !important;
+}
+#screen-map .map-constellation {
+  width: min(920px, 94vw) !important;
+  height: calc(100vh - 150px) !important;
+  max-height: 760px !important;
+}
+#screen-map .map-node .orb {
+  width: 50px !important;
+  height: 50px !important;
+  background-size: cover !important;
+  background-position: center 25% !important;
+  border: 1.5px solid rgba(246, 218, 146, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(8, 14, 16, 0.52), 0 0 22px rgba(244, 198, 96, 0.45) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+#screen-map .map-node:hover .orb {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(246, 218, 146, 0.4), 0 0 28px rgba(255, 224, 136, 0.8) !important;
+}
+#screen-map .map-node[data-mountain="emei"] .orb {
+  background-image: url("./assets/scene-emei-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #f8d87e !important;
+}
+#screen-map .map-node[data-mountain="wutai"] .orb {
+  background-image: url("./assets/scene-wutai-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #c9e2f2 !important;
+}
+#screen-map .map-node[data-mountain="putuo"] .orb {
+  background-image: url("./assets/scene-putuo-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #b7e4dc !important;
+}
+#screen-map .map-node[data-mountain="jiuhua"] .orb {
+  background-image: url("./assets/scene-jiuhua-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #ebb974 !important;
+}
+#screen-map .map-node[data-mountain="gate"] .orb {
+  background-image: url("./assets/scene-hall-4k.jpg?v=20261125-v2-15") !important;
+  border-color: #f4d282 !important;
+}
+
+/* 合理布局：避开普贤/文殊/观音/地藏四尊造像主体，清晰对称分布 */
+#screen-map .map-node[data-mountain="emei"]   { top: 24% !important; left: 61% !important; }
+#screen-map .map-node[data-mountain="wutai"]  { top: 52% !important; left: 17% !important; }
+#screen-map .map-node[data-mountain="putuo"]  { top: 52% !important; left: 83% !important; }
+#screen-map .map-node[data-mountain="jiuhua"] { top: 76% !important; left: 63% !important; }
+#screen-map .map-node[data-mountain="gate"]   { top: 76% !important; left: 37% !important; width: auto !important; }
+
+@media (max-width: 780px) {
+  #screen-map .map-progress {
+    top: auto !important;
+    bottom: 132px !important;
+    left: 12px !important;
+  }
+  #screen-map .map-node .orb {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  #screen-map .map-node[data-mountain="emei"]   { top: 22% !important; left: 50% !important; }
+  #screen-map .map-node[data-mountain="wutai"]  { top: 44% !important; left: 19% !important; }
+  #screen-map .map-node[data-mountain="putuo"]  { top: 44% !important; left: 81% !important; }
+  #screen-map .map-node[data-mountain="jiuhua"] { top: 63% !important; left: 68% !important; }
+  #screen-map .map-node[data-mountain="gate"]   { top: 63% !important; left: 32% !important; }
+}
+
+
+/* ===== 14. 全幅宽屏满铺 + 修复五尊菩萨入口层级 + 右上西方极乐 / 左下后山 / 右下冥想 ===== */
+#screen-map .map-canvas::before {
+  display: none !important;
+}
+#screen-map .map-painted-bg {
+  background-size: cover !important;
+  background-position: center 14% !important;
+}
+#screen-map .map-constellation {
+  position: relative !important;
+  z-index: 15 !important;
+  width: min(1180px, 96vw) !important;
+  height: calc(100vh - 96px) !important;
+  max-height: 820px !important;
+}
+#screen-map .map-node {
+  z-index: 16 !important;
+}
+/* 精准排布五座大殿入口在各尊圣像旁 */
+#screen-map .map-node[data-mountain="emei"]   { top: 18% !important; left: 50% !important; }
+#screen-map .map-node[data-mountain="wutai"]  { top: 44% !important; left: 22% !important; }
+#screen-map .map-node[data-mountain="putuo"]  { top: 44% !important; left: 78% !important; }
+#screen-map .map-node[data-mountain="jiuhua"] { top: 72% !important; left: 50% !important; }
+#screen-map .map-node[data-mountain="gate"]   { top: 52% !important; left: 50% !important; width: auto !important; }
+
+/* 空间四角净境入口：右上西方极乐 · 左下后山 · 右下静心冥想 */
+.v2-world-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.v2-corner-node {
+  position: absolute;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px 9px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.45);
+  background: linear-gradient(135deg, rgba(13, 21, 24, 0.84), rgba(9, 15, 17, 0.92));
+  color: #f6ebd4;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.46), 0 0 20px rgba(236, 192, 98, 0.18);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  text-align: left;
+}
+.v2-corner-node:hover {
+  transform: translateY(-2px);
+  border-color: rgba(248, 222, 156, 0.82);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.52), 0 0 28px rgba(246, 206, 114, 0.36);
+}
+.v2-corner-orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #161006;
+  background: linear-gradient(135deg, #f3d284, #b98b3c);
+  box-shadow: 0 0 16px rgba(243, 210, 132, 0.55);
+  flex-shrink: 0;
+}
+.v2-corner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v2-corner-text b {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #fff4d8;
+}
+.v2-corner-text small {
+  font-size: 11px;
+  color: rgba(235, 220, 188, 0.78);
+}
+
+/* 右上角：西方极乐世界 */
+.v2-corner-node.is-pureland {
+  top: 76px;
+  right: 22px;
+}
+/* 左下角：后山（心灯祈福 + 高僧解惑） */
+.v2-corner-node.is-backmountain {
+  left: 22px;
+  bottom: max(22px, env(safe-area-inset-bottom) + 14px);
+}
+/* 右下角：静心冥想 */
+.v2-corner-node.is-meditation {
+  right: 22px;
+  bottom: max(22px, env(safe-area-inset-bottom) + 14px);
+}
+
+@media (max-width: 780px) {
+  .v2-corner-node {
+    padding: 6px 11px 6px 7px;
+    gap: 7px;
+  }
+  .v2-corner-orb {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .v2-corner-text b {
+    font-size: 12px;
+  }
+  .v2-corner-text small {
+    font-size: 9px;
+  }
+  .v2-corner-node.is-pureland {
+    top: 92px;
+    right: 10px;
+  }
+  .v2-corner-node.is-backmountain {
+    left: 10px;
+    bottom: max(14px, env(safe-area-inset-bottom) + 8px);
+  }
+  .v2-corner-node.is-meditation {
+    right: 10px;
+    bottom: max(14px, env(safe-area-inset-bottom) + 8px);
+  }
+}
+
+
+/* ===== 15. 金色 Loading 莲环 + 五尊佛像真彩色三维立体渲染 + 本尊简介 / 专属任务 / 本殿祈愿簿 ===== */
+/* 金色 Loading 旋转莲环 */
+.v2-gold-lotus-loader {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+}
+.v2-gl-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(244, 212, 136, 0.22);
+  border-top-color: #f7d98c;
+  border-right-color: rgba(247, 217, 140, 0.65);
+  box-shadow: 0 0 18px rgba(240, 194, 92, 0.35);
+  animation: v2-gl-spin 2.2s linear infinite;
+}
+.v2-gl-ring.is-inner {
+  inset: 9px;
+  border-top-color: transparent;
+  border-bottom-color: #ffe6a4;
+  border-left-color: rgba(247, 217, 140, 0.55);
+  animation: v2-gl-spin 3.2s linear infinite reverse;
+}
+.v2-gl-core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff8dc 0%, #f5c969 60%, rgba(226, 168, 56, 0.2) 100%);
+  box-shadow: 0 0 22px #f6cf72, 0 0 42px rgba(240, 188, 76, 0.65);
+  animation: v2-lantern-flicker 2s ease-in-out infinite alternate;
+}
+@keyframes v2-gl-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 五尊佛像真彩色 + 三维立体雕塑感强化（告别平淡发灰） */
+#temple-scene {
+  perspective: 1100px;
+}
+#temple-scene .temple-art {
+  filter: saturate(1.24) contrast(1.12) brightness(1.06) !important;
+  transform: scale(1.045);
+}
+#temple-scene::before {
+  background: radial-gradient(
+    ellipse 34% 46% at 50% 39%,
+    rgba(255, 240, 192, 0.24) 0%,
+    rgba(244, 196, 94, 0.08) 46%,
+    transparent 76%
+  ) !important;
+}
+
+/* 菩萨旁「本尊简介」与「本殿祈愿簿」双按钮 */
+.v2-deity-side-bar {
+  position: absolute;
+  top: 96px;
+  right: 18px;
+  z-index: 18;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.v2-deity-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.44);
+  background: linear-gradient(135deg, rgba(14, 22, 25, 0.82), rgba(9, 15, 17, 0.9));
+  color: #f6ebd4;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.v2-deity-pill:hover {
+  transform: translateX(-2px);
+  border-color: rgba(248, 222, 156, 0.82);
+}
+.v2-deity-pill i {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: #161006;
+  background: linear-gradient(135deg, #f3d284, #ba8c3e);
+}
+.v2-deity-pill em {
+  font-style: normal;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(243, 210, 132, 0.2);
+  color: #fae09e;
+}
+
+/* 本殿专属功课条 */
+.v2-deity-task {
+  position: absolute;
+  left: 50%;
+  top: 66px;
+  transform: translateX(-50%);
+  z-index: 16;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(520px, calc(100vw - 24px));
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(238, 204, 134, 0.36);
+  background: rgba(11, 18, 20, 0.78);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+}
+.v2-dt-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f5cc72;
+  box-shadow: 0 0 10px #f5cc72;
+  flex-shrink: 0;
+}
+.v2-dt-title {
+  font-size: 12px;
+  color: #f3e6c8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v2-dt-btn {
+  border: 1px solid rgba(248, 218, 148, 0.68);
+  background: linear-gradient(135deg, #c89f4e, #9f7530);
+  color: #161006;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.v2-deity-task.is-done .v2-dt-dot {
+  background: #8fd6a8;
+  box-shadow: 0 0 10px #8fd6a8;
+}
+
+/* 本尊简介与本殿祈愿簿弹窗（统一 V1 暗青玉细金样式） */
+.v2-deity-sheet {
+  max-width: 620px !important;
+  background: linear-gradient(165deg, rgba(16, 25, 28, 0.96), rgba(9, 15, 17, 0.98)) !important;
+  border: 1px solid rgba(232, 198, 128, 0.34) !important;
+}
+.v2-intro-blessing {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(228, 194, 122, 0.12);
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  color: #f7dca0;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.v2-intro-body {
+  font-size: 14px;
+  line-height: 1.85;
+  color: #f0e4cc;
+  margin-bottom: 10px;
+}
+.v2-intro-body-en {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(235, 224, 198, 0.72);
+  font-style: italic;
+  margin-bottom: 18px;
+}
+.v2-intro-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.v2-vow-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.v2-vow-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 194, 122, 0.32);
+  background: rgba(7, 12, 14, 0.78);
+  color: #f6ebd4;
+  font-size: 13px;
+}
+.v2-vow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.v2-vow-item {
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: rgba(255, 245, 224, 0.04);
+  border: 1px solid rgba(228, 194, 122, 0.2);
+}
+.v2-vow-item.is-self {
+  background: rgba(228, 194, 122, 0.12);
+  border-color: rgba(246, 214, 138, 0.56);
+}
+.v2-vow-item header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.v2-vow-item header b {
+  color: #f5d284;
+  font-weight: 500;
+}
+.v2-vow-item header time {
+  color: rgba(235, 222, 194, 0.56);
+  font-size: 11px;
+}
+.v2-vow-item p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #efe4cc;
+}
+
+@media (max-width: 780px) {
+  .v2-deity-side-bar {
+    top: 112px;
+    right: 10px;
+  }
+  .v2-deity-task {
+    top: 62px;
+    padding: 5px 6px 5px 10px;
+    gap: 6px;
+  }
+  .v2-dt-title {
+    font-size: 11px;
+  }
+}
+
+
+/* ===== 16. 礼（拜佛）与香（敬香）动画电影级精修 ===== */
+/* 1) 礼（拜佛）：移除扁平矢量跪拜小人，升级为第一人称玉白合十双手 + 3D 俯首莲光曼陀罗 */
+.bow-scene .bow-person {
+  display: none !important;
+}
+.bow-scene {
+  perspective: 900px;
+}
+.bow-scene .bow-mandala {
+  width: 220px !important;
+  height: 220px !important;
+  border: 1px solid rgba(246, 214, 136, 0.42) !important;
+  background: radial-gradient(circle, rgba(255, 232, 166, 0.24) 0%, rgba(226, 178, 82, 0.08) 48%, transparent 74%) !important;
+  box-shadow: 0 0 46px rgba(244, 198, 96, 0.26), inset 0 0 32px rgba(255, 228, 152, 0.16) !important;
+  animation: v2-bow-mandala-breathe 3.4s cubic-bezier(0.32, 0.72, 0, 1) both !important;
+}
+.bow-scene .bow-hands-real {
+  width: min(230px, 56vw) !important;
+  opacity: 0.92 !important;
+  filter: drop-shadow(0 0 24px rgba(248, 218, 142, 0.45)) drop-shadow(0 12px 26px rgba(0, 0, 0, 0.45)) !important;
+  transform-origin: center 80%;
+  animation: v2-bow-hands-grace 3.4s cubic-bezier(0.38, 0.08, 0.22, 1) both !important;
+}
+@keyframes v2-bow-mandala-breathe {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.72) rotate(0deg); }
+  32%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.06) rotate(22deg); }
+  66%  { opacity: 1; transform: translate(-50%, -50%) scale(1.16) rotate(45deg); }
+  100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1.02) rotate(60deg); }
+}
+@keyframes v2-bow-hands-grace {
+  0%   { opacity: 0; transform: translate(-50%, 26px) scale(0.92) rotateX(0deg); }
+  22%  { opacity: 0.94; transform: translate(-50%, -10px) scale(1.02) rotateX(4deg); }
+  56%  { opacity: 0.98; transform: translate(-50%, 34px) scale(1.12) rotateX(28deg); }
+  84%  { opacity: 0.92; transform: translate(-50%, 2px) scale(1.0) rotateX(4deg); }
+  100% { opacity: 0.84; transform: translate(-50%, 0px) scale(0.98) rotateX(0deg); }
+}
+
+/* 2) 香（敬香）：立体古铜香炉 + 真实烛火摇曳 + 炭头明火点燃 + 丝缕袅袅青烟 */
+.incense-scene .incense-censer {
+  background: linear-gradient(180deg, #5e472a 0%, #3b2a17 34%, #22170c 72%, #150e07 100%) !important;
+  border: 1px solid rgba(236, 198, 120, 0.48) !important;
+  box-shadow:
+    inset 0 6px 14px rgba(255, 218, 134, 0.28),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.72),
+    0 14px 34px rgba(0, 0, 0, 0.65),
+    0 0 28px rgba(240, 186, 78, 0.16) !important;
+}
+.incense-scene .incense-candle {
+  background: linear-gradient(90deg, #5a1814, #9b2d24 42%, #762019 78%, #47120e) !important;
+  border: 1px solid rgba(242, 194, 118, 0.28) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55) !important;
+}
+.incense-scene .incense-flame {
+  background: radial-gradient(ellipse at 50% 68%, #fffef0 0%, #ffe082 36%, #f59a28 74%, rgba(235, 118, 22, 0) 100%) !important;
+  box-shadow: 0 0 18px #ffd470, 0 0 42px rgba(246, 168, 56, 0.72) !important;
+  animation: v2-lantern-flicker 1.2s ease-in-out infinite alternate !important;
+}
+.incense-scene .incense-bundle i {
+  background: linear-gradient(180deg, #7d5c32, #4d351a) !important;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+}
+.incense-scene .incense-bundle i::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff2c2 0%, #ff6b2b 58%, rgba(255, 82, 24, 0) 100%);
+  box-shadow: 0 0 10px #ff7b32, 0 0 18px rgba(255, 146, 62, 0.8);
+  animation: v2-ember-ignite 3.1s ease-in-out both;
+}
+@keyframes v2-ember-ignite {
+  0%, 24% { opacity: 0; transform: translateX(-50%) scale(0.4); }
+  36%     { opacity: 1; transform: translateX(-50%) scale(1.35); }
+  55%     { opacity: 0.92; transform: translateX(-50%) scale(1.0); }
+  100%    { opacity: 1; transform: translateX(-50%) scale(1.12); }
+}
+.incense-scene .incense-smoke-3d i {
+  background: radial-gradient(ellipse at 50% 50%, rgba(242, 236, 222, 0.56) 0%, rgba(214, 222, 220, 0.24) 48%, transparent 78%) !important;
+  filter: blur(5px) !important;
+}
+
+
+/* ===== 17. Demo-V2-Polish 巡检 P0/P1 精准修复 ===== */
+/* 1) 大殿「本尊简介 + 本殿祈愿簿」移至左侧（彻底避开右侧 四山 / 念珠 / 清音） */
+.v2-deity-side-bar {
+  left: 16px !important;
+  right: auto !important;
+  top: 96px !important;
+  align-items: flex-start;
+}
+.v2-deity-pill:hover {
+  transform: translateX(2px) !important;
+}
+/* 2) 云雾 Loading 期间底色完全不透底，彻底消除叠字 */
+.v2-photo-mist .v2-pm-backdrop {
+  background: radial-gradient(ellipse 82% 72% at 50% 45%, #162428 0%, #0d1619 58%, #080d0f 100%) !important;
+}
+/* 3) 静心冥想背景图微放大裁掉右下角 AI生成 水印，并保证共修蒲团清晰可见 */
+#overlay-world-meditation .meditation-image {
+  transform: scale(1.09);
+  background-position: center 22% !important;
+}
+#overlay-world-meditation .meditation-fullscreen {
+  height: 100% !important;
+}
+/* 4) 西方极乐 Step 3 同步使用 4K 莲境背景，消除平淡纯色渐变 */
+#overlay-world-pureland .pureland-scene {
+  background:
+    linear-gradient(180deg, rgba(10, 17, 19, 0.34), rgba(10, 17, 19, 0.62)),
+    url("./assets/pureland-4k.jpg?v=20261125-v2-19") center / cover no-repeat !important;
+}
+/* 5) 手机端大殿专属功课条清晰避让顶部清音按钮 */
+@media (max-width: 780px) {
+  .v2-deity-side-bar {
+    left: 10px !important;
+    top: 112px !important;
+  }
+  .v2-deity-task {
+    top: 60px !important;
+    left: 10px !important;
+    transform: none !important;
+    max-width: calc(100vw - 110px) !important;
+  }
+}
+
+
+/* ===== 18. 路线 B：4K 像素级深度图 WebGL 真 3D 视差画布 ===== */
+.v2-depth3d-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+.v2-depth3d-canvas.is-ready {
+  opacity: 1;
+}
+/* WebGL 深度视差就绪后平滑替代静态 CSS 背景，避免双倍重绘 */
+#screen-landing .v2-depth3d-canvas.is-ready ~ .landing-bg,
+#temple-scene .v2-depth3d-canvas.is-ready ~ .temple-art {
+  opacity: 0 !important;
+  transition: opacity 0.45s ease;
+}

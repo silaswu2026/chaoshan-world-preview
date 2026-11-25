@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>见山 · 朝山 ｜ 多版本对比台 (Demo-V1 / Demo-V2 / Demo-3D)</title>
+  <title>见山 · 朝山 ｜ 多版本对比台 (V1 / V2 / 3D-v1 / 3D-v2)</title>
   <style>
     :root {
       --bg: #0c1214;
@@ -17,7 +17,7 @@
     html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", sans-serif; }
     body { display: flex; flex-direction: column; overflow: hidden; }
     header {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
       padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--border);
     }
     .brand { display: flex; align-items: baseline; gap: 10px; }
@@ -30,7 +30,7 @@
     }
     .group button {
       border: 0; background: transparent; color: var(--muted); font-size: 12px;
-      padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.2s;
+      padding: 6px 11px; border-radius: 999px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
     }
     .group button.is-on {
       background: linear-gradient(135deg, rgba(228, 194, 122, 0.28), rgba(164, 118, 46, 0.24));
@@ -38,7 +38,7 @@
     }
     a.open-link {
       font-size: 12px; color: var(--gold); text-decoration: none;
-      padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border);
+      padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap;
     }
     a.open-link:hover { background: rgba(228, 194, 122, 0.14); }
     main {
@@ -52,7 +52,7 @@
     }
     .pane.is-hidden { display: none; }
     .pane-head {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
       padding: 8px 12px; background: rgba(19, 28, 31, 0.92); border-bottom: 1px solid var(--border);
       font-size: 12px;
     }
@@ -76,12 +76,13 @@
   <header>
     <div class="brand">
       <strong>见山 · 朝山</strong>
-      <span>多版本对比台 / V1 · V2 · 3D</span>
+      <span>多版本对比台</span>
     </div>
     <div class="controls">
       <div class="group" role="group" aria-label="版本切换">
-        <button type="button" data-mode="v2" class="is-on">Demo-V2（4K精修）</button>
-        <button type="button" data-mode="3d">Demo-3D（真三维同修）</button>
+        <button type="button" data-mode="v2" class="is-on">Demo-V2（纯净版）</button>
+        <button type="button" data-mode="3d-v1">3D-v1（4K深度视差）</button>
+        <button type="button" data-mode="3d-v2">3D-v2（三维空间同修）</button>
         <button type="button" data-mode="v1">Demo-V1（基线）</button>
         <button type="button" data-mode="split">V1 / V2 分屏</button>
       </div>
@@ -98,41 +99,54 @@
         <div><b>Demo-V1</b> <small>原始静态演示基线</small></div>
         <a class="open-link" href="./v1/" target="_blank" rel="noopener">独立打开 V1 ↗</a>
       </div>
-      <div class="frame-wrap"><iframe id="frame-v1" src="./v1/" title="Demo-V1"></iframe></div>
+      <div class="frame-wrap"><iframe id="frame-v1" data-src="./v1/" title="Demo-V1"></iframe></div>
     </section>
     <section class="pane" id="pane-v2">
       <div class="pane-head">
-        <div><b>Demo-V2</b> <small>见山 5 柱 · 4K 山门与五殿 · 同修蒲团/千灯海/本殿祈愿簿 · 巡检精修</small></div>
+        <div><b>Demo-V2</b> <small>纯净 V2：见山 5 柱 · 4K 山门与五殿 · 同修蒲团/千灯海/本殿祈愿簿</small></div>
         <a class="open-link" href="./" target="_blank" rel="noopener">独立打开 V2 ↗</a>
       </div>
       <div class="frame-wrap"><iframe id="frame-v2" src="./" title="Demo-V2"></iframe></div>
     </section>
-    <section class="pane is-hidden" id="pane-3d">
+    <section class="pane is-hidden" id="pane-3d-v1">
       <div class="pane-head">
-        <div><b>Demo-3D</b> <small>WebGL2 真三维大雄宝殿 · 8 位可见 3D 同修角色 · 4 组电影机位</small></div>
-        <a class="open-link" href="./3d/" target="_blank" rel="noopener">独立打开 3D ↗</a>
+        <div><b>3D-v1</b> <small>路线 B：4K 像素级深度图 WebGL 真 3D 视差（支持桌面鼠标与手机陀螺仪）</small></div>
+        <a class="open-link" href="./3d-v1/" target="_blank" rel="noopener">独立打开 3D-v1 ↗</a>
       </div>
-      <div class="frame-wrap"><iframe id="frame-3d" data-src="./3d/" title="Demo-3D"></iframe></div>
+      <div class="frame-wrap"><iframe id="frame-3d-v1" data-src="./3d-v1/" title="3D-v1"></iframe></div>
+    </section>
+    <section class="pane is-hidden" id="pane-3d-v2">
+      <div class="pane-head">
+        <div><b>3D-v2</b> <small>Three.js 4K 弧形立体五殿 · UnrealBloom 泛光 · 8 位写实 3D 同修角色</small></div>
+        <a class="open-link" href="./3d-v2/" target="_blank" rel="noopener">独立打开 3D-v2 ↗</a>
+      </div>
+      <div class="frame-wrap"><iframe id="frame-3d-v2" data-src="./3d-v2/" title="3D-v2"></iframe></div>
     </section>
   </main>
   <script>
     const stage = document.getElementById("stage");
-    const paneV1 = document.getElementById("pane-v1");
-    const paneV2 = document.getElementById("pane-v2");
-    const pane3D = document.getElementById("pane-3d");
-    const frame3D = document.getElementById("frame-3d");
+    const panes = {
+      v1: document.getElementById("pane-v1"),
+      v2: document.getElementById("pane-v2"),
+      "3d-v1": document.getElementById("pane-3d-v1"),
+      "3d-v2": document.getElementById("pane-3d-v2"),
+    };
     const direct = document.getElementById("direct-link");
+
+    function ensureSrc(pane) {
+      const f = pane?.querySelector("iframe");
+      if (f && !f.getAttribute("src") && f.dataset.src) f.setAttribute("src", f.dataset.src);
+    }
 
     function setMode(mode) {
       document.querySelectorAll("[data-mode]").forEach((b) => b.classList.toggle("is-on", b.dataset.mode === mode));
       stage.classList.toggle("is-split", mode === "split");
-      paneV1.classList.toggle("is-hidden", mode !== "v1" && mode !== "split");
-      paneV2.classList.toggle("is-hidden", mode !== "v2" && mode !== "split");
-      pane3D.classList.toggle("is-hidden", mode !== "3d");
-      if (mode === "3d" && !frame3D.getAttribute("src")) {
-        frame3D.setAttribute("src", frame3D.dataset.src);
-      }
-      direct.href = mode === "v1" ? "./v1/" : mode === "3d" ? "./3d/" : "./";
+      Object.entries(panes).forEach(([key, pane]) => {
+        const show = mode === "split" ? (key === "v1" || key === "v2") : key === mode;
+        pane.classList.toggle("is-hidden", !show);
+        if (show) ensureSrc(pane);
+      });
+      direct.href = mode === "v1" ? "./v1/" : mode === "3d-v1" ? "./3d-v1/" : mode === "3d-v2" ? "./3d-v2/" : "./";
     }
 
     function setViewport(vp) {

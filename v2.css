@@ -2534,25 +2534,3 @@ body.quiet-mode .v2-lamp-presence {
     max-width: calc(100vw - 110px) !important;
   }
 }
-
-
-/* ===== 18. 路线 B：4K 像素级深度图 WebGL 真 3D 视差画布 ===== */
-.v2-depth3d-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.55s ease;
-}
-.v2-depth3d-canvas.is-ready {
-  opacity: 1;
-}
-/* WebGL 深度视差就绪后平滑替代静态 CSS 背景，避免双倍重绘 */
-#screen-landing .v2-depth3d-canvas.is-ready ~ .landing-bg,
-#temple-scene .v2-depth3d-canvas.is-ready ~ .temple-art {
-  opacity: 0 !important;
-  transition: opacity 0.45s ease;
-}
