@@ -2,762 +2,215 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>「朝山 · 佛学虚拟世界」产品需求与立项调研</title>
-  <style>
-    :root {
-      --primary: #4A2E1B;
-      --secondary: #9E783D;
-      --accent: #C89B3C;
-      --bg-page: #F7F4EF;
-      --bg-card: #FFFFFF;
-      --bg-tint: #FAF6F0;
-      --text-main: #262626;
-      --text-muted: #666666;
-      --border: #E5DCD1;
-      --border-focus: #9E783D;
-      --danger: #B43425;
-      --success: #2E7D32;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background-color: var(--bg-page);
-      color: var(--text-main);
-      line-height: 1.6;
-      padding-bottom: 90px;
-    }
-
-    header {
-      background: linear-gradient(135deg, #3A2314 0%, #4A2E1B 100%);
-      color: #FFF;
-      padding: 32px 20px 24px;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-    .header-badge {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #E2C99B;
-      background: rgba(255,255,255,0.08);
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(226,201,155,0.25);
-    }
-    header h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-      color: #F8F5F0;
-    }
-    header p {
-      font-size: 13px;
-      color: #D5C4B1;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .container {
-      max-width: 860px;
-      margin: 20px auto;
-      padding: 0 16px;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border-radius: 12px;
-      padding: 24px 20px;
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(74,46,27,0.04);
-    }
-    .card-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 18px;
-      background: var(--secondary);
-      border-radius: 2px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed var(--border);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text-main);
-    }
-    .req { color: var(--danger); }
-    input[type="text"], select, textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 14px;
-      background: #FAFAFA;
-      transition: all 0.2s;
-    }
-    input[type="text"]:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--border-focus);
-      background: #FFF;
-      box-shadow: 0 0 0 3px rgba(158,120,61,0.12);
-    }
-
-    .q-box {
-      background: var(--bg-tint);
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(229,220,209,0.7);
-    }
-    .q-title {
-      font-size: 14.5px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-    .q-type {
-      font-size: 11px;
-      font-weight: normal;
-      color: var(--secondary);
-      background: rgba(158,120,61,0.12);
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-    }
-    .q-hint {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-    .opt-list {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .opt-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 13.5px;
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 6px;
-      background: #FFF;
-      border: 1px solid rgba(216,206,190,0.6);
-      transition: background 0.15s;
-    }
-    .opt-item:hover {
-      background: #FDFBF8;
-      border-color: var(--secondary);
-    }
-    .opt-item input {
-      margin-top: 3.5px;
-    }
-
-    .table-responsive {
-      overflow-x: auto;
-      margin: 12px 0;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      background: #FFF;
-      min-width: 600px;
-    }
-    table.data-table th {
-      background: var(--primary);
-      color: #FFF;
-      padding: 10px 8px;
-      font-weight: 600;
-      text-align: left;
-    }
-    table.data-table th.center, table.data-table td.center {
-      text-align: center;
-    }
-    table.data-table td {
-      padding: 8px;
-      border-top: 1px solid var(--border);
-      vertical-align: middle;
-    }
-    table.data-table tr:nth-child(even) {
-      background: var(--bg-tint);
-    }
-    table.data-table select {
-      padding: 6px 8px;
-      font-size: 12px;
-      border-radius: 6px;
-      background: #FFF;
-    }
-    table.data-table input[type="text"] {
-      padding: 6px 8px;
-      font-size: 12px;
-    }
-
-    .sticky-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      border-top: 1px solid var(--border);
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
-    }
-    .report-badge {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .report-badge strong {
-      color: var(--primary);
-      font-family: monospace;
-      font-size: 13.5px;
-    }
-    .btn-submit {
-      background: linear-gradient(135deg, #5C3D2E 0%, #4A2E1B 100%);
-      color: #FFF;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 24px;
-      font-size: 14.5px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(74,46,27,0.25);
-      transition: all 0.2s;
-    }
-    .btn-submit:hover {
-      background: #3A2314;
-      transform: translateY(-1px);
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .modal {
-      background: #FFF;
-      border-radius: 12px;
-      max-width: 580px;
-      width: 100%;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .modal-header {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-    .modal-body {
-      font-size: 13.5px;
-      color: var(--text-main);
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-    .code-box {
-      background: #F4F1EA;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 12px;
-      max-height: 180px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      margin: 10px 0;
-    }
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .btn-secondary {
-      background: #EFE7DA;
-      color: var(--primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#3a281d">
+  <meta name="description" content="朝山产品方向与真实需求调研：面向老板和核心人员，收敛产品定位、MVP、体验、商业模式与关键分歧。">
+  <title>朝山 · 产品方向与真实需求调研 V3</title>
+  <link rel="stylesheet" href="./survey.css?v=20261125-3">
+  <script defer src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+  <script defer src="./survey.js?v=20261125-3"></script>
 </head>
 <body>
-
-  <header>
-    <div class="header-badge">Project Chaoshan · Decision Survey</div>
-    <h1>「朝山 · 佛学虚拟世界」产品需求与立项调研</h1>
-    <p>面向老板、股东、核心业务与顾问团队。填写后自动生成专属调研报告编号，数据支持本地备份与一键提交汇总。</p>
+  <header class="survey-hero">
+    <nav class="survey-topbar" aria-label="页面导航">
+      <a href="./index.html" class="brand-link">朝山 <small>PRODUCT DISCOVERY</small></a>
+      <div class="nav-links">
+        <a href="./index.html" target="_blank" rel="noopener">打开 Demo</a>
+        <a href="./survey-report.html">汇总多人意见</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">CHAOSHAN · PRODUCT DIRECTION & NEEDS DISCOVERY · V3</p>
+      <h1>我们究竟要为谁<br>创造什么<br>不可替代的价值？</h1>
+      <p class="hero-desc">这不是满意度打分，而是一次面向老板与核心人员的产品假设审查。请区分“我偏好”“用户需要”和“已有证据”，允许暂不确定，也欢迎表达分歧。</p>
+      <div class="hero-meta" aria-label="问卷设计">
+        <span><strong>10</strong> 个决策维度</span>
+        <span><strong>20–25</strong> 分钟核心填写</span>
+        <span><strong>54</strong> 项可选行为深评</span>
+      </div>
+    </div>
   </header>
 
-  <div class="container">
-
-    <!-- 0. 基本信息 -->
-    <div class="card">
-      <div class="card-title">填写人基本信息</div>
-      <div class="card-desc">为保证需求调研有效性与多方意见汇总，请先确认您的称呼与角色。</div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
-        <div class="form-group">
-          <label>您的称呼 / 用户名 <span class="req">*</span></label>
-          <input type="text" id="userName" placeholder="如：张总 / 李明 / 文化顾问老陈" required>
-        </div>
-        <div class="form-group">
-          <label>您在项目中的角色 <span class="req">*</span></label>
-          <select id="userRole" required>
-            <option value="">-- 请选择 --</option>
-            <option value="owner">公司老板 / 创始人</option>
-            <option value="shareholder">股东 / 投资方</option>
-            <option value="partner">业务合伙人 / 运营</option>
-            <option value="product">产品经理 / 策划</option>
-            <option value="design">主美 / 视觉设计</option>
-            <option value="dev">技术负责人 / 研发</option>
-            <option value="advisor">文化顾问 / 佛学顾问</option>
-            <option value="user">种子用户 / 体验者</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Demo 体验情况</label>
-          <select id="demoExp">
-            <option value="deep">深度体验过各道场与场景</option>
-            <option value="light">简单浏览过首页与主殿</option>
-            <option value="none">尚未体验，仅了解概念</option>
-          </select>
+  <main class="container">
+    <section class="intro-card" aria-labelledby="intro-title">
+      <div>
+        <p class="section-kicker">核心人员独立填写 · 意见汇总 · 证据分级</p>
+        <h2 id="intro-title">先对齐问题，再讨论功能与美术</h2>
+        <p>建议每位核心人员独立填写后，再将导出的 JSON 交给发起人汇总。不要先讨论出“标准答案”。没有体验 Demo 也可填写，相关体验题会自动跳过。</p>
+        <div class="intro-actions">
+          <a class="text-button" href="#section-strategy">开始填写</a>
+          <button class="btn-secondary" type="button" id="copyInviteButton">复制转发说明</button>
         </div>
       </div>
+      <div class="privacy-summary">
+        <strong>如何得到真实答案</strong>
+        <p>选择“暂不确定／证据不足”不会被当作弃权。云端答卷只供项目发起人与授权团队汇总；他人不能公开查询。草稿仅保存在当前浏览器。</p>
+      </div>
+    </section>
+
+    <nav class="section-jump" aria-label="问卷章节">
+      <a href="#section-basic">填写人</a><a href="#section-strategy">01 定位与目标</a><a href="#section-scope">02 产品组合</a><a href="#section-business">03 商业与资源</a><a href="#section-experience">04 Demo 诊断</a><a href="#section-architecture">05 架构与交互</a><a href="#section-behaviors">06 行为深评</a><a href="#section-details">07 内容与细节</a><a href="#section-mvp">08 MVP 与验证</a><a href="#section-decision">09 风险与决策</a>
+    </nav>
+
+    <div class="progress-card" aria-label="填写进度">
+      <div class="progress-copy"><span id="progressText">正在初始化…</span><span id="draftStatus">草稿自动保存</span></div>
+      <div class="progress-track"><div id="progressBar"></div></div>
     </div>
 
-    <!-- 1. 宏观战略与灵魂五问 -->
-    <div class="card">
-      <div class="card-title">第一部分：宏观战略与商业计划书级调研（灵魂五问）</div>
-      <div class="card-desc">对齐管理层与核心团队对产品本质、核心用户与造血模式的顶层共识。</div>
+    <noscript><div class="notice error">此在线问卷需要启用 JavaScript 后才能填写和提交。</div></noscript>
 
-      <div class="q-box">
-        <div class="q-title">Q1. 麦肯锡电梯法则：您认同的产品核心定位一句话定义？ <span class="q-type">单选</span></div>
-        <div class="q-hint">检验产品定位的清晰度：谁在什么场景下解决了什么核心问题？</div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="radio" name="q1" value="A"> <strong>A. 线上轻修行与情绪疗愈空间：</strong>面向高压都市人，提供随时静心、敬香祈福、情绪安放的数字道场</label>
-          <label class="opt-item"><input type="radio" name="q1" value="B"> <strong>B. 沉浸式中国名山佛教文化博览空间：</strong>以四大道场为核心的高水准东方美学、建筑造像科普与仪轨体验</label>
-          <label class="opt-item"><input type="radio" name="q1" value="C"> <strong>C. 庄重克制的数字生命关怀与追思空间：</strong>以亲人缅怀、追思莲位、极乐胜境与温情寄语为核心的情感慰藉</label>
-          <label class="opt-item"><input type="radio" name="q1" value="D"> <strong>D. 虚拟同修与文创商业闭环社区：</strong>以共修打卡、莲灯互助、佛学交流及实物文创为驱动的虚拟世界</label>
+    <form id="survey-form" novalidate>
+      <section class="card" id="section-basic">
+        <div class="card-heading"><span class="section-number">00</span><div><h2>先标注您的判断视角</h2><p>没有这一步，后续票数很容易把决策权、专业经验和个人喜好混为一谈。</p></div></div>
+        <div class="form-grid three-columns">
+          <div class="form-group">
+            <label for="userName">您的称呼 / 姓名 <span class="req">*</span></label>
+            <input type="text" id="userName" name="userName" maxlength="40" autocomplete="name" placeholder="如：习总 / 产品负责人 / 文化顾问" required>
+          </div>
+          <div class="form-group">
+            <label for="userRole">核心角色 <span class="req">*</span></label>
+            <select id="userRole" name="userRole" required>
+              <option value="">请选择</option>
+              <option value="owner">老板 / 创始人 / 最终决策者</option>
+              <option value="shareholder">股东 / 投资方</option>
+              <option value="business">业务 / 运营 / 商业化</option>
+              <option value="product">产品 / 策划</option>
+              <option value="design">美术 / 视觉 / 音频</option>
+              <option value="dev">技术 / 研发</option>
+              <option value="expert">佛学 / 文化 / 合规顾问</option>
+              <option value="seed">种子用户 / 外部体验者</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="decisionScope">本次意见的决策性质 <span class="req">*</span></label>
+            <select id="decisionScope" name="decisionScope" required>
+              <option value="">请选择</option>
+              <option value="final">我有最终决策权</option>
+              <option value="joint">我参与共同决策</option>
+              <option value="advice">我提供专业意见</option>
+              <option value="execution">我代表执行团队</option>
+              <option value="feedback">我是外部体验者</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="demoExp">Demo 体验程度 <span class="req">*</span></label>
+            <select id="demoExp" name="demoExp" required>
+              <option value="">请选择</option>
+              <option value="deep">深度体验过多个场景与操作</option>
+              <option value="light">浏览过首页与部分场景</option>
+              <option value="none">尚未体验，仅了解概念</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="projectKnowledge">您对项目的了解主要来自</label>
+            <select id="projectKnowledge" name="projectKnowledge">
+              <option value="brief">简报 / 一次讨论</option>
+              <option value="documents">方案文档与 Demo</option>
+              <option value="ongoing">持续参与项目</option>
+              <option value="external">外部观察 / 体验</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="department">部门 / 组织（选填）</label>
+            <input type="text" id="department" name="department" maxlength="60" placeholder="如：产品中心、某某寺文化顾问">
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="q-box">
-        <div class="q-title">Q2. 用户底层面临的真实切肤之痛是什么？ <span class="q-type">多选</span></div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="checkbox" name="q2" value="A"> <strong>A. 现实寺院物理阻隔：</strong>工作繁忙、异地或行动不便，想去寺院祈福清静但时间与经济成本高</label>
-          <label class="opt-item"><input type="checkbox" name="q2" value="B"> <strong>B. 现代都市精神焦虑：</strong>职场内卷、生活迷茫，缺乏温和不评判的倾诉与静心空间</label>
-          <label class="opt-item"><input type="checkbox" name="q2" value="C"> <strong>C. 亲人思念与情感哀伤：</strong>清明中元或日常想念逝去亲人，缺少庄重且有温度的数字纪念方式</label>
-          <label class="opt-item"><input type="checkbox" name="q2" value="D"> <strong>D. 现有线上祈福产品体验恶劣：</strong>市面普遍充斥粗劣电子木鱼或充值逼单灰产，缺乏庄重美学与文化考据</label>
-          <label class="opt-item"><input type="checkbox" name="q2" value="E"> <strong>E. 信众日常微课诵缺乏便携记录：</strong>早晚课、念佛拨珠、抄经回向缺乏便携肃穆的工具记录</label>
+      <section class="card" id="section-strategy">
+        <div class="card-heading"><span class="section-number">01</span><div><h2>宏观定位、目标与真实需求</h2><p>先回答为什么做、为谁做、凭什么成立，再讨论页面和功能。</p></div></div>
+        <div id="strategyQuestions"></div>
+        <div id="targetRank"></div>
+      </section>
+
+      <section class="card" id="section-scope">
+        <div class="card-heading"><span class="section-number">02</span><div><h2>产品组合与投入边界</h2><p>“用户价值”不是“我觉得好看”；“优先级”必须允许选 P2、坚决不做和证据不足。</p></div></div>
+        <div class="legend-grid module-legend">
+          <div><strong>用户价值 1–5</strong><p>1 看不出价值 · 3 可能有价值 · 5 是关键不可替代价值。没有依据请选“不确定”。</p></div>
+          <div><strong>MVP 范围</strong><p>P0 首版必做 · P1 首版后 · P2 远期 · X 坚决不做 · ? 暂无法判断</p></div>
         </div>
-      </div>
+        <div id="moduleReview" class="module-review"></div>
+        <div id="scopeQuestions"></div>
+      </section>
 
-      <div class="q-box">
-        <div class="q-title">Q3. 最应该优先服务的核心目标人群画像（Persona）？ <span class="q-type">单选</span></div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="radio" name="q3" value="A"> <strong>A. 都市年轻白领 / 职场人（22–38 岁）：</strong>偏好新中式美学与禅意生活，追求快速减压、睡前静心</label>
-          <label class="opt-item"><input type="radio" name="q3" value="B"> <strong>B. 传统佛教信众 / 居士群体：</strong>有坚定的信仰、成熟的仪轨习惯（初一十五、念佛诵经、回向）</label>
-          <label class="opt-item"><input type="radio" name="q3" value="C"> <strong>C. 情感追思与生命关怀人群：</strong>有逝去长辈亲友需长期寄托，看重庄重感、私密性与温情陪伴</label>
-          <label class="opt-item"><input type="radio" name="q3" value="D"> <strong>D. 传统文化与古建筑美学爱好者：</strong>对四大名山历史、造像手印、楹联经卷充满文化求知欲</label>
-          <label class="opt-item"><input type="radio" name="q3" value="E"> <strong>E. 银发退休长辈群体（55 岁以上）：</strong>有敬香礼佛习惯但腿脚不便，偏好大字号极简操作</label>
+      <section class="card" id="section-business">
+        <div class="card-heading"><span class="section-number">03</span><div><h2>商业计划与资源可行性</h2><p>商业计划书不是收入愿景列表，而是价值获取、成本结构、资源与阶段门槛的共同约束。</p></div></div>
+        <div id="businessQuestions"></div>
+      </section>
+
+      <section class="card" id="section-experience">
+        <div class="card-heading"><span class="section-number">04</span><div><h2>基于现有 Demo 的体验诊断</h2><p>评价“是否帮助目标用户完成任务”，不是评价个人审美。未体验者自动跳过此节。</p></div></div>
+        <div class="demo-notice">建议新开窗口体验：<a href="./index.html" target="_blank" rel="noopener">打开当前 Demo</a>。以下评分均针对目标用户，而非单纯个人喜好。</div>
+        <div id="demoQuestions"></div>
+        <div class="subsection-title">最想保留与最想推翻</div>
+        <div class="form-grid two-columns">
+          <div class="form-group"><label for="demoBest">Demo 中最值得保留的 1–3 个体验及原因</label><textarea id="demoBest" name="demoBest" rows="3" maxlength="1200" placeholder="例：推门入山——它帮助用户完成从日常到礼拜的心理转换"></textarea></div>
+          <div class="form-group"><label for="demoWorst">最需要删除、重做或验证的体验及原因</label><textarea id="demoWorst" name="demoWorst" rows="3" maxlength="1200" placeholder="请指出具体场景、受影响用户和问题，不只写“不够好看”"></textarea></div>
+          <div class="form-group"><label for="demoSurprise">哪个瞬间最可能让目标用户主动再次打开？</label><textarea id="demoSurprise" name="demoSurprise" rows="3" maxlength="800" placeholder="若没有，请直接写“没有看到”；这是很有价值的答案"></textarea></div>
+          <div class="form-group"><label for="demoNonTarget">哪些设计其实只讨好了我们，而不是目标用户？</label><textarea id="demoNonTarget" name="demoNonTarget" rows="3" maxlength="800" placeholder="可选填"></textarea></div>
         </div>
-      </div>
+      </section>
 
-      <div class="q-box">
-        <div class="q-title">Q4. 产品中长期的自我造血与商业模式规划？ <span class="q-type">单选</span></div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="radio" name="q4" value="A"> <strong>A. 高品质实体文创周边销售（推荐主路径）：</strong>体验免费树立口碑，通过佛珠手串、名山线香、祈福香囊变现</label>
-          <label class="opt-item"><input type="radio" name="q4" value="B"> <strong>B. 增值服务轻会员制：</strong>基础朝山免费，会员解锁独家无损禅乐、深度冥想课程、多端云同步</label>
-          <label class="opt-item"><input type="radio" name="q4" value="C"> <strong>C. 小额虚拟法物祈愿：</strong>特定节气莲灯、心灯塔特色愿牌（严守小额克制，杜绝暴利逼单）</label>
-          <label class="opt-item"><input type="radio" name="q4" value="D"> <strong>D. B 端文化与文旅品牌合作：</strong>实体景区数字化导览合作、文化基金赞助、非遗展示项目</label>
-          <label class="opt-item"><input type="radio" name="q4" value="E"> <strong>E. 纯公益 / 口碑培育期：</strong>首年严格不设任何商业化，专注打磨口碑、活跃度与用户规模</label>
+      <section class="card" id="section-architecture">
+        <div class="card-heading"><span class="section-number">05</span><div><h2>空间架构、学习路径与交互表现</h2><p>决定沉浸世界、佛学学习、文化网和社交应当如何分工，避免把多个网站硬塞进一个入口。</p></div></div>
+        <div id="architectureQuestions"></div>
+      </section>
+
+      <section class="card" id="section-behaviors">
+        <div class="card-heading"><span class="section-number">06</span><div><h2>54 项寺院行为深评 <span class="optional-tag">可选</span></h2><p>适合产品、佛学顾问与深度体验者。可只评审您关心的部分；空白会记录为“未评估”，不会自动填 P0。</p></div></div>
+        <div class="legend-grid">
+          <div><strong>决策优先级</strong><p>P0 核心必做 · P1 建议保留 · P2 远期探索 · X 坚决不做</p></div>
+          <div><strong>线上表现形式</strong><p>M1 沉浸仪式 · M2 轻量卡片 · M3 视听氛围 · M4 AI 交互 · M5 图文科普 · M6 轻社交 · M7 个人档案 · M8 实体文创 · M9 场景彩蛋</p></div>
         </div>
-      </div>
-    </div>
+        <div class="behavior-tools"><span>建议先判断“是否满足真实需求”，再选择表现形式。</span><button type="button" class="btn-quiet" id="toggleBehaviors">全部展开</button></div>
+        <div id="behaviorGroups"></div>
+      </section>
 
-    <!-- 2. 全景寺院行为打分 -->
-    <div class="card">
-      <div class="card-title">第二部分：去寺院要做的所有事情（全景行为裁决清单）</div>
-      <div class="card-desc">
-        回归真实世界寺院动线，请为各项行为评估【要不要做】与【线上形式】。<br>
-        <strong>优先级代码</strong>：P0 核心必做 | P1 建议保留 | P2 远期探索 | X 坚决不做<br>
-        <strong>表现形式代码</strong>：M1 沉浸式交互仪式 | M2 轻量卡片/按钮 | M3 视听环境氛围 | M4 AI智能交互 | M5 图文科普 | M6 轻社交共修 | M7 个人档案 | M8 实体文创 | M9 场景小彩蛋
-      </div>
+      <section class="card" id="section-details">
+        <div class="card-heading"><span class="section-number">07</span><div><h2>内容专业性、表现与体验细节</h2><p>细节不是滤镜越多越好，而是让用户更自然、更可信、更专注地完成当前任务。</p></div></div>
+        <div id="detailQuestions"></div>
+      </section>
 
-      <div class="table-responsive">
-        <table class="data-table" id="behaviorTable">
-          <thead>
-            <tr>
-              <th style="width: 50px;" class="center">编号</th>
-              <th style="width: 130px;">真实寺院行为</th>
-              <th>场景说明</th>
-              <th style="width: 105px;" class="center">决策优先级</th>
-              <th style="width: 140px;" class="center">线上表现形式</th>
-              <th style="width: 120px;">您的建议/备注</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Dynamic Injection -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <section class="card" id="section-mvp">
+        <div class="card-heading"><span class="section-number">08</span><div><h2>MVP 取舍、成功指标与证据计划</h2><p>如果第一版不能解决一个明确问题，功能再多也只是演示成本。</p></div></div>
+        <div id="mvpQuestions"></div>
+      </section>
 
-    <!-- 3. Demo 改进意见 -->
-    <div class="card">
-      <div class="card-title">第三部分：基于现有 Demo 的体验诊断与改进意见</div>
-      <div class="card-desc">结合已上线的 Demo，从画面、技术、声音和交互四个维度为后续研发提出明确改进意见。</div>
-
-      <div class="q-box">
-        <div class="q-title">Q5. 整体美术基调与光影氛围倾向？ <span class="q-type">单选</span></div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="radio" name="q5" value="A"> <strong>A. 延续“庄重暖金禅意风”（全站提亮版）：</strong>金光温暖、云雾层次丰富、殿堂神圣肃穆</label>
-          <label class="opt-item"><input type="radio" name="q5" value="B"> <strong>B. 转向“宋式清雅水墨留白风”：</strong>低饱和度、素雅温润、大量留白，营造文人山水与超然禅意</label>
-          <label class="opt-item"><input type="radio" name="q5" value="C"> <strong>C. 转向“深邃静谧夜色烛火风”：</strong>深色暗调空间，突出跳动烛火、香烟与微光莲灯的聚焦感</label>
-          <label class="opt-item"><input type="radio" name="q5" value="D"> <strong>D. 随现实时间动态演进（晨昏昼夜）：</strong>清晨晨曦、午间阳光、傍晚晚霞、夜间繁星</label>
+      <section class="card" id="section-decision">
+        <div class="card-heading"><span class="section-number">09</span><div><h2>风险边界、立项判断与下一步</h2><p>不追求全票通过。找出共识、条件性支持和关键分歧，才有决策价值。</p></div></div>
+        <div id="decisionQuestions"></div>
+        <div class="form-grid two-columns">
+          <div class="form-group"><label for="managementNote">给项目负责人的最重要叮嘱</label><textarea id="managementNote" name="managementNote" rows="3" maxlength="1200" placeholder="最不能妥协的价值、最需要补的证据、最担心的风险"></textarea></div>
+          <div class="form-group"><label for="resourceApproval">首期预算、团队与时间边界意见</label><textarea id="resourceApproval" name="resourceApproval" rows="3" maxlength="800" placeholder="可选填；如尚无权限，请写“尚不能决定”"></textarea></div>
+          <div class="form-group"><label for="projectSentence">如果只能保留一句话，您希望项目方向是什么？</label><textarea id="projectSentence" name="projectSentence" rows="3" maxlength="600" placeholder="格式建议：为【谁】，在【场景】，通过【关键能力】，实现【可验证结果】"></textarea></div>
+          <div class="form-group"><label for="reviewSignature">评审署名（选填）</label><input type="text" id="reviewSignature" name="reviewSignature" maxlength="40" placeholder="姓名或团队别名；不替代正式法律签署"><small>此记录用于产品方向讨论，不是投资、采购或法律承诺。</small></div>
         </div>
-      </div>
+      </section>
 
-      <div class="q-box">
-        <div class="q-title">Q6. 技术表现路线选择（研发成本 vs 体验上限）？ <span class="q-type">单选</span></div>
-        <div class="opt-list">
-          <label class="opt-item"><input type="radio" name="q6" value="A"> <strong>A. 深化“精修原画 + 2.5D 分层视差动效”（当前路线，推荐）：</strong>首屏秒开、对普通手机友好、画面品质细腻、性价比最高</label>
-          <label class="opt-item"><input type="radio" name="q6" value="B"> <strong>B. “2.5D 场景 + 局部 3D 核心法物”：</strong>殿堂保持 2.5D，但在佛珠滑动、木鱼敲击、香炉插香采用真 3D 物理交互</label>
-          <label class="opt-item"><input type="radio" name="q6" value="C"> <strong>C. 全面转向 3D 实时渲染漫游（WebGL / Unity）：</strong>全三维自由行走（需接受发热、加载长与较高研发投入）</label>
-        </div>
-      </div>
+      <section class="card consent-card" id="section-consent">
+        <label class="consent-line"><input type="checkbox" id="surveyConsent" name="surveyConsent" value="yes"><span>我同意将本答卷提交至项目云数据库，供本次产品调研与授权团队汇总。我不会填写身份证号、银行卡、逝者照片、健康细节等不必要的信息。<strong> *</strong></span></label>
+        <p>公开访客无答卷读取权限。需要更正或删除时，请联系项目发起人并提供报告编号。</p>
+      </section>
+    </form>
+  </main>
 
-      <div class="form-group" style="margin-top: 14px;">
-        <label>您认为当前 Demo 最打动您的 2–3 处亮点：</label>
-        <textarea id="feedbackGood" rows="2" placeholder="如：推门入山的云雾感、四山金色背光、真实佛音等"></textarea>
-      </div>
+  <footer class="sticky-footer">
+    <div class="footer-status"><span class="report-badge">报告编号 <strong id="reportIdDisplay">正在生成</strong></span><span class="cloud-status" id="cloudStatus">正在加载云服务组件</span></div>
+    <button class="btn-submit" id="submitButton" type="submit" form="survey-form">提交并保存至云端</button>
+  </footer>
 
-      <div class="form-group">
-        <label>您认为当前 Demo 最别扭、多余或急需大改的 2–3 处：</label>
-        <textarea id="feedbackBad" rows="2" placeholder="如：某些弹窗太繁琐、极乐氛围尺度需调整、功能入口太分散等"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>您最担心的项目风险点或对管理层的叮嘱：</label>
-        <textarea id="feedbackRisk" rows="2" placeholder="如：合规风险、商业化过早、团队资源被拖垮等"></textarea>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 底部吸底操作栏 -->
-  <div class="sticky-footer">
-    <div class="report-badge">
-      报告编号：<strong id="reportIdDisplay">CHAOSHAN-SURVEY-XXXX</strong>
-    </div>
-    <div style="display: flex; gap: 8px;">
-      <button class="btn-submit" onclick="submitSurvey()">提交 / 生成我的调研报告</button>
-    </div>
-  </div>
-
-  <!-- 结果弹窗 -->
-  <div class="modal-overlay" id="resultModal">
+  <div class="modal-overlay" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
     <div class="modal">
-      <div class="modal-header">🎉 调研报告已生成并自动保存</div>
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <h2 class="modal-header" id="resultTitle">您的独立意见已保存</h2>
       <div class="modal-body">
-        <p>感谢您的认真填写！您的报告专属编号为：<strong id="finalReportId" style="color:var(--primary); font-family:monospace;"></strong></p>
-        <p style="margin-top: 6px; font-size:12.5px; color:var(--text-muted);">
-          您的答卷数据已在本地浏览器安全存储。您可以复制下方的专属报告摘要，直接发回给项目发起人（或在群内回复编号以供集中核对）：
-        </p>
+        <p>感谢填写。报告专属编号为：</p><p class="final-report-id" id="finalReportId"></p>
+        <p class="muted">请导出 JSON 并交给发起人；发起人可在“汇总多人意见”页面本地生成共识报告。不要公开他人的完整答卷。</p>
         <div class="code-box" id="resultDataBox"></div>
       </div>
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="copyReport()">复制报告摘要</button>
-        <button class="btn-submit" onclick="downloadJson()">导出 JSON 文件</button>
-        <button class="btn-secondary" onclick="closeModal()">关闭</button>
-      </div>
+      <div class="modal-footer"><button class="btn-secondary" id="copyReportButton" type="button">复制摘要</button><button class="btn-secondary" id="downloadButton" type="button">导出 JSON</button><button class="btn-submit" id="closeModalButton" type="button">完成</button></div>
     </div>
   </div>
-
-  <script>
-    // 54 项全景行为清单定义
-    const BEHAVIORS = [
-      { id: "1.1", cat: "行前入山", name: "选定道场与寺院", desc: "选择去四大名山（普陀/五台/峨眉/九华）或特色古刹", defP: "P0", defM: "M1" },
-      { id: "1.2", cat: "行前入山", name: "看佛历与节气吉日", desc: "查看初一十五、佛诞、清明中元、廿四节气日历", defP: "P1", defM: "M2" },
-      { id: "1.4", cat: "行前入山", name: "登山朝山（上山路）", desc: "沿石阶拾级而上，看山雾古松石刻，或“三步一拜”", defP: "P1", defM: "M1" },
-      { id: "1.5", cat: "行前入山", name: "过山门（入清净界）", desc: "推开山门、绕三门不踩门槛，感受尘世切换", defP: "P0", defM: "M1" },
-      { id: "1.6", cat: "行前入山", name: "净手洗心", desc: "在殿前洗手池掬水净手，象征洗去尘劳杂念", defP: "P1", defM: "M1" },
-
-      { id: "2.1", cat: "礼佛敬香", name: "请香", desc: "在请香处请三支清香（或选檀香、沉香等香品）", defP: "P0", defM: "M1" },
-      { id: "2.2", cat: "礼佛敬香", name: "点香与上香", desc: "烛火引燃、举香过眉默念、三拜插入香炉、香烟袅袅", defP: "P0", defM: "M1" },
-      { id: "2.3", cat: "礼佛敬香", name: "逐殿巡礼拜佛", desc: "依次巡礼天王殿、大雄殿、观音/文殊/普贤/地藏殿等", defP: "P0", defM: "M1" },
-      { id: "2.4", cat: "礼佛敬香", name: "礼拜佛菩萨（合十跪拜）", desc: "合掌问讯、俯身顶礼三拜，表达恭敬谦卑", defP: "P0", defM: "M1" },
-      { id: "2.5", cat: "礼佛敬香", name: "供灯（长明灯/莲花灯）", desc: "在殿内点亮心灯，象征破除昏暗、祈愿光明", defP: "P0", defM: "M1" },
-      { id: "2.6", cat: "礼佛敬香", name: "供花果水茶", desc: "在佛前敬献清净白莲、净果、清水或清茶", defP: "P1", defM: "M1" },
-      { id: "2.8", cat: "礼佛敬香", name: "瞻仰佛像法相", desc: "静静仰望主尊庄严法相、背光与光影，感受心灵摄受", defP: "P0", defM: "M3" },
-
-      { id: "3.1", cat: "祈愿解惑", name: "佛前祈福许愿", desc: "为自己、父母、子女祈愿平安健康、学业事业顺遂", defP: "P0", defM: "M2" },
-      { id: "3.2", cat: "祈愿解惑", name: "写祈福牌 / 挂红丝带", desc: "将心愿写在木质愿牌或红丝带上，悬挂祈福长廊", defP: "P0", defM: "M2" },
-      { id: "3.3", cat: "祈愿解惑", name: "求签 / 抽法语签", desc: "摇动签筒求一支签，或每日抽一句安心的佛学法语", defP: "P0", defM: "M2" },
-      { id: "3.4", cat: "祈愿解惑", name: "解签问惑（找师父聊心事）", desc: "带着生活困惑请教智者/AI，获得开解与建议", defP: "P0", defM: "M4" },
-      { id: "3.5", cat: "祈愿解惑", name: "立延生消灾牌位", desc: "为在世亲人长辈立祈福牌位（严格声明为数字形式）", defP: "P1", defM: "M2" },
-
-      { id: "4.1", cat: "修行静心", name: "拨佛珠念佛", desc: "手持念珠逐粒拨动，持诵佛号圣号并记录功课遍数", defP: "P0", defM: "M1" },
-      { id: "4.2", cat: "修行静心", name: "敲木鱼", desc: "跟随沉稳节奏敲击木鱼，收摄散乱心念、减压平复", defP: "P0", defM: "M1" },
-      { id: "4.3", cat: "修行静心", name: "抄经", desc: "在抄经堂焚香静坐，一笔一划临摹《心经》《金刚经》", defP: "P1", defM: "M1" },
-      { id: "4.4", cat: "修行静心", name: "禅修 / 打坐 / 冥想", desc: "跟随呼吸引导与钟磬佛音进行 5/10/20 分钟静坐冥想", defP: "P0", defM: "M3" },
-      { id: "4.5", cat: "修行静心", name: "诵经 / 听经", desc: "聆听真实录制的高品质经文唱诵，或对照经卷跟读", defP: "P0", defM: "M3" },
-      { id: "4.7", cat: "修行静心", name: "叩钟（撞钟祈福）", desc: "在钟楼撞响古钟，感受浑厚悠远的钟声震荡身心", defP: "P1", defM: "M1" },
-      { id: "4.8", cat: "修行静心", name: "发愿与回向", desc: "功课完毕念诵回向文，将善念回向亲友及一切众生", defP: "P0", defM: "M2" },
-
-      { id: "5.1", cat: "追思关怀", name: "追思堂清供祭拜", desc: "为已故亲人敬献白莲、清香、心灯、净水（不设酒肉）", defP: "P0", defM: "M1" },
-      { id: "5.2", cat: "追思关怀", name: "立往生追思莲位", desc: "为逝者设立数字化追思卡片，清明忌日随时探访", defP: "P0", defM: "M2" },
-      { id: "5.3", cat: "追思关怀", name: "给故人写信 / 寄语", desc: "单向书写未尽的思念与近况，释放哀伤（绝不冒充回复）", defP: "P0", defM: "M2" },
-      { id: "5.4", cat: "追思关怀", name: "净土意象观想（极乐胜境）", desc: "在庄严温和的西方净土艺术意境中为亲人祝祷", defP: "P1", defM: "M3" },
-
-      { id: "6.2", cat: "文化探索", name: "造像手印法器科普", desc: "学习四大菩萨愿力、佛像不同手印及法器象征意义", defP: "P1", defM: "M5" },
-      { id: "6.3", cat: "文化探索", name: "逛藏经阁 / 佛学图书馆", desc: "检索与阅读已核验校对的大藏经节选及白话释义", defP: "P1", defM: "M5" },
-      { id: "6.4", cat: "文化探索", name: "游后山园林、竹林亭台", desc: "离开主殿喧嚣，在后山幽径漫步、吹风听泉、发呆", defP: "P1", defM: "M3" },
-      { id: "6.6", cat: "文化探索", name: "集章打卡 / 通关文牒", desc: "在各名山或殿堂收集专属香印法印，生成朝山纪念册", defP: "P0", defM: "M7" },
-
-      { id: "7.2", cat: "清修生活", name: "喝禅茶 / 听雨发呆", desc: "在茶室泡一壶清茶，听雨看书放空，感受慢生活", defP: "P2", defM: "M3" },
-      { id: "8.3", cat: "善行布施", name: "护生与日行一善记录", desc: "记录今日吃素一餐、鼓励他人等现实微小善行", defP: "P1", defM: "M7" },
-
-      { id: "9.1", cat: "法物流通", name: "请实物文创 / 法物纪念品", desc: "选购佛珠手串、名山线香、祈福香囊、精装抄经本", defP: "P1", defM: "M8" },
-      { id: "9.3", cat: "法物流通", name: "免费结缘品带走", desc: "免费下载电子经折、手机壁纸、法语电子书签", defP: "P0", defM: "M2" },
-
-      { id: "10.1", cat: "同修回响", name: "偶遇同修 / 合十随喜", desc: "感知此刻同在殿内的有缘人（如微光莲灯），一键随喜", defP: "P0", defM: "M6" },
-      { id: "10.4", cat: "同修回响", name: "个人朝山志 / 终身修行档案", desc: "沉淀所至道场、所敬清香、所抄经典与愿文的年度画卷", defP: "P0", defM: "M7" },
-      { id: "10.5", cat: "同修回响", name: "日常微功课温和提醒", desc: "温和静默的早晚课提醒，将山中宁静延续至日常工作", defP: "P1", defM: "M2" }
-    ];
-
-    // 初始化唯一报告编号
-    let currentReportId = "";
-    function initReportId() {
-      const saved = localStorage.getItem("chaoshan_current_report_id");
-      if (saved) {
-        currentReportId = saved;
-      } else {
-        const rand = Math.floor(1000 + Math.random() * 9000);
-        const dateStr = new Date().toISOString().slice(2,10).replace(/-/g, "");
-        currentReportId = `CHAOSHAN-${dateStr}-${rand}`;
-        localStorage.setItem("chaoshan_current_report_id", currentReportId);
-      }
-      document.getElementById("reportIdDisplay").textContent = currentReportId;
-    }
-
-    // 渲染行为清单表格
-    function renderBehaviorTable() {
-      const tbody = document.querySelector("#behaviorTable tbody");
-      tbody.innerHTML = "";
-
-      BEHAVIORS.forEach(item => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td class="center" style="font-family:monospace; font-weight:600; color:var(--secondary);">${item.id}</td>
-          <td><strong>${item.name}</strong><br><span style="font-size:11px; color:var(--text-muted);">${item.cat}</span></td>
-          <td style="font-size:12px; color:#555;">${item.desc}</td>
-          <td class="center">
-            <select data-id="${item.id}" data-field="priority">
-              <option value="P0" ${item.defP === 'P0' ? 'selected' : ''}>P0 核心必做</option>
-              <option value="P1" ${item.defP === 'P1' ? 'selected' : ''}>P1 建议保留</option>
-              <option value="P2" ${item.defP === 'P2' ? 'selected' : ''}>P2 远期探索</option>
-              <option value="X" ${item.defP === 'X' ? 'selected' : ''}>X 坚决不做</option>
-            </select>
-          </td>
-          <td class="center">
-            <select data-id="${item.id}" data-field="mode">
-              <option value="M1" ${item.defM === 'M1' ? 'selected' : ''}>M1 沉浸交互仪式</option>
-              <option value="M2" ${item.defM === 'M2' ? 'selected' : ''}>M2 轻量点击/卡片</option>
-              <option value="M3" ${item.defM === 'M3' ? 'selected' : ''}>M3 视听环境氛围</option>
-              <option value="M4" ${item.defM === 'M4' ? 'selected' : ''}>M4 AI 智能交互</option>
-              <option value="M5" ${item.defM === 'M5' ? 'selected' : ''}>M5 图文科普展陈</option>
-              <option value="M6" ${item.defM === 'M6' ? 'selected' : ''}>M6 轻社交共修</option>
-              <option value="M7" ${item.defM === 'M7' ? 'selected' : ''}>M7 个人档案记录</option>
-              <option value="M8" ${item.defM === 'M8' ? 'selected' : ''}>M8 实体文创商城</option>
-              <option value="M9" ${item.defM === 'M9' ? 'selected' : ''}>M9 场景小彩蛋</option>
-            </select>
-          </td>
-          <td>
-            <input type="text" data-id="${item.id}" data-field="note" placeholder="备注想法">
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // 收集表单数据
-    function collectFormData() {
-      const userName = document.getElementById("userName").value.trim();
-      const userRole = document.getElementById("userRole").value;
-      const demoExp = document.getElementById("demoExp").value;
-
-      if (!userName) {
-        alert("请先填写您的称呼 / 用户名");
-        document.getElementById("userName").focus();
-        return null;
-      }
-      if (!userRole) {
-        alert("请选择您在项目中的角色");
-        document.getElementById("userRole").focus();
-        return null;
-      }
-
-      // Q1-Q6
-      const q1 = document.querySelector('input[name="q1"]:checked')?.value || "未选";
-      const q2 = Array.from(document.querySelectorAll('input[name="q2"]:checked')).map(el => el.value);
-      const q3 = document.querySelector('input[name="q3"]:checked')?.value || "未选";
-      const q4 = document.querySelector('input[name="q4"]:checked')?.value || "未选";
-      const q5 = document.querySelector('input[name="q5"]:checked')?.value || "未选";
-      const q6 = document.querySelector('input[name="q6"]:checked')?.value || "未选";
-
-      // 行为清单打分
-      const behaviorsData = [];
-      BEHAVIORS.forEach(item => {
-        const prio = document.querySelector(`select[data-id="${item.id}"][data-field="priority"]`)?.value || item.defP;
-        const mode = document.querySelector(`select[data-id="${item.id}"][data-field="mode"]`)?.value || item.defM;
-        const note = document.querySelector(`input[data-id="${item.id}"][data-field="note"]`)?.value.trim() || "";
-        behaviorsData.push({
-          id: item.id,
-          name: item.name,
-          cat: item.cat,
-          priority: prio,
-          mode: mode,
-          note: note
-        });
-      });
-
-      const feedbackGood = document.getElementById("feedbackGood").value.trim();
-      const feedbackBad = document.getElementById("feedbackBad").value.trim();
-      const feedbackRisk = document.getElementById("feedbackRisk").value.trim();
-
-      return {
-        reportId: currentReportId,
-        submittedAt: new Date().toISOString(),
-        userInfo: {
-          name: userName,
-          role: userRole,
-          demoExp: demoExp
-        },
-        macroStrategy: {
-          q1_corePositioning: q1,
-          q2_userPains: q2,
-          q3_targetPersona: q3,
-          q4_businessModel: q4
-        },
-        demoFeedback: {
-          q5_artStyle: q5,
-          q6_techRoute: q6,
-          feedbackGood: feedbackGood,
-          feedbackBad: feedbackBad,
-          feedbackRisk: feedbackRisk
-        },
-        behaviorsAudit: behaviorsData
-      };
-    }
-
-    let lastResultJson = null;
-
-    function submitSurvey() {
-      const data = collectFormData();
-      if (!data) return;
-
-      lastResultJson = data;
-
-      // 本地存储
-      localStorage.setItem(`chaoshan_survey_${data.reportId}`, JSON.stringify(data));
-
-      // 维护一个已提交索引
-      let historyList = JSON.parse(localStorage.getItem("chaoshan_survey_history") || "[]");
-      if (!historyList.includes(data.reportId)) {
-        historyList.push(data.reportId);
-        localStorage.setItem("chaoshan_survey_history", JSON.stringify(historyList));
-      }
-
-      // 显示弹窗
-      document.getElementById("finalReportId").textContent = data.reportId;
-      const summaryText = `【朝山虚拟世界调研报告 · ${data.reportId}】\n` +
-        `👤 填写人：${data.userInfo.name}（角色：${data.userInfo.role}）\n` +
-        `🎯 核心定位倾向：${data.macroStrategy.q1_corePositioning}\n` +
-        `👥 核心目标人群：${data.macroStrategy.q3_targetPersona}\n` +
-        `💰 商业模式选择：${data.macroStrategy.q4_businessModel}\n` +
-        `🎨 美术基调选择：${data.demoFeedback.q5_artStyle} | 技术路线：${data.demoFeedback.q6_techRoute}\n` +
-        `✨ 亮点反馈：${data.demoFeedback.feedbackGood || "未填"}\n` +
-        `⚠️ 痛点反馈：${data.demoFeedback.feedbackBad || "未填"}\n` +
-        `🛡️ 风险提示：${data.demoFeedback.feedbackRisk || "未填"}\n` +
-        `📋 行为清单已裁决项：${data.behaviorsAudit.length} 项（P0核心必做：${data.behaviorsAudit.filter(b=>b.priority==='P0').length}项）`;
-
-      document.getElementById("resultDataBox").textContent = summaryText;
-      document.getElementById("resultModal").style.display = "flex";
-    }
-
-    function copyReport() {
-      const text = document.getElementById("resultDataBox").textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("报告摘要已复制到剪贴板！可以直接发送给发起人或发到微信群内。");
-      }).catch(() => {
-        alert("复制失败，请手动长按选中文本复制。");
-      });
-    }
-
-    function downloadJson() {
-      if (!lastResultJson) return;
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastResultJson, null, 2));
-      const downloadAnchor = document.createElement("a");
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `${lastResultJson.reportId}_${lastResultJson.userInfo.name}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-    }
-
-    function closeModal() {
-      document.getElementById("resultModal").style.display = "none";
-    }
-
-    // 页面加载启动
-    window.addEventListener("DOMContentLoaded", () => {
-      initReportId();
-      renderBehaviorTable();
-    });
-  </script>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

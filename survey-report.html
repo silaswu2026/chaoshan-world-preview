@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#3a281d">
+  <meta name="description" content="在浏览器本地汇总朝山核心人员调研 JSON，查看产品方向共识、角色差异、MVP 取舍与关键分歧。">
+  <title>朝山 · 多人调研共识与分歧报告</title>
+  <link rel="stylesheet" href="./survey.css?v=20261125-3">
+  <link rel="stylesheet" href="./survey-report.css?v=20261125-3">
+  <script defer src="./survey-report.js?v=20261125-3"></script>
+</head>
+<body>
+  <header class="survey-hero report-hero">
+    <nav class="survey-topbar" aria-label="页面导航">
+      <a href="./survey.html" class="brand-link">朝山 <small>CONSENSUS REPORT</small></a>
+      <div class="nav-links"><a href="./survey.html">填写问卷</a><a href="./index.html">打开 Demo</a></div>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">LOCAL ONLY · NO ANSWER UPLOAD</p>
+      <h1>把多人意见，<br>变成可讨论的项目方向</h1>
+      <p class="hero-desc">导入各成员从问卷导出的 JSON，在当前浏览器内生成方向、需求、MVP 和体验报告。文件不会上传，开放意见默认匿名展示。</p>
+    </div>
+  </header>
+
+  <main class="container report-container">
+    <section class="intro-card">
+      <div>
+        <p class="section-kicker">使用方法</p>
+        <h2>先独立收集，再看共识与分歧</h2>
+        <p>1. 每位核心人员独立填写并导出 JSON。2. 将文件收集到同一台电脑。3. 在这里选择多个 JSON。建议至少覆盖最终决策、产品、业务、技术、美术和佛学文化视角。</p>
+      </div>
+      <div class="privacy-summary">
+        <strong>只在本机处理</strong>
+        <p>此页面不读取云数据库，也不会把导入文件发送到任何服务器。完整答卷仍可能包含敏感意见，请只由发起人或授权评审人员汇总。</p>
+      </div>
+    </section>
+
+    <section class="card report-controls">
+      <label class="file-drop" id="fileDrop">
+        <input type="file" id="surveyFiles" accept=".json,application/json" multiple>
+        <span><strong>点击选择多个答卷 JSON</strong><small>或将文件拖放到这里 · 自动去除重复报告编号</small></span>
+      </label>
+      <div class="filter-row">
+        <div class="form-group"><label for="roleFilter">按核心角色筛选</label><select id="roleFilter"><option value="">全部角色</option></select></div>
+        <div class="form-group"><label for="demoFilter">按 Demo 体验筛选</label><select id="demoFilter"><option value="">全部体验程度</option><option value="deep">深度体验</option><option value="light">简单浏览</option><option value="none">尚未体验</option></select></div>
+        <button type="button" class="btn-secondary" id="clearButton">清空文件</button>
+      </div>
+      <p class="file-status" id="fileStatus" aria-live="polite">尚未导入答卷</p>
+    </section>
+
+    <div id="reportEmpty" class="empty-state">导入答卷后，这里会显示样本量、方向共识、角色差异、模块优先级、Demo 评分和开放意见。</div>
+    <div id="reportContent" hidden>
+      <div id="reportSummary" class="summary-grid"></div>
+      <section class="card"><div class="card-heading"><span class="section-number">A</span><div><h2>当前样本的方向倾向</h2><p>高占比只表示本组受访者意见，不代表目标用户市场结论。</p></div></div><div id="consensusHighlights"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">B</span><div><h2>不同角色的判断差异</h2><p>匿名展示各角色最集中的首要结果与 MVP 模块，帮助安排下一步讨论。</p></div></div><div class="table-wrap" id="rolePerspectives"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">C</span><div><h2>定位、需求、商业与架构选项分布</h2><p>“暂不确定”和“证据不足”单独保留，不按空白或同意处理。</p></div></div><div id="questionDistributions"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">D</span><div><h2>十二个产品模块的价值与 MVP 判断</h2><p>平均分只使用有效数字评分；P0 与坚决不做均按本组人数计算。</p></div></div><div class="table-wrap" id="moduleConsensus"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">E</span><div><h2>Demo 体验诊断</h2><p>仅统计实际填写评分的人，未体验者不进入分母。</p></div></div><div id="demoConsensus"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">F</span><div><h2>54 项寺院行为深评</h2><p>空白仍视为未评估，不自动变成 P0。下列展示获得至少一票的项目。</p></div></div><div id="behaviorConsensus"></div></section>
+      <section class="card"><div class="card-heading"><span class="section-number">G</span><div><h2>匿名开放意见与原话</h2><p>用于理解数字背后的理由，不公开填写人姓名。</p></div></div><div id="openAnswers"></div></section>
+      <section class="card method-card"><h2>解读与下一步建议</h2><ol><li>样本少于 4 人时，只用于发现分歧，不做“共识已经形成”的结论。</li><li>先检查最终决策者与执行团队是否理解同一目标，再讨论票数。</li><li>把“需要用户验证”的假设转成访谈、可用性测试、内容评审或技术 PoC。</li><li>核心人员不是目标用户。立项前仍需补充真实用户行为证据。</li></ol></section>
+      <div class="report-actions"><button type="button" class="btn-secondary" id="exportButton">导出 Markdown 报告</button><button type="button" class="btn-submit" id="printButton">打印 / 保存 PDF</button></div>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
