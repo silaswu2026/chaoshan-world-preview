@@ -41,46 +41,31 @@
       return centered;
     }
 
-    // 结合空间几何透视 + 画面明暗浮雕计算像素级 3D 深度 (0.0 = 极远, 1.0 = 近景前景)
-    float computeDepth(vec2 uv, vec3 col) {
-      float lum = dot(col, vec3(0.299, 0.587, 0.114));
+    // 纯几何平滑空间纵深（绝不用像素亮度做位移，确保佛像法相 100% 刚体庄严、绝不变形扭曲）
+    float computeDepth(vec2 uv) {
       float dx = abs(uv.x - 0.5) * 2.0; // 0 = 中轴, 1 = 左右边缘
-      float dy = uv.y;                   // 0 = 顶部天空/殿顶, 1 = 底部石阶/香案
+      float dy = uv.y;                   // 0 = 顶部, 1 = 底部石阶
 
       if (u_mode < 0.5) {
-        // 山门模式：左右古松/石栏(近) + 底部石阶(近) + 中轴远殿拱门(远) + 亮金主尊微浮雕
-        float sideWalls = smoothstep(0.32, 0.95, dx) * 0.68;
-        float groundSteps = smoothstep(0.56, 1.0, dy) * 0.62;
-        float centerGateFar = (1.0 - smoothstep(0.0, 0.48, length(uv - vec2(0.5, 0.44)))) * 0.38;
-        float relief = lum * 0.16;
-        return clamp(0.24 + sideWalls + groundSteps - centerGateFar + relief, 0.0, 1.0);
+        // 山门：左右边缘古松/石栏与底部石阶平滑过渡，中轴远殿保持刚性稳定
+        float sideWalls = smoothstep(0.45, 1.0, dx) * 0.45;
+        float groundSteps = smoothstep(0.68, 1.0, dy) * 0.38;
+        return clamp(0.22 + max(sideWalls, groundSteps), 0.0, 1.0);
       } else {
-        // 大殿主尊模式：正中主尊菩萨像立体凸出 + 左右殿柱/前景香炉近景 + 背后光环与壁画远景
-        float deityDist = length((uv - vec2(0.5, 0.42)) * vec2(1.45, 1.0));
-        float deitySculpt = (1.0 - smoothstep(0.14, 0.54, deityDist)) * (0.48 + lum * 0.36);
-        float frontAltar = smoothstep(0.68, 1.0, dy) * 0.52;
-        float sidePillars = smoothstep(0.55, 0.98, dx) * 0.42;
-        return clamp(0.14 + max(deitySculpt, max(frontAltar, sidePillars)), 0.0, 1.0);
+        // 大殿：中轴佛像区域恒定刚性平面 (0.35)，仅左右最外缘立柱与最底香案有轻柔透视移动
+        float outerPillars = smoothstep(0.68, 1.0, dx) * 0.35;
+        float frontAltar = smoothstep(0.76, 1.0, dy) * 0.32;
+        return clamp(0.35 + max(outerPillars, frontAltar), 0.0, 1.0);
       }
     }
 
     void main() {
       vec2 baseUV = coverUV(v_uv);
-      // 6 步迭代视差浮雕映射 (Iterative Relief Parallax)，产生真实的前后景立体错位
-      vec2 parallaxStrength = u_offset * vec2(0.036, 0.022);
-      vec2 sampleUV = baseUV;
-      float d = 0.5;
-      for (int i = 0; i < 6; i++) {
-        vec3 probe = texture2D(u_tex, clamp(sampleUV, 0.002, 0.998)).rgb;
-        d = computeDepth(v_uv, probe);
-        // 近景 (d -> 1) 顺镜头反方向大幅位移，远景 (d -> 0) 几乎不动
-        sampleUV = baseUV - parallaxStrength * (d - 0.36);
-      }
+      // 轻克制平滑刚性视差，杜绝任何面部或线条拉扯变形
+      float d = computeDepth(v_uv);
+      vec2 parallaxStrength = u_offset * vec2(0.016, 0.010);
+      vec2 sampleUV = baseUV - parallaxStrength * (d - 0.35);
       vec3 finalCol = texture2D(u_tex, clamp(sampleUV, 0.002, 0.998)).rgb;
-
-      // 轻微电影级立体受光高光（随视角微动，增强真 3D 质感）
-      float rim = (d - 0.4) * (u_offset.x * 0.035 - u_offset.y * 0.025);
-      finalCol += vec3(0.95, 0.84, 0.58) * max(0.0, rim);
       gl_FragColor = vec4(finalCol, 1.0);
     }
   `;
