@@ -1,528 +1,67 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#101719" />
-    <meta name="description" content="朝山：一支香，四座山。中国佛教四大道场虚拟朝山体验。" />
-    <title>见山 · 朝山 ｜ 一支香，四座山</title>
-    <link rel="stylesheet" href="./styles.css?v=20261124-7" />
-    <link rel="stylesheet" href="./visual.css?v=20261124-7" />
-    <link rel="stylesheet" href="./ritual.css?v=20261124-7" />
-    <link rel="stylesheet" href="./world.css?v=20261124-7" />
-    <link rel="stylesheet" href="./sanctuary.css?v=20261124-7" />
-    <link rel="stylesheet" href="./ritual-stage.css?v=20261124-7" />
-    <link rel="stylesheet" href="./v2.css?v=20261125-v2-20" />
-  </head>
-  <body>
-    <div class="app" id="app">
-      <!-- 1. 落地（见山平台 · 朝山中心入口） -->
-      <section class="screen is-active" id="screen-landing" data-screen="landing">
-        <header class="jianshan-topbar">
-          <button type="button" class="jianshan-brand" data-jianshan-nav="about" aria-label="见山">
-            <strong data-v2-i18n="brandMain">见山</strong>
-            <small data-v2-i18n="brandSub">JIANSHAN</small>
-          </button>
-          <nav class="jianshan-nav" aria-label="见山主栏目">
-            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="about" data-v2-i18n="navAbout">关于</button>
-            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="learn" data-v2-i18n="navLearn">佛学学习</button>
-            <button type="button" class="jianshan-nav-btn is-center" data-jianshan-nav="chaoshan" data-v2-i18n="navChaoshan">朝山</button>
-            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="store" data-v2-i18n="navStore">请佛物</button>
-            <button type="button" class="jianshan-nav-btn" data-jianshan-nav="events" data-v2-i18n="navEvents">最新活动</button>
-          </nav>
-          <div class="jianshan-tools">
-            <div class="lang-switch" role="group" aria-label="语言">
-              <button type="button" data-lang="en">EN</button>
-              <button type="button" class="is-on" data-lang="zh-Hans">简</button>
-              <button type="button" data-lang="zh-Hant">繁</button>
-            </div>
-            <button type="button" class="jianshan-icon-btn" data-v2-sound data-v2-i18n="sound">清音</button>
-          </div>
-        </header>
-        <div class="hero-atmosphere" aria-hidden="true">
-          <div class="painted-bg landing-bg"></div>
-          <div class="landing-light" aria-hidden="true"><i></i><i></i></div>
-          <div class="cloud-sea cloud-one"></div>
-          <div class="cloud-sea cloud-two"></div>
-          <div class="landing-foreground landing-foreground-path" aria-hidden="true"></div>
-          <div class="landing-foreground landing-foreground-left" aria-hidden="true"></div>
-          <div class="landing-foreground landing-foreground-right" aria-hidden="true"></div>
-          <div class="cloud-sea cloud-front" aria-hidden="true"></div>
-          <div class="gold-dust"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="scene-shade"></div>
-        </div>
-        <div class="landing-content">
-          <p class="landing-eyebrow" data-v2-i18n="eyebrow">云 雾 之 间 · 心 有 所 向</p>
-          <h1 class="brand-hero" data-v2-i18n="heroTitle">朝山</h1>
-          <p class="tagline" data-v2-i18n="tagline">一支香，四座山。</p>
-          <div class="btn-row landing-actions">
-            <button type="button" class="btn-enter-gate-v2" id="btn-v2-enter-gate" data-v2-i18n="enterGateMain">推开山门</button>
-          </div>
-          <p class="entry-hint" data-v2-i18n="entryHint">免注册 · 免费 · 仅存本机</p>
-        </div>
-      </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080e10" />
+  <title>大雄宝殿 · 4K 多人共修视觉测试 (3D-v1)</title>
+  <link rel="stylesheet" href="./hall-test.css?v=20261125-3dv1-2" />
+</head>
+<body>
+  <main class="hall-stage" id="hall-stage">
+    <!-- 1. 4K 大雄宝殿底图 + 100% 刚体不变形平滑视差 -->
+    <div class="hall-bg-layer" id="hall-bg-layer" aria-hidden="true"></div>
 
-      <!-- 2. 捏香客 -->
-      <section class="screen" id="screen-avatar" data-screen="avatar">
-        <header class="topbar">
-          <button type="button" class="brand-mini" data-go="landing">朝山</button>
-          <button type="button" class="chip" data-go="landing">返回</button>
-        </header>
-        <div class="avatar-stage">
-          <div class="avatar-halo" aria-hidden="true"></div>
-          <img class="avatar-image" id="avatar-image" src="./assets/avatar-qing.webp?v=20261124-7" alt="香客立绘" />
-          <div class="avatar-figure" aria-hidden="true">
-            <div class="avatar-head"></div>
-            <div class="avatar-beads" id="avatar-beads"></div>
-            <div class="avatar-body" id="avatar-body" data-robe="ink"></div>
-          </div>
-        </div>
-        <div class="avatar-panel">
-          <h2 class="panel-title" data-i18n="avatarTitle">香客</h2>
-          <p class="panel-note" data-i18n="avatarNote">名号与形象只留在本机，可随时更改。无需注册。</p>
-          <div class="field">
-            <label for="guest-name" data-i18n="nameLabel">香客号</label>
-            <div class="name-tools">
-              <input id="guest-name" type="text" maxlength="8" value="清风" autocomplete="off" />
-              <button type="button" class="btn-secondary" id="btn-random-name" data-i18n="randomName">助拟</button>
-            </div>
-          </div>
-          <div class="field">
-            <label>选择香客</label>
-            <div class="avatar-options" id="avatar-options">
-              <button type="button" class="is-on" data-avatar="qing"><img src="./assets/avatar-qing.webp?v=20261124-7" alt="青年香客" /><span>清行</span></button>
-              <button type="button" data-avatar="shao"><img src="./assets/avatar-shao.webp?v=20261124-7" alt="少年香客" /><span>澄心</span></button>
-              <button type="button" data-avatar="zhong"><img src="./assets/avatar-zhong.webp?v=20261124-7" alt="中年香客" /><span>静远</span></button>
-              <button type="button" data-avatar="lao"><img src="./assets/avatar-lao.webp?v=20261124-7" alt="年长香客" /><span>慧安</span></button>
-            </div>
-          </div>
-          <div class="field compact-field">
-            <label data-i18n="robeLabel">衣着</label>
-            <div class="option-row" id="robe-options">
-              <button type="button" class="option-pill is-on" data-robe="ink">墨青</button>
-              <button type="button" class="option-pill" data-robe="lotus">莲褐</button>
-              <button type="button" class="option-pill" data-robe="cinnabar">朱砂</button>
-            </div>
-          </div>
-          <div class="field">
-            <label data-i18n="beadLabel">念珠</label>
-            <div class="option-row" id="bead-options">
-              <button type="button" class="option-pill is-on" data-bead="#9a7b2f">檀色</button>
-              <button type="button" class="option-pill" data-bead="#6d8f6a">青玉</button>
-              <button type="button" class="option-pill" data-bead="#a63d2f">朱砂</button>
-            </div>
-          </div>
-          <div class="btn-row">
-            <button type="button" class="btn-primary" id="btn-enter-gate" data-i18n="enterGate">进入山门</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3. 朝山世界全景（二图合一） -->
-      <section class="screen" id="screen-map" data-screen="map">
-        <header class="map-topbar-v2">
-          <div class="map-topbar-left">
-            <button type="button" class="jianshan-brand" data-go="landing">
-              <strong data-v2-i18n="brandMain">见山</strong>
-              <small data-v2-i18n="mapBackGate">山门</small>
-            </button>
-            <button type="button" class="map-online-pill" data-world-open="room">
-              <i></i><b id="v2-map-online-num">1,286</b> <span data-v2-i18n="onlineSuffix">位同修在线</span>
-            </button>
-          </div>
-          <div class="map-topbar-right">
-            <button type="button" class="jianshan-icon-btn" data-v2-quiet aria-pressed="false"><span data-v2-i18n="quietOff">清净模式</span></button>
-            <button type="button" class="jianshan-icon-btn" data-v2-profile data-v2-i18n="mapProfile">香客档案</button>
-            <button type="button" class="jianshan-icon-btn" data-open="book" data-i18n="bookTitle">祈愿簿</button>
-            <button type="button" class="jianshan-icon-btn" data-v2-sound data-v2-i18n="sound">清音</button>
-            <button type="button" class="jianshan-icon-btn" data-jianshan-nav="learn" data-v2-i18n="navLearn">佛学学习</button>
-          </div>
-        </header>
-        <p class="map-progress"><span data-i18n="mapProgress">四山香印</span> <strong id="seal-count">0</strong> / 4</p>
-        <div class="map-canvas">
-          <div class="map-painted-bg" aria-hidden="true"></div>
-          <div class="map-auras" aria-hidden="true">
-            <i class="map-aura map-aura-emei"></i>
-            <i class="map-aura map-aura-wutai"></i>
-            <i class="map-aura map-aura-putuo"></i>
-            <i class="map-aura map-aura-jiuhua"></i>
-          </div>
-          <div class="map-constellation">
-            <div class="map-rings" aria-hidden="true"></div>
-            <button type="button" class="map-node" data-pos="w" data-mountain="wutai" data-seal="wutai">
-              <div class="orb">台</div>
-              <div class="name">五台山</div>
-              <div class="role">文殊 · 智慧</div>
-            </button>
-            <button type="button" class="map-node" data-pos="e" data-mountain="putuo" data-seal="putuo">
-              <div class="orb">普</div>
-              <div class="name">普陀山</div>
-              <div class="role">观音 · 慈悲</div>
-            </button>
-            <button type="button" class="map-node" data-pos="s" data-mountain="jiuhua" data-seal="jiuhua">
-              <div class="orb">华</div>
-              <div class="name">九华山</div>
-              <div class="role">地藏 · 愿力</div>
-            </button>
-            <button type="button" class="map-node" data-pos="n" data-mountain="emei" data-seal="emei">
-              <div class="orb">峨</div>
-              <div class="name">峨眉山</div>
-              <div class="role">普贤 · 行愿</div>
-            </button>
-            <button type="button" class="map-node memorial-node" data-pos="memorial" data-mountain="memorial">
-              <div class="orb">忆</div>
-              <div class="name">缅怀堂</div>
-              <div class="role">追思 · 回向</div>
-            </button>
-            <button type="button" class="map-node" data-pos="c" data-mountain="gate">
-              <div class="orb">门</div>
-              <div class="name">山门</div>
-              <div class="role">大雄宝殿 · 回向</div>
-            </button>
-          </div>
-        </div>
-        <div class="v2-world-corners" aria-label="净境入口">
-          <button type="button" class="v2-corner-node is-pureland" data-world-open="pureland">
-            <span class="v2-corner-orb">莲</span>
-            <span class="v2-corner-text"><b data-v2-i18n="realmPureland">西方极乐世界</b><small data-v2-i18n="realmPurelandSub">怀念故人 · 归莲净土</small></span>
-          </button>
-          <button type="button" class="v2-corner-node is-backmountain" data-world-open="backmountain">
-            <span class="v2-corner-orb">灯</span>
-            <span class="v2-corner-text"><b data-v2-i18n="realmLamp">后山</b><small data-v2-i18n="realmLampSub">心灯祈福 · 高僧解惑</small></span>
-          </button>
-          <button type="button" class="v2-corner-node is-meditation" data-world-open="meditation">
-            <span class="v2-corner-orb">定</span>
-            <span class="v2-corner-text"><b data-v2-i18n="realmMeditation">静心冥想</b><small data-v2-i18n="realmMeditationSub">4K 禅堂 · 同修蒲团</small></span>
-          </button>
-        </div>
-        <div class="map-footer">
-          <p class="map-tip">点选道场 · 入殿礼佛</p>
-          <button type="button" class="btn-ghost" id="btn-quick-four" data-i18n="quickFour">今日一巡（轻量）</button>
-        </div>
-      </section>
-
-      <!-- 4. 殿内 -->
-      <section class="screen" id="screen-temple" data-screen="temple">
-        <div class="temple-scene" id="temple-scene" data-mountain="gate">
-          <div class="temple-art" aria-hidden="true"></div>
-          <div class="mountain-aura" aria-hidden="true">
-            <div class="aura-bloom"></div>
-            <div class="aura-rays"></div>
-            <div class="aura-ring aura-ring-one"></div>
-            <div class="aura-ring aura-ring-two"></div>
-            <div class="aura-sparks"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="temple-light" aria-hidden="true"></div>
-          <div class="sacred-rays" aria-hidden="true"><i></i><i></i><i></i></div>
-          <div class="sacred-mist" aria-hidden="true"><i></i><i></i></div>
-          <div class="temple-halo" aria-hidden="true"></div>
-          <div class="incense-smoke" id="incense-smoke" aria-hidden="true"><i></i><i></i><i></i></div>
-          <div class="placed-incense" id="placed-incense" aria-hidden="true"><i></i></div>
-          <div class="incense-rite" id="incense-rite" aria-hidden="true">
-            <div class="ignition-glow"></div>
-            <div class="anim-incense"><i></i></div>
-            <p id="incense-rite-caption">取香</p>
-          </div>
-          <div class="temple-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="candle-flames" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-          <div class="prayer-bubbles" id="prayer-bubbles" aria-live="polite"></div>
-          <p class="place-tag" id="place-tag">山门 · 大雄宝殿</p>
-          <div class="deity-stage">
-            <div class="deity-halo">
-              <span class="deity-glyph" id="deity-glyph">佛</span>
-            </div>
-            <div class="deity-name" id="deity-name">释迦牟尼佛</div>
-            <div class="deity-verse" id="deity-verse">诸恶莫作 · 众善奉行</div>
-          </div>
-          <div class="floor-ring" aria-hidden="true"></div>
-          <div class="memorial-entry" id="memorial-entry">
-            <p>为故人留一盏灯</p>
-            <button type="button" id="btn-memorial">追思缅怀</button>
-          </div>
-          <div class="bow-first-person" id="bow-first-person" aria-hidden="true">
-            <span>一心顶礼</span>
-            <img class="bow-hands" src="./assets/hands-jade.webp?v=20261124-7" alt="" aria-hidden="true" />
-          </div>
-        </div>
-
-        <div class="hud-top">
-          <div class="hud-identity">
-            <div class="who" id="hud-name">清风</div>
-            <div class="meta"><span data-i18n="streak">连续朝山</span> 1 日</div>
-          </div>
-          <div class="hud-tools">
-            <button type="button" class="chip" data-v2-quiet aria-pressed="false"><span data-v2-i18n="quietOff">清净模式</span></button>
-            <button type="button" class="chip" data-open="book" data-i18n="bookTitle">祈愿簿</button>
-            <button type="button" class="chip" data-open="settings">设定</button>
-          </div>
-        </div>
-
-        <div class="seals" id="hud-seals" aria-label="四山香印">
-          <div class="seal" data-seal="putuo" title="普陀">普</div>
-          <div class="seal" data-seal="wutai" title="五台">台</div>
-          <div class="seal" data-seal="emei" title="峨眉">峨</div>
-          <div class="seal" data-seal="jiuhua" title="九华">华</div>
-        </div>
-
-        <button type="button" class="mini-map" data-go="map" aria-label="打开朝山图"><span>四山</span><i></i></button>
-
-        <div class="ritual-actions" aria-label="礼佛操作">
-          <button type="button" data-ritual="bow"><b>礼</b><span>拜佛</span></button>
-          <button type="button" data-ritual="take"><b>香</b><span>敬香</span></button>
-          <button type="button" data-ritual="chant"><b>唵</b><span>念佛</span></button>
-          <button type="button" data-ritual="beads"><b>珠</b><span>佛珠</span></button>
-          <button type="button" data-ritual="muyu"><b>木</b><span>木鱼</span></button>
-          <button type="button" data-ritual="lamp"><b>灯</b><span>供灯</span></button>
-          <button type="button" data-ritual="plaque"><b>牌</b><span>佛牌</span></button>
-        </div>
-
-        <button type="button" class="beads-widget" id="btn-beads" title="念珠">
-          <div class="num"><span id="bead-count">0</span>/108</div>
-          <div class="lbl" data-i18n="beads">念珠</div>
-        </button>
-
-        <nav class="hud-dock" aria-label="主操作">
-          <button type="button" class="dock-btn" data-go="map" data-i18n="dockMap">朝山图</button>
-          <button type="button" class="dock-btn accent" id="btn-incense" data-i18n="dockIncense">敬香</button>
-          <button type="button" class="dock-btn" id="btn-practice" data-i18n="dockPractice">功课</button>
-          <button type="button" class="dock-btn" id="btn-dedicate" data-i18n="dockGate">回山门</button>
-        </nav>
-      </section>
-
-      <!-- 5. 圆满卡 -->
-      <section class="screen" id="screen-card" data-screen="card">
-        <article class="completion-card">
-          <div class="mark">CHAOSHAN</div>
-          <h1>朝山</h1>
-          <p class="sub">四山圆满</p>
-          <div class="card-seals">
-            <span>普</span><span>台</span><span>峨</span><span>华</span>
-          </div>
-          <div class="card-meta">
-            <div id="card-guest">香客 · 清风</div>
-            <div id="card-date"></div>
-            <div>chaoshan.online</div>
-          </div>
-        </article>
-        <div class="card-actions">
-          <button type="button" class="btn-secondary" data-go="temple" data-mountain="gate">继续巡礼</button>
-          <button type="button" class="btn-primary" data-go="landing">回到首页</button>
-        </div>
-      </section>
-
-      <!-- 敬香 -->
-      <div class="overlay" id="overlay-incense" role="dialog" aria-modal="true" aria-labelledby="incense-title">
-        <div class="sheet">
-          <div class="sheet-head">
-            <h2 id="incense-title" data-i18n="incenseTitle">敬香</h2>
-            <button type="button" class="sheet-close" data-close data-i18n="close">退出</button>
-          </div>
-          <div class="steps" id="incense-steps">
-            <div class="step is-on"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-          </div>
-          <div class="rite-body">
-            <div class="rite-visual" id="incense-visual">合十</div>
-            <p id="incense-copy">站定于香炉前，合十片刻。移动将被锁定，以免打断仪式。</p>
-          </div>
-          <div class="sheet-actions">
-            <button type="button" class="btn-secondary" data-close>取消</button>
-            <button type="button" class="btn-primary" id="btn-incense-next">下一步</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 功课 -->
-      <div class="overlay" id="overlay-practice" role="dialog" aria-modal="true">
-        <div class="sheet">
-          <div class="sheet-head">
-            <h2 data-i18n="practiceTitle">功课</h2>
-            <button type="button" class="sheet-close" data-close>关闭</button>
-          </div>
-          <div class="option-row" style="flex-direction: column; align-items: stretch; gap: 10px">
-            <button type="button" class="btn-secondary" style="justify-content: flex-start; height: 52px" id="practice-main">
-              本殿专项
-            </button>
-            <button type="button" class="btn-secondary" style="justify-content: flex-start; height: 52px" id="practice-beads">
-              念珠计数 +1
-            </button>
-            <button type="button" class="btn-secondary" style="justify-content: flex-start; height: 52px" data-close data-go="map">
-              打开朝山图
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 祈愿簿 -->
-      <div class="overlay" id="overlay-book" role="dialog" aria-modal="true">
-        <div class="sheet wide">
-          <div class="sheet-head">
-            <h2 data-i18n="bookTitle">祈愿簿</h2>
-            <button type="button" class="sheet-close" data-close>关闭</button>
-          </div>
-          <div class="tabs" role="tablist">
-            <button type="button" class="tab is-on" data-tab="seals">香印</button>
-            <button type="button" class="tab" data-tab="wish">愿文</button>
-            <button type="button" class="tab" data-tab="about">说明</button>
-          </div>
-          <div class="tab-panel is-on" data-panel="seals">
-            <div class="seal-grid" id="book-seals">
-              <div class="seal-card" data-seal="putuo"><div class="big">普</div><div class="small">普陀 · 观音</div></div>
-              <div class="seal-card" data-seal="wutai"><div class="big">台</div><div class="small">五台 · 文殊</div></div>
-              <div class="seal-card" data-seal="emei"><div class="big">峨</div><div class="small">峨眉 · 普贤</div></div>
-              <div class="seal-card" data-seal="jiuhua"><div class="big">华</div><div class="small">九华 · 地藏</div></div>
-            </div>
-            <p class="panel-note" style="margin-top: 20px" id="book-seal-note">尚未点亮香印。可至各山主殿敬香，或使用快速朝山。</p>
-          </div>
-          <div class="tab-panel" data-panel="wish">
-            <p class="panel-note">本机愿文不会上传。公开祈福需另行确认。</p>
-            <div class="field" style="margin-top: 16px">
-              <label for="local-wish">最近愿文</label>
-              <input id="local-wish" type="text" placeholder="例：家人平安" maxlength="40" />
-            </div>
-          </div>
-          <div class="tab-panel" data-panel="about">
-            <p class="rite-body" style="min-height: 0">
-              朝山是虚构的线上道场体验，不代表任何实体寺院。仪轨仅供文化学习与祈福参考；实际朝山请依各寺方规矩。
-              医疗、法律、投资请咨询专业人士。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 设定 -->
-      <div class="overlay" id="overlay-settings" role="dialog" aria-modal="true">
-        <div class="sheet">
-          <div class="sheet-head">
-            <h2>设定</h2>
-            <button type="button" class="sheet-close" data-close>关闭</button>
-          </div>
-          <div class="setting-row">
-            <span>简礼一炷</span>
-            <button type="button" class="toggle is-on" data-toggle="simple-rite" aria-pressed="true"></button>
-          </div>
-          <div class="setting-row">
-            <span>隐藏他人愿文</span>
-            <button type="button" class="toggle" data-toggle="hide-wishes" aria-pressed="false"></button>
-          </div>
-          <div class="setting-row">
-            <span>实况模式</span>
-            <button type="button" class="toggle" data-toggle="live-mode" aria-pressed="false"></button>
-          </div>
-          <div class="setting-row">
-            <span>减少动效</span>
-            <button type="button" class="toggle" data-toggle="reduce-motion" aria-pressed="false"></button>
-          </div>
-          <p class="panel-note" style="margin-top: 20px">存档码、护持道场入口将放在此页下半（原型未接支付）。</p>
-        </div>
-      </div>
-
-      <button type="button" class="music-fab" id="btn-music" aria-label="选择清净背景音"><i></i><span>清音</span></button>
-
-      <div class="gate-transition" id="gate-transition" aria-hidden="true">
-        <div class="gate-destination"></div>
-        <div class="gate-door gate-left"></div>
-        <div class="gate-door gate-right"></div>
-        <div class="gate-light"></div>
-        <div class="gate-cloud-stream" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div class="transition-cloud cloud-left"></div><div class="transition-cloud cloud-right"></div><div class="transition-cloud cloud-low"></div>
-        <p>一 念 起 · 万 缘 放 下</p>
-      </div>
-      <div class="lotus-loading" id="lotus-loading" role="status" aria-label="正在进入道场">
-        <div class="lotus-lamp"><i></i><i></i><i></i><i></i><b></b></div>
-        <p>莲灯引路</p><span id="loading-label">正在开启山门</span>
-      </div>
-      <div class="ritual-feedback" id="ritual-feedback" aria-hidden="true"></div>
-
-      <div class="overlay" id="overlay-ritual" role="dialog" aria-modal="true">
-        <div class="sheet ritual-sheet">
-          <div class="sheet-head"><h2 id="ritual-title">佛牌</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <div class="ritual-card-mark" id="ritual-card-mark">愿</div>
-          <p class="ritual-description" id="ritual-description"></p>
-          <div class="field" id="ritual-wish-field"><label for="ritual-wish">愿文（仅存本机）</label><input id="ritual-wish" maxlength="40" placeholder="例：家人平安，诸事顺遂" /></div>
-          <div class="sheet-actions"><button type="button" class="btn-secondary" data-close>返回</button><button type="button" class="btn-primary" id="btn-save-ritual">留存心愿</button></div>
-        </div>
-      </div>
-
-      <div class="overlay" id="overlay-music" role="dialog" aria-modal="true">
-        <div class="sheet audio-sheet">
-          <div class="sheet-head"><h2>清净背景音</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <p class="panel-note">真实佛音录音 · 点击后播放 · 切页不中断 · 刷新不自动响起。</p>
-          <div class="music-list">
-            <button type="button" data-music="0"><b>般若波罗蜜多心经</b><span>中文诵念 · 静心闻思</span><i>播放</i></button>
-            <button type="button" data-music="1"><b>大悲咒</b><span>慢版诵念 · 慈悲安定</span><i>播放</i></button>
-            <button type="button" data-music="2"><b>六字真言</b><span>唵嘛呢叭咪吽 · 循环持诵</span><i>播放</i></button>
-          </div>
-          <details class="music-credits"><summary>音源与授权</summary><p>录音来自 <a href="https://github.com/gong-sh/buddhistsutras" target="_blank" rel="noopener">Mahayana Buddhist Sutras（佛教念诵合集）</a>，随仓库 Unlicense 发布。原合集收录观世音菩萨心灵法门同修诵念；此处仅作网页 Demo 背景音，不表示原作者或团体为本项目背书。</p></details>
-          <div class="volume-row"><label for="music-volume">音量</label><input id="music-volume" type="range" min="0" max="100" value="45" /><button type="button" id="btn-music-stop">停止</button></div>
-        </div>
-      </div>
-
-      <div class="overlay" id="overlay-chant" role="dialog" aria-modal="true">
-        <div class="sheet chant-sheet">
-          <div class="sheet-head"><h2>念佛 · 闻思</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <div class="chant-sanskrit">唵</div>
-          <p class="chant-verse" id="chant-verse">应无所住而生其心。<br />一切有为法，如梦幻泡影，<br />如露亦如电，应作如是观。</p>
-          <p class="panel-note">《金刚经》节选 · 使用设备中文语音诵读，音色因设备而异。</p>
-          <div class="chant-actions"><button type="button" class="btn-secondary" data-chant="amitabha">阿弥陀佛圣号</button><button type="button" class="btn-primary" data-chant="diamond">诵读金刚经</button></div>
-          <button type="button" class="chant-stop" id="btn-chant-stop">停止诵读</button>
-        </div>
-      </div>
-
-      <div class="overlay" id="overlay-beads" role="dialog" aria-modal="true">
-        <div class="sheet beads-sheet">
-          <div class="sheet-head"><h2>三维佛珠</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <div class="beads-status"><span>本圈 <b id="bead-3d-count">0</b> / 108</span><span>金币 <b id="coin-count">108</b></span></div>
-          <div class="bead-tap-zone" id="bead-tap-zone" aria-label="点击或左右拖动拨动佛珠">
-            <div class="bead-orbit" id="bead-orbit"></div><div class="bead-center">一念<br />一珠</div>
-          </div>
-          <p class="panel-note">点击珠串或左右拖动，每次拨动一粒。自动模式每粒消耗 1 枚虚拟金币，不涉及充值或支付。</p>
-          <div class="bead-actions"><button type="button" class="btn-secondary" id="btn-bead-manual">拨动一粒</button><button type="button" class="btn-primary" id="btn-bead-auto">自动拨珠 · 1 金币/珠</button></div>
-          <p class="auto-status" id="auto-bead-status"></p>
-        </div>
-      </div>
-
-      <div class="overlay" id="overlay-lamp" role="dialog" aria-modal="true">
-        <div class="sheet lamp-sheet">
-          <div class="sheet-head"><h2>虚拟供灯</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <div class="virtual-lotus-lamp" id="virtual-lotus-lamp"><i></i><i></i><i></i><i></i><b></b></div>
-          <p class="ritual-description">点亮一盏心灯，愿智慧光明、离苦得乐。此供灯仅存在于当前网页，不对应任何线下寺院灯位。</p>
-          <button type="button" class="btn-primary" id="btn-light-lamp">点亮心灯</button>
-        </div>
-      </div>
-
-      <div class="overlay" id="overlay-memorial" role="dialog" aria-modal="true">
-        <div class="sheet memorial-sheet">
-          <div class="sheet-head"><h2>缅怀堂 · 追思卡</h2><button type="button" class="sheet-close" data-close>关闭</button></div>
-          <p class="panel-note">虚拟追思空间，不代表实体寺院。称谓与寄语仅保存于本机，不公开展示。</p>
-          <div class="field"><label for="memorial-name">故人称谓</label><input id="memorial-name" maxlength="16" placeholder="例：先祖、父亲、慈母" /></div>
-          <div class="field"><label for="memorial-message">追思寄语</label><textarea id="memorial-message" maxlength="120" placeholder="愿故人离苦得乐，愿在世者平安珍重。"></textarea></div>
-          <div class="memorial-offerings"><button type="button" class="is-on" data-offering="lotus">献白莲</button><button type="button" data-offering="lamp">供心灯</button><button type="button" data-offering="incense">敬清香</button></div>
-          <button type="button" class="btn-primary" id="btn-save-memorial">留存追思卡</button>
-          <div class="memorial-saved" id="memorial-saved"></div>
-        </div>
-      </div>
-
-      <div class="toast" id="toast" role="status"></div>
+    <!-- 2. 电影光影层：中轴佛光 + 丁达尔光柱 + 实拍丝缕薄雾 + 60fps 金光粒子与环境香烟 -->
+    <div class="hall-atmosphere" aria-hidden="true">
+      <div class="hall-buddha-glow"></div>
+      <div class="hall-rays"><i></i><i></i><i></i></div>
+      <div class="hall-mist"></div>
+      <canvas id="hall-fx-canvas"></canvas>
     </div>
-    <script src="./app.js?v=20261125-v2-2"></script>
-    <script src="./visual.js?v=20261124-7"></script>
-    <script src="./ritual.js?v=20261124-7"></script>
-    <script src="./ritual-stage.js?v=20261125-v2-11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
-    <script src="./world-ui.js?v=20261124-7"></script>
-    <script src="./sanctuary-ui.js?v=20261125-v2-19"></script>
-    <script src="./world.js?v=20261124-7"></script>
-    <script src="./sanctuary.js?v=20261125-v2-19"></script>
-    <script src="./v2.js?v=20261125-v2-19"></script>
-    <script src="./v2-hero.js?v=20261125-v2-19"></script>
-    <script src="./v2-clouds.js?v=20261125-v2-19"></script>
-    <script src="./v2-map-fx.js?v=20261125-v2-19"></script>
-    <script src="./v2-sanctuary.js?v=20261125-v2-19"></script>
-    <script src="./v2-halls.js?v=20261125-v2-19"></script>
-    <script src="./v2-depth3d.js?v=20261125-3d1-fix"></script>
-  </body>
+
+    <!-- 3. 环境光影实时联动层：香炉实时新香烟 + 两侧灯台实时亮灯微字 -->
+    <div class="hall-live-world" id="hall-live-world" aria-live="polite">
+      <div class="live-censer-zone" id="live-censer-zone"></div>
+      <div class="live-lamps-left" id="live-lamps-left"></div>
+      <div class="live-lamps-right" id="live-lamps-right"></div>
+    </div>
+
+    <!-- 4. 前景透视蒲团共修席位（6 位同修背影剪影呼吸/礼拜 + 中央自己主蒲团） -->
+    <section class="hall-cushions" id="hall-cushions" aria-label="殿内共修同修"></section>
+
+    <!-- 5. 顶栏（极简 V1 暗青玉细金） -->
+    <header class="hall-topbar">
+      <div class="hall-title">
+        <strong id="t-hall-name">大雄宝殿 · 释迦牟尼佛</strong>
+        <small id="t-hall-sub">3D-v1 单页测试 · 4K 刚体视差 + 多人在场感</small>
+      </div>
+      <div class="hall-top-tools">
+        <span class="online-pill" id="online-pill"><i></i><b id="online-count">42</b> <span id="t-online">位同修正在殿内</span></span>
+        <button type="button" class="tool-btn" id="btn-quiet">清净模式</button>
+        <button type="button" class="tool-btn" id="btn-sound">清音 · 关</button>
+        <button type="button" class="tool-btn" id="btn-lang">EN</button>
+      </div>
+    </header>
+
+    <!-- 6. 第一人称礼拜玉白合十双手浮层 -->
+    <div class="bow-hands-layer" id="bow-hands-layer" aria-hidden="true">
+      <div class="bow-mandala"></div>
+      <img src="./assets/hands-jade.webp?v=20261124-7" alt="" />
+      <span>一心顶礼 · 愿心无散乱</span>
+    </div>
+
+    <!-- 7. 底部极简测试操作栏 -->
+    <footer class="hall-dock">
+      <button type="button" class="dock-btn is-gold" id="btn-act-incense"><b>香</b><span id="t-incense">敬香</span></button>
+      <button type="button" class="dock-btn" id="btn-act-bow"><b>礼</b><span id="t-bow">礼拜</span></button>
+      <button type="button" class="dock-btn" id="btn-act-lamp"><b>灯</b><span id="t-lamp">供灯</span></button>
+    </footer>
+
+    <div class="hall-toast" id="hall-toast" role="status"></div>
+  </main>
+
+  <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
+  <script src="./hall-test.js?v=20261125-3dv1-2"></script>
+</body>
 </html>
