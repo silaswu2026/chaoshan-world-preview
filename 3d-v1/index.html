@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080e10" />
   <title>大雄宝殿 · 第一人称多人共修测试 (3D-v1)</title>
-  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-13" />
+  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-14" />
 </head>
 <body>
   <main class="hall-stage" id="hall-stage">
@@ -14,8 +14,13 @@
       <!-- 1. 4K 大雄宝殿干净底图（100% 刚体平移，佛像法相绝不变形） -->
       <div class="hall-bg-layer" id="hall-bg-layer" aria-hidden="true"></div>
 
-      <!-- 2. 电影光影层：中轴佛光 + 丁达尔光柱 + 实拍薄雾 + 60fps 丝绸青烟与金光浮尘 -->
+      <!-- 2. 电影光影层：动态流转佛光背光 + 丁达尔光柱 + 实拍薄雾 + 60fps 丝绸青烟与金光浮尘 -->
       <div class="hall-atmosphere" aria-hidden="true">
+        <div class="buddha-sacred-halo">
+          <div class="halo-rays-spin"></div>
+          <div class="halo-ring-flow"></div>
+          <div class="halo-core-breathe"></div>
+        </div>
         <div class="hall-buddha-glow"></div>
         <div class="hall-rays"><i></i><i></i><i></i></div>
         <div class="hall-mist"></div>
@@ -52,7 +57,7 @@
       </div>
 
       <div class="fp-hands-actor" id="fp-hands-actor">
-        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-13" alt="" />
+        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-14" alt="" />
       </div>
 
       <div class="fp-offer-actor" id="fp-offer-actor">
@@ -73,7 +78,7 @@
     <div class="zen-fish-widget" id="zen-fish-widget" aria-hidden="true">
       <button type="button" class="fish-tap-btn" id="btn-tap-fish" aria-label="敲木鱼">
         <span class="fish-wave" id="fish-wave"></span>
-        <img src="./assets/wooden-fish.png?v=20261126-3dv1-13" alt="木鱼" />
+        <img src="./assets/wooden-fish.png?v=20261126-3dv1-14" alt="木鱼" />
       </button>
       <div class="zen-widget-cap">
         <span>轻敲木鱼 · <b id="fish-count">0</b></span>
@@ -159,6 +164,6 @@
   </main>
 
   <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
-  <script src="./hall-test.js?v=20261126-3dv1-13"></script>
+  <script src="./hall-test.js?v=20261126-3dv1-14"></script>
 </body>
 </html>

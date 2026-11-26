@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261126-3dv1-13";
+  const V = "20261126-3dv1-14";
   let isEn = false;
 
   function showToast(msg) {
