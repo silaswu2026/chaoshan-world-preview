@@ -1,7 +1,7 @@
-/* 大雄宝殿 · 写实佛前四供 + 前景实像行者三层景深 (3D-v1) */
+/* 大雄宝殿 · 第一人称多人共修测试 (3D-v1) */
 :root {
   --bg: #080e10;
-  --panel: rgba(11, 18, 21, 0.80);
+  --panel: rgba(11, 18, 21, 0.82);
   --gold: #e4c27a;
   --gold-bright: #fae09e;
   --paper: #f4ead6;
@@ -30,10 +30,26 @@ html, body, .hall-stage {
   --py: 0px;
 }
 
-/* 1. 4K 大雄宝殿干净底图（背景层：100% 刚体平移，佛像法相绝不变形） */
+/* 第一人称镜头容器（礼拜跪拜时视角自然下沉再缓缓起身） */
+.hall-camera {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: 50% 52%;
+  transition: transform 1.05s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+.hall-stage.is-fp-bowing .hall-camera {
+  transform: translate3d(0, -4.8%, 0) scale(1.06);
+}
+.hall-stage.is-fp-bowing .hall-buddha-glow {
+  filter: brightness(1.38);
+}
+
+/* 1. 4K 大雄宝殿干净底图（100% 刚体平移，佛像法相绝不变形） */
 .hall-bg-layer {
   position: absolute;
-  inset: -4%;
+  inset: -5%;
   z-index: 1;
   background: url("./assets/scene-hall-clean-4k.jpg?v=20261125-3dv1-7") center 44% / cover no-repeat;
   filter: saturate(1.16) contrast(1.06) brightness(1.03);
@@ -45,8 +61,8 @@ html, body, .hall-stage {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 74% 64% at 50% 40%, transparent 46%, rgba(6, 11, 13, 0.58) 100%),
-    linear-gradient(180deg, rgba(6, 11, 13, 0.52) 0%, transparent 20%, transparent 66%, rgba(6, 10, 12, 0.78) 100%);
+    radial-gradient(ellipse 74% 64% at 50% 40%, transparent 46%, rgba(6, 11, 13, 0.56) 100%),
+    linear-gradient(180deg, rgba(6, 11, 13, 0.52) 0%, transparent 20%, transparent 72%, rgba(6, 10, 12, 0.72) 100%);
 }
 
 /* 2. 电影光影与粒子层 */
@@ -68,6 +84,7 @@ html, body, .hall-stage {
   background: radial-gradient(circle, rgba(255, 234, 174, 0.24) 0%, rgba(238, 186, 86, 0.08) 48%, transparent 74%);
   mix-blend-mode: screen;
   animation: glow-pulse 5.2s ease-in-out infinite alternate;
+  transition: filter 0.8s ease;
 }
 @keyframes glow-pulse {
   0% { opacity: 0.65; transform: translate(-50%, -50%) scale(0.95); }
@@ -96,11 +113,11 @@ html, body, .hall-stage {
   left: -20%;
   width: 140%;
   bottom: -8%;
-  height: 40%;
+  height: 36%;
   background: url("./assets/vfx-cloud-wisp.jpg?v=20261125-v2-9") center / cover no-repeat;
   mix-blend-mode: screen;
   filter: blur(14px) brightness(1.04);
-  opacity: 0.16;
+  opacity: 0.14;
   -webkit-mask-image: linear-gradient(180deg, transparent, rgba(0,0,0,0.72) 60%, rgba(0,0,0,0.4));
   mask-image: linear-gradient(180deg, transparent, rgba(0,0,0,0.72) 60%, rgba(0,0,0,0.4));
   animation: mist-drift 32s ease-in-out infinite alternate;
@@ -117,13 +134,13 @@ html, body, .hall-stage {
   display: block;
 }
 
-/* 3. 中景：佛前四供写实器物层（与供桌透视同步，位于前景人物之后、佛像与香炉之前） */
+/* 3. 中景：佛前四供写实供案（严格中轴对称一炉二莲四灯四茶） */
 .hall-altar {
   position: absolute;
   inset: 0;
   z-index: 8;
   pointer-events: none;
-  transform: translate3d(calc(var(--px) * 0.28), calc(var(--py) * 0.18), 0);
+  transform: translate3d(calc(var(--px) * 0.24), calc(var(--py) * 0.16), 0);
   will-change: transform;
 }
 
@@ -148,11 +165,9 @@ html, body, .hall-stage {
   background: linear-gradient(180deg, rgba(226, 196, 148, 0.78) 0%, rgba(126, 84, 48, 0.88) 45%, rgba(44, 28, 16, 0.92) 100%);
   transform-origin: center bottom;
 }
-.incense-stick.is-fresh {
-  animation: stick-insert 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
+.incense-stick.is-fresh { animation: stick-insert 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
 @keyframes stick-insert {
-  from { opacity: 0; transform: translateY(-14px) rotate(var(--rot, 0deg)); }
+  from { opacity: 0; transform: translateY(-16px) rotate(var(--rot, 0deg)); }
   to   { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)); }
 }
 .incense-ember {
@@ -172,13 +187,13 @@ html, body, .hall-stage {
   100% { opacity: 1; transform: translateX(-50%) scale(1.22); }
 }
 
-/* ② 写实古铜酥油灯海（实拍灯体 + 动态烛光晕） */
-.altar-candles-layer, .altar-lotus-layer {
+/* ② 写实古铜酥油灯 + ③ 宋瓷水盘白莲 + ④ 青瓷贡茶 */
+.altar-candles-layer, .altar-lotus-layer, .altar-tea-row {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
-.peer-candle {
+.peer-candle, .lotus-item, .tea-cup {
   position: absolute;
   transform: translate(-50%, -50%);
   pointer-events: auto;
@@ -192,42 +207,18 @@ html, body, .hall-stage {
 }
 .peer-candle.is-new { animation: offering-pop 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-.lamp-visual {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-}
+.lamp-visual { position: relative; width: 52px; height: 52px; display: grid; place-items: center; }
 .lamp-visual::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 2px;
-  width: 40px;
-  height: 10px;
-  transform: translateX(-50%);
-  border-radius: 50%;
+  content: ""; position: absolute; left: 50%; bottom: 2px; width: 40px; height: 10px;
+  transform: translateX(-50%); border-radius: 50%;
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.78) 0%, transparent 72%);
 }
-.lamp-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: contrast(1.06) saturate(1.08) drop-shadow(0 5px 8px rgba(0, 0, 0, 0.68));
-}
+.lamp-img { position: relative; width: 100%; height: 100%; object-fit: contain; filter: contrast(1.06) saturate(1.08) drop-shadow(0 5px 8px rgba(0, 0, 0, 0.68)); }
 .lamp-flame-glow {
-  position: absolute;
-  left: 50%;
-  top: 22%;
-  width: 34px;
-  height: 34px;
-  transform: translate(-50%, -50%);
+  position: absolute; left: 50%; top: 22%; width: 34px; height: 34px; transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 224, 140, 0.58) 0%, rgba(244, 162, 48, 0.2) 44%, transparent 74%);
-  mix-blend-mode: screen;
-  pointer-events: none;
+  mix-blend-mode: screen; pointer-events: none;
   animation: candle-aura 2.2s ease-in-out infinite alternate;
 }
 @keyframes candle-aura {
@@ -235,125 +226,43 @@ html, body, .hall-stage {
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1.14); }
 }
 
-/* ③ 写实宋瓷水盘白莲（对称安放于须弥座石台两侧） */
-.lotus-item {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2px;
-}
-.lotus-visual {
-  position: relative;
-  width: 68px;
-  height: 68px;
-  display: grid;
-  place-items: center;
-}
+.lotus-visual { position: relative; width: 66px; height: 66px; display: grid; place-items: center; }
 .lotus-visual::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 7px;
-  width: 58px;
-  height: 12px;
-  transform: translateX(-50%);
-  border-radius: 50%;
+  content: ""; position: absolute; left: 50%; bottom: 7px; width: 56px; height: 12px;
+  transform: translateX(-50%); border-radius: 50%;
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.82) 0%, transparent 74%);
 }
 .lotus-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  position: relative; width: 100%; height: 100%; object-fit: contain;
   filter: brightness(0.92) contrast(1.06) saturate(1.04) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.72));
-  transform-origin: center bottom;
   animation: lotus-sway 5.2s ease-in-out infinite alternate;
 }
 .lotus-item.is-fresh .lotus-img {
   animation: offering-pop 0.95s cubic-bezier(0.22, 1, 0.36, 1) both, lotus-sway 5.2s 0.95s ease-in-out infinite alternate;
 }
-@keyframes lotus-sway {
-  0%   { transform: scale(0.99); }
-  100% { transform: scale(1.015); }
-}
+@keyframes lotus-sway { 0% { transform: scale(0.99); } 100% { transform: scale(1.015); } }
 
-/* ④ 写实宋代青瓷开片贡茶（严格落于木质供桌台面，左二右二对称排布） */
-.altar-tea-row {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.tea-cup {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2px;
-}
-.tea-visual {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-}
+.tea-visual { position: relative; width: 44px; height: 44px; display: grid; place-items: center; }
 .tea-visual::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 4px;
-  width: 36px;
-  height: 9px;
-  transform: translateX(-50%);
-  border-radius: 50%;
+  content: ""; position: absolute; left: 50%; bottom: 4px; width: 36px; height: 9px;
+  transform: translateX(-50%); border-radius: 50%;
   background: radial-gradient(ellipse, rgba(0, 0, 0, 0.8) 0%, transparent 72%);
 }
 .tea-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  position: relative; width: 100%; height: 100%; object-fit: contain;
   filter: brightness(0.94) contrast(1.06) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.72));
   transition: filter 0.35s, opacity 0.35s;
 }
-.tea-cup:not(.is-filled) .tea-img {
-  filter: brightness(0.62) saturate(0.45) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.7));
-  opacity: 0.78;
-}
-
+.tea-cup:not(.is-filled) .tea-img { filter: brightness(0.62) saturate(0.45); opacity: 0.78; }
 .tea-steam {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  width: 20px;
-  height: 24px;
-  transform: translateX(-50%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  position: absolute; top: -12px; left: 50%; width: 20px; height: 24px;
+  transform: translateX(-50%); pointer-events: none; opacity: 0; transition: opacity 0.6s ease;
 }
 .tea-cup.is-filled .tea-steam { opacity: 0.72; }
 .tea-steam i {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 1.8px;
-  height: 16px;
-  border-radius: 99px;
+  position: absolute; bottom: 0; left: 50%; width: 1.8px; height: 16px; border-radius: 99px;
   background: linear-gradient(180deg, transparent, rgba(248, 240, 224, 0.58), transparent);
-  filter: blur(1.5px);
-  animation: tea-steam-rise 3.4s ease-in-out infinite;
+  filter: blur(1.5px); animation: tea-steam-rise 3.4s ease-in-out infinite;
 }
 .tea-steam i:nth-child(2) { left: 36%; height: 12px; animation-delay: -1.6s; }
 @keyframes tea-steam-rise {
@@ -361,65 +270,34 @@ html, body, .hall-stage {
   40%  { opacity: 0.82; transform: translate(-42%, -4px) scaleY(1.08); }
   100% { opacity: 0; transform: translate(-58%, -16px) scaleY(1.25); }
 }
-
 .tea-ripple {
-  position: absolute;
-  left: 50%;
-  top: 40%;
-  width: 22px;
-  height: 8px;
-  border-radius: 50%;
+  position: absolute; left: 50%; top: 40%; width: 22px; height: 8px; border-radius: 50%;
   border: 1.5px solid rgba(255, 232, 166, 0.9);
-  transform: translate(-50%, -50%) scale(0.35);
-  opacity: 0;
-  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.35); opacity: 0; pointer-events: none;
 }
-.tea-cup.is-rippling .tea-ripple {
-  animation: tea-ripple-wave 1.15s ease-out forwards;
-}
+.tea-cup.is-rippling .tea-ripple { animation: tea-ripple-wave 1.15s ease-out forwards; }
 @keyframes tea-ripple-wave {
   0%   { opacity: 0.95; transform: translate(-50%, -50%) scale(0.35); }
   100% { opacity: 0; transform: translate(-50%, -50%) scale(1.75); }
 }
 
-/* 供品名牌默认隐去（彻底告别满屏浮签凌乱），悬停时柔和显现 */
 .peer-offering-tag {
-  position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translate(-50%, 4px);
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(9, 15, 17, 0.84);
-  border: 1px solid rgba(246, 214, 140, 0.45);
-  color: rgba(248, 238, 214, 0.96);
-  font-size: 10px;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
+  position: absolute; top: -18px; left: 50%; transform: translate(-50%, 4px);
+  padding: 2px 8px; border-radius: 999px;
+  background: rgba(9, 15, 17, 0.86); border: 1px solid rgba(246, 214, 140, 0.45);
+  color: rgba(248, 238, 214, 0.96); font-size: 10px; white-space: nowrap;
+  backdrop-filter: blur(4px); opacity: 0; pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .peer-candle:hover .peer-offering-tag,
 .lotus-item:hover .peer-offering-tag,
-.tea-cup:hover .peer-offering-tag {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
+.tea-cup:hover .peer-offering-tag { opacity: 1; transform: translate(-50%, 0); }
 .peer-offering-tag b { color: #f6d58b; font-weight: 500; }
 
-/* 通用随喜金光涟漪 */
 .is-blessed::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1.5px solid #fae09e;
-  transform: translate(-50%, -50%) scale(0.5);
-  pointer-events: none;
+  content: ""; position: absolute; left: 50%; top: 45%; width: 48px; height: 48px;
+  border-radius: 50%; border: 1.5px solid #fae09e;
+  transform: translate(-50%, -50%) scale(0.5); pointer-events: none;
   animation: blessing-ripple 0.95s ease-out forwards;
 }
 @keyframes blessing-ripple {
@@ -431,398 +309,513 @@ html, body, .hall-stage {
   100% { opacity: 1; }
 }
 
-/* ===== 4. 前景实像礼佛行者（站姿 + 跪拜顶礼双姿态平滑切换，100% 实像不透明） ===== */
-.hall-foreground-pilgrim {
+/* ===== 4. 殿前写实蒲团阵（左右多席 + 正中主蒲团归第一人称） ===== */
+.hall-cushions-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate3d(calc(var(--px) * 0.65), calc(var(--py) * 0.42), 0);
+}
+.temple-cushion {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 118px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.temple-cushion::before {
+  content: "";
   position: absolute;
   left: 50%;
-  bottom: 4.5%;
-  z-index: 14;
+  bottom: -3px;
+  width: 96%;
+  height: 18px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.35) 56%, transparent 78%);
+}
+.temple-cushion img {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: brightness(0.92) contrast(1.06) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.72));
+}
+.temple-cushion.is-self {
+  width: 146px;
+}
+.temple-cushion.is-self .cushion-self-ring {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 122%;
+  height: 92%;
+  transform: translate(-50%, -50%) scale(0.86);
+  border-radius: 50%;
+  border: 1.5px solid rgba(250, 224, 154, 0.72);
+  box-shadow: 0 0 24px rgba(248, 206, 110, 0.42);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.8s ease;
+}
+.hall-stage.is-fp-bowing .temple-cushion.is-self .cushion-self-ring {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+/* ===== 5. 动态入殿的其他同修（100% 实像不透明，站在/跪在左右蒲团上） ===== */
+.hall-visitors-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 13;
   pointer-events: none;
-  transform: translate3d(calc(-50% + var(--px) * 1.1), calc(var(--py) * 0.65), 0);
-  will-change: transform;
+  transform: translate3d(calc(var(--px) * 0.72), calc(var(--py) * 0.46), 0);
+}
+.visitor-actor {
+  position: absolute;
+  transform: translate(-50%, -100%);
   display: grid;
   place-items: end center;
+  opacity: 0;
+  transition: opacity 0.85s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.pilgrim-img {
+.visitor-actor.is-present { opacity: 1; }
+.visitor-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 72%;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.76) 0%, transparent 74%);
+}
+.visitor-img {
   grid-area: 1 / 1;
   position: relative;
   width: auto;
   display: block;
-  filter: brightness(0.95) contrast(1.06) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.74));
+  opacity: 1; /* 永久硬红线：100% 不透明实像 */
   transform-origin: center bottom;
+  filter: var(--robe-filter, brightness(0.92) contrast(1.06)) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.74));
 }
-.pilgrim-img.is-stand {
-  height: clamp(148px, 25vh, 238px);
+.visitor-img.is-stand {
+  height: var(--vh, 170px);
   opacity: 1;
-  animation: pilgrim-breathe 5.6s ease-in-out infinite alternate;
-  transition: opacity 0.65s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s ease, transform 0.7s ease;
 }
-.pilgrim-img.is-bow {
-  height: clamp(114px, 19.2vh, 184px);
+.visitor-img.is-bow {
+  height: calc(var(--vh, 170px) * 0.76);
   opacity: 0;
-  transform: translateY(-10px) scale(1.03);
-  transition: opacity 0.7s ease, transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(-6px);
+  transition: opacity 0.65s ease, transform 0.75s ease;
 }
-.hall-foreground-pilgrim.is-bowing .pilgrim-img.is-stand {
-  animation: none;
+.visitor-actor.is-bowing .visitor-img.is-stand {
   opacity: 0;
-  transform: translateY(18px) scaleY(0.88);
+  transform: translateY(14px) scaleY(0.9);
 }
-.hall-foreground-pilgrim.is-bowing .pilgrim-img.is-bow {
+.visitor-actor.is-bowing .visitor-img.is-bow {
   opacity: 1;
-  transform: translateY(2px) scale(1);
+  transform: translateY(2px);
 }
-.pilgrim-shadow {
+.visitor-badge {
   position: absolute;
+  top: -22px;
   left: 50%;
-  bottom: -4px;
-  width: 78%;
-  height: 18px;
   transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.34) 55%, transparent 78%);
-  transition: width 0.7s ease;
-}
-.hall-foreground-pilgrim.is-bowing .pilgrim-shadow {
-  width: 112%;
-}
-.pilgrim-lotus-ring {
-  position: absolute;
-  left: 50%;
-  bottom: -10px;
-  width: 180px;
-  height: 44px;
-  transform: translateX(-50%) scale(0.55);
-  border-radius: 50%;
-  border: 1.5px solid rgba(250, 224, 154, 0.75);
-  box-shadow: 0 0 24px rgba(248, 206, 110, 0.45), inset 0 0 18px rgba(248, 206, 110, 0.25);
-  opacity: 0;
-  pointer-events: none;
-}
-.hall-foreground-pilgrim.is-bowing .pilgrim-lotus-ring {
-  animation: floor-lotus-bloom 2.6s ease-out forwards;
-}
-@keyframes floor-lotus-bloom {
-  0%   { opacity: 0; transform: translateX(-50%) scale(0.5); }
-  22%  { opacity: 0.92; transform: translateX(-50%) scale(1.05); }
-  100% { opacity: 0; transform: translateX(-50%) scale(1.65); }
-}
-@keyframes pilgrim-breathe {
-  0%   { transform: scaleY(0.994); }
-  100% { transform: scaleY(1.008); }
-}
-
-/* 礼拜时佛光微暖回应 */
-.hall-stage.is-bow-active .hall-buddha-glow {
-  filter: brightness(1.38);
-}
-
-/* 7. 礼拜时的轻雅禅意短句（居于佛像与供桌之间的柔和留白，克制不挡画面） */
-.bow-caption-layer {
-  position: fixed;
-  left: 50%;
-  top: 44%;
-  transform: translate(-50%, 6px);
-  z-index: 25;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.75s ease, transform 0.75s ease;
-}
-.bow-caption-layer.is-show {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-.bow-caption-layer span {
-  display: inline-block;
-  padding: 6px 20px;
+  padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(9, 15, 17, 0.64);
-  border: 1px solid rgba(248, 218, 146, 0.42);
-  backdrop-filter: blur(6px);
-  font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.28em;
-  color: #fae6b8;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-}
-
-/* 5. 环境联动层：同修实时供养浮字 */
-.hall-live-world {
-  position: absolute;
-  inset: 0;
-  z-index: 16;
-  pointer-events: none;
-  transform: translate3d(calc(var(--px) * -0.45), calc(var(--py) * -0.35), 0);
-}
-.live-censer-zone {
-  position: absolute;
-  left: 50%;
-  top: 47%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-.live-lamps-left, .live-lamps-right {
-  position: absolute;
-  top: 52%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.live-lamps-left { left: 8%; align-items: flex-start; }
-.live-lamps-right { right: 8%; align-items: flex-end; }
-
-.live-whisper {
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(10, 17, 19, 0.76);
-  border: 1px solid rgba(242, 206, 130, 0.36);
-  color: #fae6b8;
-  font-size: 11px;
-  letter-spacing: 0.05em;
+  background: rgba(9, 15, 17, 0.74);
+  border: 1px solid rgba(238, 204, 130, 0.34);
+  color: #f6e7c6;
+  font-size: 10px;
   white-space: nowrap;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-  animation: whisper-rise 3.8s ease forwards;
+  backdrop-filter: blur(4px);
 }
-@keyframes whisper-rise {
-  0%   { opacity: 0; transform: translateY(10px); }
-  14%  { opacity: 1; transform: translateY(0px); }
-  78%  { opacity: 0.92; transform: translateY(-16px); }
-  100% { opacity: 0; transform: translateY(-30px); }
-}
+.visitor-badge b { color: var(--gold-bright); font-weight: 500; }
 
-/* ===== 点击供品后的「同修祈愿 & 合十随喜」浮卡 ===== */
-.offering-popover {
+/* ===== 6. 第一人称四大仪式专属动画舞台 ===== */
+.fp-ritual-stage {
   position: fixed;
-  left: 50%;
-  top: 46%;
-  transform: translate(-50%, -50%) scale(0.95);
-  z-index: 42;
-  width: min(300px, calc(100vw - 32px));
-  padding: 14px 16px 13px;
-  border-radius: 14px;
-  background: rgba(11, 19, 22, 0.92);
-  border: 1px solid rgba(236, 200, 126, 0.48);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 24px rgba(236, 194, 108, 0.14);
-  backdrop-filter: blur(10px);
-  opacity: 0;
+  inset: 0;
+  z-index: 28;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  overflow: hidden;
 }
-.offering-popover.is-open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-}
-.popover-close {
+
+/* ① 敬香动画：三柱线香点燃 → 移向香炉插上 */
+.fp-incense-actor {
   position: absolute;
-  right: 10px;
-  top: 8px;
-  width: 24px;
-  height: 24px;
+  left: 50%;
+  bottom: -220px;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.fp-incense-actor.is-playing {
+  animation: fp-incense-ritual 2.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+.fp-incense-bundle {
+  position: relative;
+  width: 60px;
+  height: 190px;
+}
+.fp-stick {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 3.5px;
+  height: 170px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #b88a56 0%, #6d4726 55%, #3d2210 100%);
+  transform-origin: center bottom;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+.fp-stick.s1 { transform: translateX(-50%) rotate(-7deg); }
+.fp-stick.s2 { transform: translateX(-50%) rotate(0deg); height: 176px; }
+.fp-stick.s3 { transform: translateX(-50%) rotate(7deg); }
+.fp-spark {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateX(-50%) scale(0);
   border-radius: 50%;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font-size: 16px;
-  cursor: pointer;
+  background: radial-gradient(circle, #fffbe0 0%, #ff8a2a 52%, rgba(255, 96, 20, 0) 100%);
+  box-shadow: 0 0 14px #ff9638, 0 0 28px rgba(255, 132, 42, 0.85);
 }
-.popover-meta {
-  font-size: 11px;
-  color: var(--gold);
-  letter-spacing: 0.06em;
-  margin-bottom: 6px;
+.fp-incense-actor.is-playing .fp-spark {
+  animation: fp-spark-ignite 2.4s ease forwards;
 }
-.popover-wish {
-  font-family: var(--font-display);
-  font-size: 14px;
-  line-height: 1.65;
-  color: #fff6e2;
-  margin-bottom: 12px;
-}
-.popover-actions { display: flex; justify-content: flex-end; }
-.popover-bless-btn {
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(250, 224, 158, 0.72);
-  background: linear-gradient(135deg, rgba(208, 166, 82, 0.34), rgba(146, 104, 38, 0.34));
-  color: #fff4d8;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-/* 清净模式：保留宁静的供案香火烛花茶与前景行者，隐藏他人姓名标签与浮字 */
-body.quiet-mode .peer-offering-tag,
-body.quiet-mode .online-pill,
-body.quiet-mode .hall-live-world,
-body.quiet-mode .offering-popover {
-  display: none !important;
-}
-
-/* 6. 顶栏与底栏 */
-.hall-topbar {
+.fp-ignite-flash {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 20;
+  top: -26px;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  transform: translateX(-50%) scale(0.2);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 240, 178, 0.92) 0%, rgba(255, 154, 48, 0.42) 48%, transparent 74%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+.fp-incense-actor.is-playing .fp-ignite-flash {
+  animation: fp-ignite-burst 0.95s 0.45s ease-out forwards;
+}
+@keyframes fp-incense-ritual {
+  0%   { opacity: 0; bottom: -160px; transform: translateX(-50%) scale(1.15); }
+  18%  { opacity: 1; bottom: 18vh;   transform: translateX(-50%) scale(1.05); }
+  45%  { opacity: 1; bottom: 20vh;   transform: translateX(-50%) scale(1.02); }
+  80%  { opacity: 1; bottom: 43vh;   transform: translateX(-50%) scale(0.32); }
+  100% { opacity: 0; bottom: 44.5vh; transform: translateX(-50%) scale(0.22); }
+}
+@keyframes fp-spark-ignite {
+  0%, 16% { transform: translateX(-50%) scale(0); }
+  28%     { transform: translateX(-50%) scale(1.45); }
+  100%    { transform: translateX(-50%) scale(1); }
+}
+@keyframes fp-ignite-burst {
+  0%   { opacity: 0; transform: translateX(-50%) scale(0.2); }
+  35%  { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.7); }
+}
+
+/* ② 礼拜动画：第一人称自然暖光写实合十双手（无白手、无阴森感） */
+.fp-hands-actor {
+  position: absolute;
+  left: 50%;
+  bottom: -24px;
+  transform: translate(-50%, 100%);
+  opacity: 0;
+  transition: opacity 0.55s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fp-hands-actor img {
+  width: min(360px, 76vw);
+  height: auto;
+  display: block;
+  filter: brightness(0.94) contrast(1.04) sepia(0.08) drop-shadow(0 12px 28px rgba(0, 0, 0, 0.72));
+}
+.fp-hands-actor.is-raised {
+  opacity: 1;
+  transform: translate(-50%, 10%);
+}
+.fp-hands-actor.is-bowed {
+  opacity: 1;
+  transform: translate(-50%, 24%) scale(0.94);
+}
+
+/* ③ 供灯 / ④ 奉茶 / ⑤ 献花：从前景手前奉至供台 */
+.fp-offer-actor {
+  position: absolute;
+  left: 50%;
+  bottom: -140px;
+  width: 140px;
+  height: 140px;
+  transform: translateX(-50%);
+  opacity: 0;
+  display: grid;
+  place-items: center;
+}
+.fp-offer-actor img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.72));
+}
+.fp-offer-glow {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 224, 146, 0.52) 0%, transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+.fp-offer-actor.is-playing {
+  animation: fp-offer-present 1.85s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+.fp-offer-actor.is-playing .fp-offer-glow {
+  animation: fp-offer-flash 1.85s ease forwards;
+}
+@keyframes fp-offer-present {
+  0%   { opacity: 0; bottom: -110px; left: 50%; transform: translateX(-50%) scale(1.18); }
+  25%  { opacity: 1; bottom: 18vh;   left: 50%; transform: translateX(-50%) scale(1.02); }
+  52%  { opacity: 1; bottom: 20vh;   left: 50%; transform: translateX(-50%) scale(0.96); }
+  88%  { opacity: 0.92; bottom: var(--offer-ty, 32vh); left: var(--offer-tx, 50%); transform: translateX(-50%) scale(0.4); }
+  100% { opacity: 0; bottom: var(--offer-ty, 32vh); left: var(--offer-tx, 50%); transform: translateX(-50%) scale(0.32); }
+}
+@keyframes fp-offer-flash {
+  0%, 30% { opacity: 0; }
+  62%     { opacity: 0.9; }
+  100%    { opacity: 0; }
+}
+
+/* ===== 7. 前方实时动态弹窗：【地址】日期、某某、做了什么（居左上留白区，绝不遮挡佛像法相） ===== */
+.live-popup-stack {
+  position: fixed;
+  left: 16px;
+  top: 66px;
+  z-index: 32;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  pointer-events: none;
+  max-width: min(380px, calc(100vw - 290px));
+}
+.live-popup-card {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 12px;
+  background: rgba(10, 17, 20, 0.84);
+  border: 1px solid rgba(242, 206, 130, 0.44);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  font-size: 12px;
+  color: #f6ead0;
+  animation: popup-slide 4.2s ease forwards;
+}
+.live-popup-card .pop-city { color: var(--gold-bright); font-weight: 600; }
+.live-popup-card .pop-time { color: rgba(244, 234, 214, 0.58); font-size: 11px; font-variant-numeric: tabular-nums; }
+.live-popup-card .pop-who  { color: #fff7e4; font-weight: 500; }
+.live-popup-card .pop-act  { color: #ebd39d; }
+@keyframes popup-slide {
+  0%   { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  10%  { opacity: 1; transform: translateY(0) scale(1); }
+  84%  { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.98); }
+}
+
+/* ===== 8. 右上角共修清单 / 排行榜（同一个人自动累计计数） ===== */
+.merit-board {
+  position: fixed;
+  top: 62px;
+  right: 16px;
+  z-index: 26;
+  width: 256px;
+  border-radius: 14px;
+  background: rgba(10, 17, 20, 0.84);
+  border: 1px solid rgba(232, 198, 126, 0.38);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: width 0.25s ease;
+}
+.merit-board.is-collapsed .board-list { display: none; }
+.board-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: max(12px, env(safe-area-inset-top)) 18px 10px;
-  background: linear-gradient(180deg, rgba(7, 12, 14, 0.84), transparent);
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(228, 194, 122, 0.2);
+  background: rgba(20, 31, 35, 0.55);
+}
+.board-title { display: flex; align-items: center; gap: 6px; }
+.board-title i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #f6ce72; box-shadow: 0 0 8px #f6ce72;
+}
+.board-title strong { font-family: var(--font-display); font-size: 13px; color: #fae6b6; letter-spacing: 0.08em; font-weight: 500; }
+.board-title small { font-size: 10px; color: var(--muted); }
+.board-toggle {
+  border: 1px solid rgba(228, 194, 122, 0.3);
+  background: transparent;
+  color: var(--muted);
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.board-list {
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 6px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.board-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  border-radius: 9px;
+  background: rgba(18, 28, 32, 0.55);
+  border: 1px solid rgba(228, 194, 122, 0.14);
+  transition: background 0.3s, border-color 0.3s;
+}
+.board-row.is-me {
+  background: rgba(66, 48, 18, 0.56);
+  border-color: rgba(250, 222, 150, 0.52);
+}
+.board-row.is-flash {
+  animation: board-row-flash 1.1s ease;
+}
+@keyframes board-row-flash {
+  0%   { border-color: #fae09e; background: rgba(214, 170, 82, 0.32); }
+  100% { }
+}
+.board-rank {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+.board-row:nth-child(1) .board-rank { background: rgba(236, 188, 86, 0.32); color: #ffe6a2; }
+.board-row:nth-child(2) .board-rank { background: rgba(210, 214, 218, 0.22); color: #eef2f5; }
+.board-row:nth-child(3) .board-rank { background: rgba(196, 134, 82, 0.26); color: #f2c89c; }
+
+.board-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.board-name { font-size: 11.5px; color: #f7ebd2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-name em { font-style: normal; font-size: 10px; color: var(--gold); margin-right: 3px; }
+.board-acts { font-size: 10px; color: rgba(244, 234, 214, 0.66); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-total {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 点击供品祈愿卡 */
+.offering-popover {
+  position: fixed; left: 50%; top: 46%; transform: translate(-50%, -50%) scale(0.95);
+  z-index: 42; width: min(300px, calc(100vw - 32px)); padding: 14px 16px 13px;
+  border-radius: 14px; background: rgba(11, 19, 22, 0.92);
+  border: 1px solid rgba(236, 200, 126, 0.48); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px); opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.offering-popover.is-open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.popover-close { position: absolute; right: 10px; top: 8px; width: 24px; height: 24px; border: 0; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer; }
+.popover-meta { font-size: 11px; color: var(--gold); letter-spacing: 0.06em; margin-bottom: 6px; }
+.popover-wish { font-family: var(--font-display); font-size: 14px; line-height: 1.65; color: #fff6e2; margin-bottom: 12px; }
+.popover-actions { display: flex; justify-content: flex-end; }
+.popover-bless-btn {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(250, 224, 158, 0.72);
+  background: linear-gradient(135deg, rgba(208, 166, 82, 0.34), rgba(146, 104, 38, 0.34));
+  color: #fff4d8; font-size: 12px; cursor: pointer;
+}
+
+/* 清净模式 */
+body.quiet-mode .hall-visitors-layer,
+body.quiet-mode .live-popup-stack,
+body.quiet-mode .merit-board,
+body.quiet-mode .online-pill,
+body.quiet-mode .offering-popover { display: none !important; }
+
+/* 9. 顶栏与底栏 */
+.hall-topbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  padding: max(12px, env(safe-area-inset-top)) 16px 10px;
+  background: linear-gradient(180deg, rgba(7, 12, 14, 0.86), transparent);
 }
 .hall-title { display: flex; flex-direction: column; gap: 2px; }
-.hall-title strong {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  color: #fff3d6;
-}
+.hall-title strong { font-family: var(--font-display); font-size: 18px; font-weight: 500; letter-spacing: 0.16em; color: #fff3d6; }
 .hall-title small { font-size: 11px; color: var(--muted); }
 .hall-top-tools { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .online-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  font-size: 11.5px;
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--border); font-size: 11.5px;
 }
-.online-pill i {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #f6ce72; box-shadow: 0 0 10px #f6ce72;
-}
-.pill-sep { font-style: normal; opacity: 0.45; }
-.pill-stats { color: var(--gold-bright); font-size: 11px; letter-spacing: 0.04em; }
-
+.online-pill i { width: 7px; height: 7px; border-radius: 50%; background: #f6ce72; box-shadow: 0 0 10px #f6ce72; }
 .tool-btn {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--paper);
-  font-size: 12px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
+  padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--paper); font-size: 12px; cursor: pointer; backdrop-filter: blur(6px);
 }
-.tool-btn.is-on {
-  background: rgba(214, 174, 92, 0.28);
-  border-color: rgba(248, 220, 148, 0.78);
-  color: #fff7e2;
-}
+.tool-btn.is-on { background: rgba(214, 174, 92, 0.28); border-color: rgba(248, 220, 148, 0.78); color: #fff7e2; }
 
-/* 7. 第一人称礼拜双手 */
-.bow-hands-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 12vh;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.55s ease;
-}
-.bow-hands-layer.is-show { opacity: 1; }
-.bow-mandala {
-  position: absolute;
-  left: 50%; top: 52%;
-  width: 220px; height: 220px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(248, 218, 142, 0.45);
-  background: radial-gradient(circle, rgba(255, 232, 166, 0.22), transparent 72%);
-}
-.bow-hands-layer img {
-  width: min(220px, 52vw);
-  -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
-  filter: drop-shadow(0 0 26px rgba(248, 214, 132, 0.5));
-}
-.bow-hands-layer span {
-  margin-top: 8px;
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.26em;
-  color: #fae4b0;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
-}
-
-/* 8. 底部五键共修操作栏 */
+/* 10. 底部五键共修操作栏 */
 .hall-dock {
-  position: absolute;
-  left: 50%;
-  bottom: max(12px, env(safe-area-inset-bottom) + 8px);
-  transform: translateX(-50%);
-  z-index: 22;
-  display: inline-flex;
-  gap: 8px;
-  max-width: calc(100vw - 16px);
+  position: absolute; left: 50%; bottom: max(12px, env(safe-area-inset-bottom) + 8px);
+  transform: translateX(-50%); z-index: 30;
+  display: inline-flex; gap: 8px; max-width: calc(100vw - 16px);
 }
 .dock-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 15px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--paper);
-  font-size: 12.5px;
-  white-space: nowrap;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
+  display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--panel); color: var(--paper);
+  font-size: 12.5px; white-space: nowrap; cursor: pointer; backdrop-filter: blur(8px);
   transition: transform 0.15s, border-color 0.2s;
 }
 .dock-btn:hover { border-color: rgba(250, 224, 158, 0.72); }
 .dock-btn:active { transform: scale(0.96); }
 .dock-btn b { font-family: var(--font-display); color: var(--gold-bright); font-weight: 500; }
 .dock-btn.is-gold {
-  background: linear-gradient(135deg, #c9a050, #9c722c);
-  border-color: rgba(250, 224, 158, 0.82);
-  color: #161006;
-  font-weight: 600;
+  background: linear-gradient(135deg, #c9a050, #9c722c); border-color: rgba(250, 224, 158, 0.82);
+  color: #161006; font-weight: 600;
 }
 .dock-btn.is-gold b { color: #161006; }
 
 .hall-toast {
-  position: fixed;
-  top: 74px;
-  left: 50%;
-  transform: translate(-50%, -8px);
-  z-index: 50;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: rgba(14, 22, 25, 0.92);
-  border: 1px solid rgba(242, 208, 134, 0.56);
-  color: #fae6b6;
-  font-size: 13px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s;
+  position: fixed; bottom: 68px; left: 50%; transform: translate(-50%, 6px);
+  z-index: 50; padding: 7px 15px; border-radius: 999px;
+  background: rgba(14, 22, 25, 0.92); border: 1px solid rgba(242, 208, 134, 0.56);
+  color: #fae6b6; font-size: 12.5px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s;
 }
 .hall-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
 
 @media (max-width: 720px) {
-  .pill-sep, .pill-stats { display: none; }
+  .merit-board { width: 204px; top: 96px; right: 10px; }
+  .board-list { max-height: 175px; }
+  .live-popup-stack { top: 96px; left: 10px; transform: none; align-items: flex-start; max-width: calc(100vw - 224px); }
+  .live-popup-card { font-size: 10.5px; padding: 5px 9px; white-space: normal; border-radius: 12px; }
   .lamp-visual { width: 38px; height: 38px; }
-  .lotus-visual { width: 50px; height: 50px; }
+  .lotus-visual { width: 48px; height: 48px; }
   .tea-visual { width: 34px; height: 34px; }
-  .pilgrim-img.is-stand { height: clamp(135px, 23vh, 195px); }
-  .pilgrim-img.is-bow { height: clamp(104px, 17.8vh, 152px); }
-  .hall-foreground-pilgrim { bottom: 7.5%; }
-  .peer-offering-tag { font-size: 9px; padding: 1.5px 6px; }
+  .temple-cushion { width: 82px; }
+  .temple-cushion.is-self { width: 108px; }
   .dock-btn { padding: 8px 11px; font-size: 11.5px; gap: 4px; }
-  .live-lamps-left { left: 4%; }
-  .live-lamps-right { right: 4%; }
 }

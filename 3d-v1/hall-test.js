@@ -6,13 +6,19 @@
   const candlesLayer = document.getElementById("altar-candles-layer");
   const lotusLayer = document.getElementById("altar-lotus-layer");
   const teaRowEl = document.getElementById("altar-tea-row");
-  const fgPilgrim = document.getElementById("fg-pilgrim");
-  const censerZone = document.getElementById("live-censer-zone");
-  const lampsLeft = document.getElementById("live-lamps-left");
-  const lampsRight = document.getElementById("live-lamps-right");
-  const statsEl = document.getElementById("altar-stats");
+  const cushionsLayer = document.getElementById("hall-cushions-layer");
+  const visitorsLayer = document.getElementById("hall-visitors-layer");
+  const popupStack = document.getElementById("live-popup-stack");
+  const boardEl = document.getElementById("merit-board");
+  const boardListEl = document.getElementById("board-list");
+  const boardTotalEl = document.getElementById("board-total-actions");
   const toastEl = document.getElementById("hall-toast");
   const bgm = document.getElementById("hall-bgm");
+
+  const fpIncense = document.getElementById("fp-incense-actor");
+  const fpHands = document.getElementById("fp-hands-actor");
+  const fpOffer = document.getElementById("fp-offer-actor");
+  const fpOfferImg = document.getElementById("fp-offer-img");
 
   const popover = document.getElementById("offering-popover");
   const popoverMeta = document.getElementById("popover-meta");
@@ -20,25 +26,26 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261125-3dv1-9";
-  const counts = { incense: 18, lamp: 24, lotus: 11, tea: 14 };
+  const V = "20261126-3dv1-11";
   let isEn = false;
-
-  function updateStats() {
-    statsEl.textContent = isEn
-      ? `Incense ${counts.incense} · Lamp ${counts.lamp} · Lotus ${counts.lotus} · Tea ${counts.tea}`
-      : `香${counts.incense} 灯${counts.lamp} 花${counts.lotus} 茶${counts.tea}`;
-  }
-  updateStats();
 
   function showToast(msg) {
     toastEl.textContent = msg;
     toastEl.classList.add("is-show");
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toastEl.classList.remove("is-show"), 2600);
+    showToast._t = setTimeout(() => toastEl.classList.remove("is-show"), 2500);
   }
 
-  /* ===== WebAudio 柔和法器清音（铜磬 / 水滴 / 禅钟） ===== */
+  function formatNow() {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mi = String(d.getMinutes()).padStart(2, "0");
+    return `${mm}/${dd} ${hh}:${mi}`;
+  }
+
+  /* ===== WebAudio 柔和法器清音 ===== */
   let audioCtx = null;
   function playTone(kind = "bell") {
     try {
@@ -68,10 +75,99 @@
     } catch (_) {}
   }
 
-  /* ===== 通用：点击任意供品弹出「同修祈愿 & 合十随喜」 ===== */
+  /* ===== 1. 前方实时动态弹窗：【地址】日期、某某、做了什么 ===== */
+  function pushLivePopup(city, name, actionText) {
+    if (document.body.classList.contains("quiet-mode") || document.hidden) return;
+    while (popupStack.children.length >= 2) {
+      popupStack.firstElementChild?.remove();
+    }
+    const card = document.createElement("div");
+    card.className = "live-popup-card";
+    card.innerHTML = `
+      <span class="pop-city">【${city}】</span>
+      <span class="pop-time">${formatNow()}</span>
+      <span class="pop-who">${name}</span>
+      <span class="pop-act">${actionText}</span>
+    `;
+    popupStack.appendChild(card);
+    setTimeout(() => card.remove(), 4200);
+  }
+
+  /* ===== 2. 右上角共修行为清单 / 排行榜（同一个人自动累计计数） ===== */
+  const ledger = new Map();
+  const ACT_LABELS = { incense: "香", bow: "礼", lamp: "灯", tea: "茶", lotus: "花" };
+  const ACT_LABELS_EN = { incense: "Inc", bow: "Bow", lamp: "Lmp", tea: "Tea", lotus: "Flw" };
+
+  function recordAction(id, name, city, type, isMe = false) {
+    let entry = ledger.get(id);
+    if (!entry) {
+      entry = { id, name, city, isMe, total: 0, counts: { incense: 0, bow: 0, lamp: 0, tea: 0, lotus: 0 }, lastTs: 0 };
+      ledger.set(id, entry);
+    }
+    entry.counts[type] = (entry.counts[type] || 0) + 1;
+    entry.total += 1;
+    entry.lastTs = Date.now();
+    renderBoard(id);
+  }
+
+  function renderBoard(flashId = null) {
+    const sorted = Array.from(ledger.values()).sort((a, b) => b.total - a.total || b.lastTs - a.lastTs);
+    const totalAll = sorted.reduce((acc, r) => acc + r.total, 0);
+    boardTotalEl.textContent = isEn ? `${totalAll} acts` : `累计 ${totalAll} 次`;
+    const labels = isEn ? ACT_LABELS_EN : ACT_LABELS;
+
+    boardListEl.innerHTML = sorted.slice(0, 8).map((r, i) => {
+      const breakdown = Object.entries(r.counts)
+        .filter(([, n]) => n > 0)
+        .map(([k, n]) => `${labels[k]}${n}`)
+        .join(" · ");
+      return `
+        <li class="board-row ${r.isMe ? "is-me" : ""} ${r.id === flashId ? "is-flash" : ""}">
+          <span class="board-rank">${i + 1}</span>
+          <div class="board-info">
+            <div class="board-name"><em>[${r.city}]</em>${r.name}</div>
+            <div class="board-acts">${breakdown}</div>
+          </div>
+          <span class="board-total">${isEn ? `${r.total}x` : `${r.total}次`}</span>
+        </li>
+      `;
+    }).join("");
+  }
+
+  // 预置几位刚刚入殿的同修记录，确保打开就有真实共修排行榜氛围
+  recordAction("u-lin",   "林安",   "旧金山", "incense");
+  recordAction("u-lin",   "林安",   "旧金山", "bow");
+  recordAction("u-ruo",   "若水",   "温哥华", "lamp");
+  recordAction("u-ruo",   "若水",   "温哥华", "bow");
+  recordAction("u-chen",  "陈志远", "纽约",   "incense");
+  recordAction("u-maya",  "Maya",   "Seattle","tea");
+
+  const boardToggleBtn = document.getElementById("btn-board-toggle");
+  boardToggleBtn.addEventListener("click", () => {
+    const collapsed = boardEl.classList.toggle("is-collapsed");
+    boardToggleBtn.textContent = collapsed ? (isEn ? "Open" : "展开") : (isEn ? "Hide" : "收起");
+  });
+
+  /* ===== 3. 殿前写实蒲团阵（左右 4 席同修蒲团 + 正中 1 席你的主蒲团） ===== */
+  const cushionSlots = [
+    { id: "c-lb", x: 24.5, y: 80.5, scale: 0.78, vh: 148, role: "visitor" },
+    { id: "c-rb", x: 75.5, y: 80.5, scale: 0.78, vh: 148, role: "visitor" },
+    { id: "c-lf", x: 15.5, y: 89.5, scale: 0.96, vh: 184, role: "visitor" },
+    { id: "c-rf", x: 84.5, y: 89.5, scale: 0.96, vh: 184, role: "visitor" },
+    { id: "c-me", x: 50.0, y: 90.8, scale: 1.00, vh: 0,   role: "self" },
+  ];
+
+  cushionsLayer.innerHTML = cushionSlots.map((c) => `
+    <div class="temple-cushion ${c.role === "self" ? "is-self" : ""}"
+         style="left:${c.x}%;top:${c.y}%;transform:translate(-50%,-50%) scale(${c.scale})">
+      ${c.role === "self" ? `<div class="cushion-self-ring"></div>` : ""}
+      <img src="./assets/temple-cushion.png?v=${V}" alt="礼佛蒲团" />
+    </div>
+  `).join("");
+
+  /* ===== 4. 佛前四供写实供案（一炉、二莲、四灯、四茶，中轴对称） ===== */
   let activeOffering = null;
   let activeTargetEl = null;
-
   function openPopover(item, targetEl) {
     if (document.body.classList.contains("quiet-mode")) return;
     activeOffering = item;
@@ -85,8 +181,7 @@
   function closePopover() {
     popover.classList.remove("is-open");
     popover.setAttribute("aria-hidden", "true");
-    activeOffering = null;
-    activeTargetEl = null;
+    activeOffering = null; activeTargetEl = null;
   }
   document.getElementById("popover-close").addEventListener("click", closePopover);
   stage.addEventListener("click", (e) => {
@@ -107,18 +202,17 @@
     showToast(`已为「${activeOffering.name}」的${activeOffering.kindLabel}合十随喜`);
   });
 
-  /* ===== ① 正中大香炉：燃香阵（多柱线香 + 橘红呼吸香头） ===== */
+  // ① 香炉燃香
   const incenseSticks = [
-    { x: -24, rot: -14, h: 24, name: "苏明轩", city: "旧金山", wish: "愿心安住，诸事顺遂", bless: 7 },
-    { x: -18, rot: -10, h: 27, name: "林安",   city: "温哥华", wish: "父母康健，岁岁无忧", bless: 11 },
-    { x: -12, rot: -6,  h: 29, name: "Maya",   city: "Seattle", wish: "Peace & stillness for my family", bless: 9 },
-    { x: -6,  rot: -3,  h: 31, name: "清和",   city: "台北",   wish: "智慧明澈，不染尘劳", bless: 14 },
+    { x: -22, rot: -13, h: 24, name: "林安",   city: "旧金山", wish: "愿心安住，诸事顺遂", bless: 7 },
+    { x: -15, rot: -8,  h: 27, name: "Maya",   city: "Seattle",wish: "Peace for all", bless: 9 },
+    { x: -8,  rot: -4,  h: 30, name: "清和",   city: "台北",   wish: "智慧明澈，不染尘劳", bless: 14 },
     { x: 0,   rot: 0,   h: 32, name: "陈志远", city: "纽约",   wish: "愿众生安乐，所求皆安", bless: 16 },
-    { x: 6,   rot: 3,   h: 30, name: "周宁",   city: "上海",   wish: "平安喜乐，自在清净", bless: 8 },
-    { x: 12,  rot: 7,   h: 28, name: "David",  city: "Boston", wish: "Clarity and compassion today", bless: 6 },
-    { x: 18,  rot: 11,  h: 26, name: "慧心",   city: "洛杉矶", wish: "愿此一炷清香回向十方", bless: 12 },
-    { x: 24,  rot: 15,  h: 24, name: "Grace",  city: "Toronto", wish: "Gratitude and warmth", bless: 10 },
+    { x: 8,   rot: 4,   h: 30, name: "周宁",   city: "上海",   wish: "平安喜乐，自在清净", bless: 8 },
+    { x: 15,  rot: 8,   h: 27, name: "David",  city: "Boston", wish: "Clarity and compassion", bless: 6 },
+    { x: 22,  rot: 13,  h: 24, name: "慧心",   city: "洛杉矶", wish: "清香一炷回向十方", bless: 12 },
   ];
+  let extraStrands = 0;
 
   function renderIncense(freshIdx = -1) {
     incenseBox.innerHTML = incenseSticks.map((s, i) => `
@@ -129,34 +223,24 @@
     `).join("");
   }
   renderIncense();
-
   incenseBox.dataset.offering = "incense";
-  incenseBox.addEventListener("click", () => {
-    const latest = incenseSticks[incenseSticks.length - 1];
-    openPopover({ ...latest, kindLabel: "敬香" }, incenseBox);
-  });
+  incenseBox.addEventListener("click", () => openPopover({ ...incenseSticks[3], kindLabel: "敬香" }, incenseBox));
 
   function addIncenseStick(name, city, wish) {
     const idx = Math.floor(Math.random() * incenseSticks.length);
-    incenseSticks[idx] = {
-      ...incenseSticks[idx],
-      h: 28 + Math.round(Math.random() * 6),
-      name, city, wish, bless: 1,
-    };
-    counts.incense += 1;
-    updateStats();
+    incenseSticks[idx] = { ...incenseSticks[idx], h: 28 + Math.round(Math.random() * 5), name, city, wish, bless: 1 };
     extraStrands = 1.0;
     renderIncense(idx);
   }
 
-  /* ===== ② 写实古铜酥油灯（严格中轴对称：须弥座石台左右各1 + 木质供桌两角各1，共4盏） ===== */
+  // ② 四盏对称古铜酥油灯（稳居须弥座石台内侧与木质供桌两角，与原图高烛台互不重叠）
   const peerCandles = [
-    { name: "清和",  city: "台北",   tag: "平安",    wish: "愿一家老小四季平安，夜夜好眠", x: 29.2, y: 62.6, scale: 0.86, bless: 9 },
-    { name: "Maya",  city: "Seattle",tag: "Peace",   wish: "May everyone in this hall find quiet peace", x: 36.6, y: 67.6, scale: 0.96, bless: 12 },
-    { name: "Grace", city: "Toronto",tag: "Family",  wish: "Blessings for my parents and children", x: 63.4, y: 67.6, scale: 0.96, bless: 11 },
-    { name: "慧心",  city: "洛杉矶", tag: "安宁",    wish: "一灯能除千年暗，愿心里常明", x: 70.8, y: 62.6, scale: 0.86, bless: 13 },
+    { name: "清和",  city: "台北",   tag: "平安",    wish: "愿一家老小四季平安", x: 31.4, y: 62.6, scale: 0.84, bless: 9 },
+    { name: "Maya",  city: "Seattle",tag: "Peace",   wish: "Quiet peace for everyone", x: 36.6, y: 67.6, scale: 0.94, bless: 12 },
+    { name: "Grace", city: "Toronto",tag: "Family",  wish: "Blessings for my family", x: 63.4, y: 67.6, scale: 0.94, bless: 11 },
+    { name: "慧心",  city: "洛杉矶", tag: "安宁",    wish: "一灯能除千年暗", x: 68.6, y: 62.6, scale: 0.84, bless: 13 },
   ];
-
+  let lampCursor = 0;
   function renderCandles(newIdx = -1) {
     candlesLayer.innerHTML = peerCandles.map((p, idx) => `
       <button type="button" class="peer-candle ${idx === newIdx ? "is-new" : ""}" data-offering="lamp" data-idx="${idx}"
@@ -170,20 +254,17 @@
     `).join("");
   }
   renderCandles();
-
   candlesLayer.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-offering='lamp']");
-    if (!btn) return;
-    const item = peerCandles[Number(btn.dataset.idx)];
-    openPopover({ ...item, kindLabel: "供灯" }, btn);
+    if (btn) openPopover({ ...peerCandles[Number(btn.dataset.idx)], kindLabel: "供灯" }, btn);
   });
 
-  /* ===== ③ 写实宋瓷水盘白莲（左右对称安放于须弥座石台，端庄不凌乱） ===== */
+  // ③ 两盘对称宋瓷白莲
   const lotusItems = [
-    { x: 35.0, y: 62.2, scale: 0.92, side: "left",  name: "清岚", city: "杭州",   wish: "心如白莲，不染尘埃", bless: 8 },
-    { x: 65.0, y: 62.2, scale: 0.92, side: "right", name: "若水", city: "温哥华", wish: "愿家人岁岁长安，花开见佛", bless: 13 },
+    { x: 35.0, y: 62.2, scale: 0.92, name: "清岚", city: "杭州",   wish: "心如白莲，不染尘埃", bless: 8 },
+    { x: 65.0, y: 62.2, scale: 0.92, name: "若水", city: "温哥华", wish: "花开见佛，岁岁长安", bless: 13 },
   ];
-
+  let lotusCursor = 0;
   function renderLotus(freshIdx = -1) {
     lotusLayer.innerHTML = lotusItems.map((f, i) => `
       <button type="button" class="lotus-item ${i === freshIdx ? "is-fresh" : ""}" data-offering="lotus" data-idx="${i}"
@@ -196,36 +277,23 @@
     `).join("");
   }
   renderLotus();
-
   lotusLayer.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-offering='lotus']");
-    if (!btn) return;
-    const item = lotusItems[Number(btn.dataset.idx)];
-    openPopover({ ...item, kindLabel: "佛前供莲" }, btn);
+    if (btn) openPopover({ ...lotusItems[Number(btn.dataset.idx)], kindLabel: "佛前供莲" }, btn);
   });
 
-  function offerLotus(name, city, wish) {
-    const idx = Math.floor(Math.random() * lotusItems.length);
-    lotusItems[idx] = { ...lotusItems[idx], name, city, wish, bless: 1 };
-    counts.lotus += 1;
-    updateStats();
-    renderLotus(idx);
-    return lotusItems[idx].side;
-  }
-
-  /* ===== ④ 写实宋代青瓷开片贡茶（严格落于木质供桌台面，左二右二对称排布，中轴留白给前景行者） ===== */
+  // ④ 四盏对称青瓷贡茶
   const teaCups = [
     { x: 41.2, y: 67.8, filled: true,  name: "明觉", city: "旧金山", wish: "奉一盏清茶，愿心如止水", bless: 9 },
-    { x: 45.3, y: 67.8, filled: true,  name: "静远", city: "成都",   wish: "禅茶一味，去除烦躁昏沉", bless: 12 },
+    { x: 45.3, y: 67.8, filled: true,  name: "静远", city: "成都",   wish: "禅茶一味，自在清净", bless: 12 },
     { x: 54.7, y: 67.8, filled: true,  name: "Chloe",city: "LA",     wish: "Still water, clear mind", bless: 14 },
-    { x: 58.8, y: 67.8, filled: false, name: "虚位", city: "",       wish: "点击下方「奉茶」，在佛前注满这一盏清茶", bless: 0 },
+    { x: 58.8, y: 67.8, filled: false, name: "虚位", city: "",       wish: "点击下方「奉茶」注满这一盏清茶", bless: 0 },
   ];
-
+  let teaCursor = 3;
   function renderTeaRow(rippleIdx = -1) {
     teaRowEl.innerHTML = teaCups.map((c, i) => `
       <button type="button" class="tea-cup ${c.filled ? "is-filled" : ""} ${i === rippleIdx ? "is-rippling" : ""}"
-              style="left:${c.x}%;top:${c.y}%"
-              data-offering="tea" data-idx="${i}">
+              style="left:${c.x}%;top:${c.y}%" data-offering="tea" data-idx="${i}">
         <span class="tea-steam"><i></i><i></i></span>
         <span class="tea-visual">
           <img class="tea-img" src="./assets/offering-tea.png?v=${V}" alt="宋瓷贡茶" />
@@ -236,87 +304,242 @@
     `).join("");
   }
   renderTeaRow();
-
   teaRowEl.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-offering='tea']");
     if (!btn) return;
     const idx = Number(btn.dataset.idx);
-    const item = teaCups[idx];
-    if (!item.filled) {
-      offerTea("你", "此刻", "奉上一盏清茶，愿身心澄明安住", idx);
-      playTone("tea");
-      showToast("已于佛前奉上一盏青瓷清茶 · 水纹轻漾");
-      return;
-    }
-    openPopover({ ...item, kindLabel: "青瓷贡茶" }, btn);
+    if (!teaCups[idx].filled) { triggerSelfTea(idx); return; }
+    openPopover({ ...teaCups[idx], kindLabel: "青瓷贡茶" }, btn);
   });
 
-  function offerTea(name, city, wish, forcedIdx = -1) {
-    let idx = forcedIdx;
-    if (idx < 0) {
-      idx = teaCups.findIndex((c) => !c.filled);
-      if (idx < 0) idx = Math.floor(Math.random() * teaCups.length);
-    }
-    teaCups[idx] = { ...teaCups[idx], filled: true, name, city, wish, bless: 1 };
-    counts.tea += 1;
-    updateStats();
-    renderTeaRow(idx);
-  }
-
-  /* ===== ⑤ 实时同修共修流动（香、灯、花、茶四供轮流真实发生） ===== */
-  const liveEvents = [
-    { type: "tea",     name: "旧金山 · 明觉", city: "旧金山", wish: "愿心如止水，清明自在", text: "旧金山 · 明觉 刚刚奉上一盏青瓷清茶" },
-    { type: "lotus",   name: "温哥华 · 若水", city: "温哥华", wish: "花开见佛，愿亲友皆安", text: "温哥华 · 若水 刚刚于佛前供上一盘白莲" },
-    { type: "incense", name: "Seattle · Maya",city: "Seattle",wish: "Peace and calm for all", text: "Seattle · Maya 刚刚敬了一炷清香" },
-    { type: "lamp",    name: "纽约 · 陈志远", city: "纽约",   wish: "长明一盏心灯，照破迷惘", text: "纽约 · 陈志远 刚刚点亮一盏古铜酥油灯" },
-    { type: "tea",     name: "Boston · David",city: "Boston", wish: "Still water, gentle heart", text: "Boston · David 刚刚供奉八功德净水" },
-    { type: "lotus",   name: "洛杉矶 · 慧心", city: "洛杉矶", wish: "清净庄严，吉祥如意", text: "洛杉矶 · 慧心 刚刚供奉一盘清莲" },
+  /* ===== 5. 模拟多位其他用户动态进入大殿（在左右蒲团上真实烧香、跪拜） ===== */
+  const visitorPool = [
+    { id: "u-lin",   name: "林安",   city: "旧金山", filter: "brightness(0.92) contrast(1.06)" },
+    { id: "u-ruo",   name: "若水",   city: "温哥华", filter: "brightness(0.88) sepia(0.24) hue-rotate(-10deg)" },
+    { id: "u-chen",  name: "陈志远", city: "纽约",   filter: "brightness(0.84) contrast(1.1) saturate(0.85)" },
+    { id: "u-maya",  name: "Maya",   city: "Seattle",filter: "brightness(0.95) sepia(0.18) hue-rotate(8deg)" },
+    { id: "u-zhou",  name: "周宁",   city: "上海",   filter: "brightness(0.86) hue-rotate(165deg) saturate(0.55)" },
+    { id: "u-david", name: "David",  city: "Boston", filter: "brightness(0.9) sepia(0.28)" },
   ];
-  let liveIdx = 0;
-  let extraStrands = 0;
 
-  function showWhisper(text) {
-    if (document.body.classList.contains("quiet-mode") || document.hidden) return;
-    // 统一在正中上方仅展示一行克制浮字，避免满屏叠字凌乱
-    censerZone.innerHTML = "";
-    const whisper = document.createElement("div");
-    whisper.className = "live-whisper";
-    whisper.textContent = text;
-    censerZone.appendChild(whisper);
-    setTimeout(() => whisper.remove(), 3800);
+  // 4 个同修蒲团席位状态
+  const visitorSlots = cushionSlots.slice(0, 4).map((slot, idx) => ({
+    slotIndex: idx,
+    x: slot.x,
+    y: slot.y + 0.6,
+    vh: slot.vh,
+    user: null,
+    el: null,
+  }));
+
+  function spawnVisitorAt(slotIdx, user) {
+    const s = visitorSlots[slotIdx];
+    if (s.el) s.el.remove();
+    s.user = user;
+    const el = document.createElement("div");
+    el.className = "visitor-actor";
+    el.style.left = `${s.x}%`;
+    el.style.top = `${s.y}%`;
+    el.style.setProperty("--vh", `${s.vh}px`);
+    el.style.setProperty("--robe-filter", user.filter);
+    el.innerHTML = `
+      <div class="visitor-badge"><b>${user.name}</b> · ${user.city}</div>
+      <div class="visitor-shadow"></div>
+      <img class="visitor-img is-stand" src="./assets/pilgrim-fg.png?v=${V}" alt="" />
+      <img class="visitor-img is-bow" src="./assets/pilgrim-bow.png?v=${V}" alt="" />
+    `;
+    visitorsLayer.appendChild(el);
+    s.el = el;
+    requestAnimationFrame(() => el.classList.add("is-present"));
   }
 
-  function runPeerEvent(ev) {
+  // 初始让 2 位同修已在左右后排蒲团静立共修
+  spawnVisitorAt(0, visitorPool[0]);
+  spawnVisitorAt(1, visitorPool[1]);
+  // 稍后再模拟第 3 位同修入殿至左前蒲团
+  setTimeout(() => {
+    if (!document.hidden) {
+      spawnVisitorAt(2, visitorPool[2]);
+      pushLivePopup(visitorPool[2].city, visitorPool[2].name, "步入大雄宝殿，立于佛前蒲团");
+    }
+  }, 2400);
+
+  let simStep = 0;
+  function runVisitorSimulation() {
     if (document.hidden) return;
-    const shortName = ev.name.split(" · ").pop();
-    if (ev.type === "incense") {
-      addIncenseStick(shortName, ev.city, ev.wish);
-      showWhisper(ev.text, "center");
-    } else if (ev.type === "lotus") {
-      const side = offerLotus(shortName, ev.city, ev.wish);
-      showWhisper(ev.text, side);
-    } else if (ev.type === "tea") {
-      offerTea(shortName, ev.city, ev.wish);
-      showWhisper(ev.text, "center");
-    } else {
-      const idx = Math.floor(Math.random() * peerCandles.length);
-      peerCandles[idx] = { ...peerCandles[idx], name: shortName, city: ev.city, wish: ev.wish, bless: 1 };
-      counts.lamp += 1;
-      updateStats();
+    const activeSlots = visitorSlots.filter((s) => s.user && s.el);
+    // 每隔几轮轮换一位同修离殿并迎入新同修
+    if (simStep > 0 && simStep % 5 === 0) {
+      const targetSlot = visitorSlots[simStep % 4];
+      const nextUser = visitorPool[(simStep + 2) % visitorPool.length];
+      if (!visitorSlots.some((s) => s.user && s.user.id === nextUser.id)) {
+        if (targetSlot.el) {
+          targetSlot.el.classList.remove("is-present");
+          setTimeout(() => spawnVisitorAt(targetSlot.slotIndex, nextUser), 700);
+        } else {
+          spawnVisitorAt(targetSlot.slotIndex, nextUser);
+        }
+        pushLivePopup(nextUser.city, nextUser.name, "步入大雄宝殿");
+        simStep++;
+        return;
+      }
+    }
+
+    const actor = activeSlots[simStep % activeSlots.length];
+    if (!actor) return;
+    const u = actor.user;
+    const actionCycle = ["bow", "incense", "lamp", "tea", "bow", "lotus"];
+    const act = actionCycle[simStep % actionCycle.length];
+    simStep++;
+
+    if (act === "bow") {
+      actor.el.classList.add("is-bowing");
+      setTimeout(() => actor.el && actor.el.classList.remove("is-bowing"), 3200);
+      recordAction(u.id, u.name, u.city, "bow");
+      pushLivePopup(u.city, u.name, "于蒲团虔诚合十礼拜");
+    } else if (act === "incense") {
+      addIncenseStick(u.name, u.city, "愿心安住，吉祥平安");
+      recordAction(u.id, u.name, u.city, "incense");
+      pushLivePopup(u.city, u.name, "敬了一炷清香");
+    } else if (act === "lamp") {
+      const idx = lampCursor++ % peerCandles.length;
+      peerCandles[idx] = { ...peerCandles[idx], name: u.name, city: u.city, wish: "点亮心灯，光明常照", bless: 1 };
       renderCandles(idx);
-      showWhisper(ev.text, peerCandles[idx].x < 50 ? "left" : "right");
+      recordAction(u.id, u.name, u.city, "lamp");
+      pushLivePopup(u.city, u.name, "供奉了一盏长明酥油灯");
+    } else if (act === "tea") {
+      const idx = teaCursor++ % teaCups.length;
+      teaCups[idx] = { ...teaCups[idx], filled: true, name: u.name, city: u.city, wish: "奉茶净心，清安自在", bless: 1 };
+      renderTeaRow(idx);
+      recordAction(u.id, u.name, u.city, "tea");
+      pushLivePopup(u.city, u.name, "奉上了一盏青瓷清茶");
+    } else if (act === "lotus") {
+      const idx = lotusCursor++ % lotusItems.length;
+      lotusItems[idx] = { ...lotusItems[idx], name: u.name, city: u.city, wish: "佛前供莲，清净庄严", bless: 1 };
+      renderLotus(idx);
+      recordAction(u.id, u.name, u.city, "lotus");
+      pushLivePopup(u.city, u.name, "于佛前献上一盘白莲");
     }
   }
 
-  setTimeout(() => runPeerEvent(liveEvents[liveIdx++ % liveEvents.length]), 1800);
-  setInterval(() => runPeerEvent(liveEvents[liveIdx++ % liveEvents.length]), 5800);
+  setTimeout(runVisitorSimulation, 1500);
+  setInterval(runVisitorSimulation, 5400);
 
-  /* ===== ⑥ 丝绸状缠绕檀香青烟 + 60fps 金光浮尘 + 三层刚体视差 ===== */
+  /* ===== 6. 第一人称四大仪式动画（敬香 / 礼拜 / 供灯 / 奉茶 / 献花） ===== */
+  let busyRitual = false;
+
+  // ① 敬香：点香 → 插上香炉 → 亮起火星与青烟
+  document.getElementById("btn-act-incense").addEventListener("click", () => {
+    if (busyRitual) return;
+    busyRitual = true;
+    playTone("bell");
+    fpIncense.classList.remove("is-playing");
+    void fpIncense.offsetWidth;
+    fpIncense.classList.add("is-playing");
+
+    setTimeout(() => {
+      addIncenseStick("你", "本机", "清香一炷，愿心安住、诸事吉祥");
+      recordAction("u-me", "你", "本机", "incense", true);
+      pushLivePopup("本机", "你", "点燃清香并插于佛前香炉");
+      showToast("清香已燃并插于香炉 · 丝缕青烟徐徐升空");
+    }, 1550);
+
+    setTimeout(() => {
+      fpIncense.classList.remove("is-playing");
+      busyRitual = false;
+    }, 2450);
+  });
+
+  // ② 礼拜：自然暖光双手合十 → 第一人称镜头下跪俯首 → 缓缓起身
+  document.getElementById("btn-act-bow").addEventListener("click", () => {
+    if (busyRitual) return;
+    busyRitual = true;
+    playTone("bell");
+    fpHands.classList.add("is-raised");
+
+    setTimeout(() => {
+      stage.classList.add("is-fp-bowing");
+      fpHands.classList.add("is-bowed");
+      recordAction("u-me", "你", "本机", "bow", true);
+      pushLivePopup("本机", "你", "合十跪拜顶礼");
+      showToast("合十跪拜 · 一心顶礼");
+    }, 650);
+
+    setTimeout(() => {
+      stage.classList.remove("is-fp-bowing");
+      fpHands.classList.remove("is-bowed");
+    }, 2350);
+
+    setTimeout(() => {
+      fpHands.classList.remove("is-raised");
+      busyRitual = false;
+    }, 3250);
+  });
+
+  function playOfferFly(imgSrc, targetXPercent, targetYFromBottomVh, onLand) {
+    if (busyRitual) return;
+    busyRitual = true;
+    fpOfferImg.src = imgSrc;
+    fpOffer.style.setProperty("--offer-tx", `${targetXPercent}%`);
+    fpOffer.style.setProperty("--offer-ty", `${targetYFromBottomVh}vh`);
+    fpOffer.classList.remove("is-playing");
+    void fpOffer.offsetWidth;
+    fpOffer.classList.add("is-playing");
+    setTimeout(onLand, 1400);
+    setTimeout(() => {
+      fpOffer.classList.remove("is-playing");
+      busyRitual = false;
+    }, 1900);
+  }
+
+  // ③ 供灯动画
+  document.getElementById("btn-act-lamp").addEventListener("click", () => {
+    const idx = lampCursor++ % peerCandles.length;
+    const seat = peerCandles[idx];
+    playTone("lamp");
+    playOfferFly(`./assets/offering-lamp.png?v=${V}`, seat.x, 100 - seat.y, () => {
+      peerCandles[idx] = { ...seat, name: "你", city: "本机", tag: "心灯", wish: "点亮一盏长明酥油灯，愿光明温暖常伴", bless: 1 };
+      renderCandles(idx);
+      recordAction("u-me", "你", "本机", "lamp", true);
+      pushLivePopup("本机", "你", "奉上并点亮一盏古铜酥油灯");
+      showToast("酥油灯已奉至供台 · 暖金灯火亮起");
+    });
+  });
+
+  // ④ 奉茶动画
+  function triggerSelfTea(forcedIdx = -1) {
+    const idx = forcedIdx >= 0 ? forcedIdx : (teaCups.findIndex((c) => !c.filled) >= 0 ? teaCups.findIndex((c) => !c.filled) : (teaCursor++ % teaCups.length));
+    const seat = teaCups[idx];
+    playTone("tea");
+    playOfferFly(`./assets/offering-tea.png?v=${V}`, seat.x, 100 - seat.y, () => {
+      teaCups[idx] = { ...seat, filled: true, name: "你", city: "本机", wish: "奉一盏青瓷清茶，愿心如止水", bless: 1 };
+      renderTeaRow(idx);
+      recordAction("u-me", "你", "本机", "tea", true);
+      pushLivePopup("本机", "你", "于佛前奉上一盏青瓷清茶");
+      showToast("清茶已奉上供桌 · 水纹轻漾、茶雾微升");
+    });
+  }
+  document.getElementById("btn-act-tea").addEventListener("click", () => triggerSelfTea());
+
+  // ⑤ 献花动画
+  document.getElementById("btn-act-lotus").addEventListener("click", () => {
+    const idx = lotusCursor++ % lotusItems.length;
+    const seat = lotusItems[idx];
+    playTone("lotus");
+    playOfferFly(`./assets/offering-lotus.png?v=${V}`, seat.x, 100 - seat.y, () => {
+      lotusItems[idx] = { ...seat, name: "你", city: "本机", wish: "佛前供莲，清净庄严", bless: 1 };
+      renderLotus(idx);
+      recordAction("u-me", "你", "本机", "lotus", true);
+      pushLivePopup("本机", "你", "于佛前供上一盘白莲");
+      showToast("白莲已奉至供台 · 清雅绽放");
+    });
+  });
+
+  /* ===== 7. 丝绸状缠绕檀香青烟 + 60fps 金光浮尘 + 刚体视差 ===== */
   const canvas = document.getElementById("hall-fx-canvas");
   const ctx = canvas.getContext("2d");
   let w = 0, h = 0, dpr = 1;
   const motes = [];
-
   const strands = [
     { ox: -10, freq: 0.014, amp: 14, speed: 1.15, phase: 0.0, width: 1.5, alpha: 0.24 },
     { ox:   0, freq: 0.011, amp: 20, speed: 0.92, phase: 1.7, width: 2.1, alpha: 0.30 },
@@ -326,22 +549,13 @@
   ];
 
   function resize() {
-    w = window.innerWidth;
-    h = window.innerHeight;
+    w = window.innerWidth; h = window.innerHeight;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (!motes.length) {
-      for (let i = 0; i < 52; i++) {
-        motes.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: 0.8 + Math.random() * 1.6,
-          vy: -(0.14 + Math.random() * 0.28),
-          phase: Math.random() * Math.PI * 2,
-          alpha: 0.22 + Math.random() * 0.5,
-        });
+      for (let i = 0; i < 48; i++) {
+        motes.push({ x: Math.random() * w, y: Math.random() * h, r: 0.8 + Math.random() * 1.5, vy: -(0.14 + Math.random() * 0.26), phase: Math.random() * Math.PI * 2, alpha: 0.2 + Math.random() * 0.48 });
       }
     }
   }
@@ -351,46 +565,34 @@
   let targetX = 0, targetY = 0, curX = 0, curY = 0;
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
-    targetX = (e.clientX / Math.max(1, w) - 0.5) * 18;
-    targetY = (e.clientY / Math.max(1, h) - 0.5) * 10;
+    targetX = (e.clientX / Math.max(1, w) - 0.5) * 16;
+    targetY = (e.clientY / Math.max(1, h) - 0.5) * 9;
   });
 
   function drawSilkIncenseSmoke(t) {
-    const baseX = w * 0.5 + curX * 0.28;
-    const baseY = h * 0.56 + curY * 0.18;
+    const baseX = w * 0.5 + curX * 0.24;
+    const baseY = h * 0.55 + curY * 0.16;
     const topY = h * 0.19;
     const heightSpan = Math.max(120, baseY - topY);
     const boost = 1 + extraStrands * 0.55;
-
     ctx.save();
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
     for (let s = 0; s < strands.length; s++) {
       const st = strands[s];
       const steps = 40;
       for (let i = 0; i < steps; i++) {
-        const p0 = i / steps;
-        const p1 = (i + 1) / steps;
-        const y0 = baseY - p0 * heightSpan;
-        const y1 = baseY - p1 * heightSpan;
-        const sway0 = Math.sin(p0 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p0 * 1.35)
-                    + Math.cos(p0 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.2 * p0;
-        const sway1 = Math.sin(p1 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p1 * 1.35)
-                    + Math.cos(p1 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.2 * p1;
-        const x0 = baseX + st.ox * (1 + p0 * 1.35) + sway0;
-        const x1 = baseX + st.ox * (1 + p1 * 1.35) + sway1;
-        const fadeIn = Math.min(1, p0 * 7);
-        const fadeOut = Math.pow(1 - p0, 1.45);
-        const alpha = st.alpha * fadeIn * fadeOut * boost;
+        const p0 = i / steps, p1 = (i + 1) / steps;
+        const y0 = baseY - p0 * heightSpan, y1 = baseY - p1 * heightSpan;
+        const sway0 = Math.sin(p0 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p0 * 1.35) + Math.cos(p0 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.2 * p0;
+        const sway1 = Math.sin(p1 * 7.5 - t * st.speed + st.phase) * st.amp * (0.25 + p1 * 1.35) + Math.cos(p1 * 13.0 - t * st.speed * 0.7 + st.phase) * 4.2 * p1;
+        const x0 = baseX + st.ox * (1 + p0 * 1.35) + sway0, x1 = baseX + st.ox * (1 + p1 * 1.35) + sway1;
+        const alpha = st.alpha * Math.min(1, p0 * 7) * Math.pow(1 - p0, 1.45) * boost;
         if (alpha < 0.004) continue;
         ctx.strokeStyle = `rgba(234, 232, 224, ${alpha.toFixed(3)})`;
         ctx.lineWidth = st.width * (0.68 + p0 * 4.0);
         ctx.shadowColor = `rgba(236, 232, 220, ${(alpha * 0.85).toFixed(3)})`;
         ctx.shadowBlur = 4 + p0 * 14;
-        ctx.beginPath();
-        ctx.moveTo(x0, y0);
-        ctx.lineTo(x1, y1);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
       }
     }
     ctx.restore();
@@ -400,94 +602,33 @@
     requestAnimationFrame(tick);
     if (document.hidden) return;
     const t = now * 0.001;
-    curX += (targetX + Math.sin(t * 0.38) * 2.2 - curX) * 0.06;
-    curY += (targetY + Math.cos(t * 0.3) * 1.5 - curY) * 0.06;
+    curX += (targetX + Math.sin(t * 0.38) * 2.0 - curX) * 0.06;
+    curY += (targetY + Math.cos(t * 0.3) * 1.3 - curY) * 0.06;
     stage.style.setProperty("--px", `${curX.toFixed(2)}px`);
     stage.style.setProperty("--py", `${curY.toFixed(2)}px`);
 
     extraStrands *= 0.988;
     ctx.clearRect(0, 0, w, h);
     drawSilkIncenseSmoke(t);
-
     for (let i = 0; i < motes.length; i++) {
       const m = motes[i];
-      m.phase += 0.024;
-      m.y += m.vy;
-      m.x += Math.sin(m.phase) * 0.18;
+      m.phase += 0.024; m.y += m.vy; m.x += Math.sin(m.phase) * 0.18;
       if (m.y < -10) { m.y = h + 10; m.x = Math.random() * w; }
       const a = m.alpha * (0.55 + 0.45 * Math.sin(m.phase * 1.4));
       ctx.fillStyle = `rgba(255, 234, 174, ${a})`;
-      ctx.beginPath();
-      ctx.arc(m.x + curX * 0.35, m.y + curY * 0.25, m.r, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(m.x + curX * 0.35, m.y + curY * 0.25, m.r, 0, Math.PI * 2); ctx.fill();
     }
   }
   requestAnimationFrame(tick);
 
-  /* ===== ⑦ 底部五键共修互动（香、灯、花、茶、礼拜） ===== */
-  document.getElementById("btn-act-incense").addEventListener("click", () => {
-    playTone("bell");
-    addIncenseStick("你", "此刻", "清香一炷，愿心安住、诸事吉祥");
-    showWhisper("你 刚刚敬了一炷清香 · 香云供养", "center");
-    showToast("清香已插于佛前香炉 · 丝缕青烟徐徐升空");
-  });
-
-  document.getElementById("btn-act-lamp").addEventListener("click", () => {
-    playTone("lamp");
-    // 严格保持对称格局：依次在对称主灯位点亮刷新，绝不随机散落
-    const idx = counts.lamp % peerCandles.length;
-    peerCandles[idx] = {
-      ...peerCandles[idx],
-      name: "你",
-      city: "此刻",
-      tag: "心灯",
-      wish: "点亮一盏长明酥油灯，愿光明温暖常伴",
-      bless: 1,
-    };
-    counts.lamp += 1;
-    updateStats();
-    renderCandles(idx);
-    showWhisper("你 刚刚于佛前供台点亮一盏古铜酥油灯");
-    showToast("你的古铜酥油灯已端正点亮于佛前供台");
-  });
-
-  document.getElementById("btn-act-lotus").addEventListener("click", () => {
-    playTone("lotus");
-    const side = offerLotus("你", "此刻", "佛前献上一盘白莲，愿清净庄严、诸善圆满");
-    showWhisper("你 刚刚于佛前供上一盘白莲", side);
-    showToast("一盘白莲已供于佛前案台");
-  });
-
-  document.getElementById("btn-act-tea").addEventListener("click", () => {
-    playTone("tea");
-    offerTea("你", "此刻", "奉一盏青瓷清茶，愿心如止水、澄明清安");
-    showWhisper("你 刚刚于佛前奉上一盏青瓷清茶", "center");
-    showToast("青瓷贡茶已奉于佛前 · 水纹轻漾、茶雾微升");
-  });
-
-  let bowTimer = null;
-  document.getElementById("btn-act-bow").addEventListener("click", () => {
-    playTone("bell");
-    const caption = document.getElementById("bow-caption-layer");
-    fgPilgrim.classList.add("is-bowing");
-    stage.classList.add("is-bow-active");
-    caption.classList.add("is-show");
-    clearTimeout(bowTimer);
-    bowTimer = setTimeout(() => {
-      fgPilgrim.classList.remove("is-bowing");
-      stage.classList.remove("is-bow-active");
-      caption.classList.remove("is-show");
-    }, 3400);
-  });
-
-  /* ===== 顶栏开关 ===== */
+  /* ===== 8. 顶栏开关 ===== */
   const quietBtn = document.getElementById("btn-quiet");
   quietBtn.addEventListener("click", () => {
     const on = document.body.classList.toggle("quiet-mode");
     quietBtn.classList.toggle("is-on", on);
     quietBtn.textContent = on ? "已清净" : "清净模式";
     if (on) closePopover();
-    showToast(on ? "已开启清净模式 · 隐去他人姓名与动态，独享宁静供案" : "已恢复满殿同修供养与随喜互动");
+    showToast(on ? "已开启清净模式 · 独享静谧大雄宝殿" : "已恢复多人共修与实时榜单");
   });
 
   const soundBtn = document.getElementById("btn-sound");
@@ -506,14 +647,15 @@
     isEn = !isEn;
     e.target.textContent = isEn ? "中文" : "EN";
     document.getElementById("t-hall-name").textContent = isEn ? "Mahāvīra Hall · Shakyamuni Buddha" : "大雄宝殿 · 释迦牟尼佛";
-    document.getElementById("t-hall-sub").textContent = isEn ? "Photorealistic Four Offerings + Foreground Pilgrim Depth" : "佛前四供实时共修 · 写实器物 + 前景行者三层景深";
+    document.getElementById("t-hall-sub").textContent = isEn ? "First-Person Sanctuary · Cushions, Rituals & Live Merit Board" : "第一人称共修测试 · 殿前蒲团 + 四大仪式动画 + 实时共修榜";
     document.getElementById("t-online").textContent = isEn ? "Pilgrims" : "位同修在殿";
+    document.getElementById("t-board-title").textContent = isEn ? "Hall Merit Board" : "殿内共修榜";
     document.getElementById("t-incense").textContent = isEn ? "Incense" : "敬香";
-    document.getElementById("t-lamp").textContent = isEn ? "Lamp" : "供灯";
-    document.getElementById("t-lotus").textContent = isEn ? "Lotus" : "献花";
-    document.getElementById("t-tea").textContent = isEn ? "Tea" : "奉茶";
     document.getElementById("t-bow").textContent = isEn ? "Bow" : "礼拜";
-    document.getElementById("t-bow-caption").textContent = isEn ? "Reverent Bow · Still Mind" : "一心顶礼 · 愿心清净";
-    updateStats();
+    document.getElementById("t-lamp").textContent = isEn ? "Lamp" : "供灯";
+    document.getElementById("t-tea").textContent = isEn ? "Tea" : "奉茶";
+    document.getElementById("t-lotus").textContent = isEn ? "Lotus" : "献花";
+    boardToggleBtn.textContent = boardEl.classList.contains("is-collapsed") ? (isEn ? "Open" : "展开") : (isEn ? "Hide" : "收起");
+    renderBoard();
   });
 })();
