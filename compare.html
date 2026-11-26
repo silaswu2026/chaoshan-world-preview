@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>见山 · 朝山 ｜ 多版本对比台 (V1 / V2 / 3D-v1 / 3D-v2)</title>
+  <title>见山 · 朝山 ｜ 多版本对比台 (V1 / V2 / 3D-v1)</title>
   <style>
     :root {
       --bg: #0c1214;
@@ -81,8 +81,7 @@
     <div class="controls">
       <div class="group" role="group" aria-label="版本切换">
         <button type="button" data-mode="v2" class="is-on">Demo-V2（纯净版）</button>
-        <button type="button" data-mode="3d-v1">3D-v1（4K深度视差）</button>
-        <button type="button" data-mode="3d-v2">3D-v2（三维空间同修）</button>
+        <button type="button" data-mode="3d-v1">3D-v1（大雄宝殿2.5D共修）</button>
         <button type="button" data-mode="v1">Demo-V1（基线）</button>
         <button type="button" data-mode="split">V1 / V2 分屏</button>
       </div>
@@ -110,17 +109,10 @@
     </section>
     <section class="pane is-hidden" id="pane-3d-v1">
       <div class="pane-head">
-        <div><b>3D-v1</b> <small>路线 B：4K 像素级深度图 WebGL 真 3D 视差（支持桌面鼠标与手机陀螺仪）</small></div>
+        <div><b>3D-v1</b> <small>第一人称真 4K 大雄宝殿共修测试台（发散佛光 · 写实四供 · 7 席蒲团 · 听佛/佛珠/木鱼）</small></div>
         <a class="open-link" href="./3d-v1/" target="_blank" rel="noopener">独立打开 3D-v1 ↗</a>
       </div>
       <div class="frame-wrap"><iframe id="frame-3d-v1" data-src="./3d-v1/" title="3D-v1"></iframe></div>
-    </section>
-    <section class="pane is-hidden" id="pane-3d-v2">
-      <div class="pane-head">
-        <div><b>3D-v2</b> <small>Three.js 4K 弧形立体五殿 · UnrealBloom 泛光 · 8 位写实 3D 同修角色</small></div>
-        <a class="open-link" href="./3d-v2/" target="_blank" rel="noopener">独立打开 3D-v2 ↗</a>
-      </div>
-      <div class="frame-wrap"><iframe id="frame-3d-v2" data-src="./3d-v2/" title="3D-v2"></iframe></div>
     </section>
   </main>
   <script>
@@ -129,7 +121,6 @@
       v1: document.getElementById("pane-v1"),
       v2: document.getElementById("pane-v2"),
       "3d-v1": document.getElementById("pane-3d-v1"),
-      "3d-v2": document.getElementById("pane-3d-v2"),
     };
     const direct = document.getElementById("direct-link");
 
@@ -146,7 +137,7 @@
         pane.classList.toggle("is-hidden", !show);
         if (show) ensureSrc(pane);
       });
-      direct.href = mode === "v1" ? "./v1/" : mode === "3d-v1" ? "./3d-v1/" : mode === "3d-v2" ? "./3d-v2/" : "./";
+      direct.href = mode === "v1" ? "./v1/" : mode === "3d-v1" ? "./3d-v1/" : "./";
     }
 
     function setViewport(vp) {
