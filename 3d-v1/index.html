@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080e10" />
   <title>大雄宝殿 · 第一人称多人共修测试 (3D-v1)</title>
-  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-11" />
+  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-12" />
 </head>
 <body>
   <main class="hall-stage" id="hall-stage">
-    <!-- 第一人称视角镜头容器（礼拜跪拜时整体平稳下俯再起身） -->
+    <!-- 第一人称视角镜头容器（礼拜跪拜 / 听佛落座时平稳过渡） -->
     <div class="hall-camera" id="hall-camera">
       <!-- 1. 4K 大雄宝殿干净底图（100% 刚体平移，佛像法相绝不变形） -->
       <div class="hall-bg-layer" id="hall-bg-layer" aria-hidden="true"></div>
@@ -30,16 +30,18 @@
         <div class="altar-tea-row" id="altar-tea-row"></div>
       </section>
 
-      <!-- 4. 殿前写实蒲团阵（左右多席供同修进入礼拜 + 正中主蒲团归属第一人称“你”） -->
+      <!-- 4. 殿前 7 席写实蒲团阵（左右两排 6 席供同修进入礼拜 + 正中主蒲团归第一人称“你”） -->
       <section class="hall-cushions-layer" id="hall-cushions-layer" aria-label="殿前礼佛蒲团"></section>
 
-      <!-- 5. 动态进入大殿的其他同修（100% 不透明实像，在左右蒲团上真实烧香/跪拜） -->
+      <!-- 5. 动态进入大殿的多元同修（男/女/老人/儿童，100% 不透明实像） -->
       <section class="hall-visitors-layer" id="hall-visitors-layer" aria-label="殿内共修同修"></section>
+
+      <!-- 6. 部位就地 +1 飘字层（在香炉、灯台、莲盘、茶盏、蒲团正上方自然向上飘散） -->
+      <div class="spot-float-layer" id="spot-float-layer" aria-live="polite"></div>
     </div>
 
-    <!-- 6. 第一人称仪式动画舞台（敬香点插 / 自然暖光双手合十 / 奉灯 / 奉茶 / 献花） -->
+    <!-- 7. 第一人称仪式动画舞台（敬香点燃 / 自然暖光双手合十 / 供灯 / 奉茶 / 献花） -->
     <div class="fp-ritual-stage" id="fp-ritual-stage" aria-hidden="true">
-      <!-- 敬香：点燃并插向香炉的三柱檀香 -->
       <div class="fp-incense-actor" id="fp-incense-actor">
         <div class="fp-incense-bundle">
           <span class="fp-stick s1"><i class="fp-spark"></i></span>
@@ -49,30 +51,55 @@
         </div>
       </div>
 
-      <!-- 礼拜：第一人称自然暖光写实合十双手（绝非渗人白手） -->
       <div class="fp-hands-actor" id="fp-hands-actor">
-        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-11" alt="" />
+        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-12" alt="" />
       </div>
 
-      <!-- 供灯 / 奉茶 / 献花 奉上动画载体 -->
       <div class="fp-offer-actor" id="fp-offer-actor">
         <img id="fp-offer-img" src="" alt="" />
         <div class="fp-offer-glow"></div>
       </div>
     </div>
 
-    <!-- 7. 前方实时动态弹窗：【地址】日期、某某、做了什么 -->
-    <div class="live-popup-stack" id="live-popup-stack" aria-live="polite"></div>
+    <!-- 8. 「听佛」坐禅经文轻字幕（仅听佛模式显现，居供桌上方柔和留白，绝不挡佛像） -->
+    <div class="listen-sutra-bar" id="listen-sutra-bar" aria-live="polite">
+      <span id="listen-sutra-text">观自在菩萨，行深般若波罗蜜多时，照见五蕴皆空</span>
+    </div>
 
-    <!-- 8. 右上角共修行为清单 / 排行榜（同一个人自动累计计数） -->
+    <!-- 9. 底部安全带轻流动态字幕（不再固定在左上角，绝不挡佛像） -->
+    <div class="hall-danmaku-bar" id="hall-danmaku-bar" aria-live="polite"></div>
+
+    <!-- 10. 静修工具浮层：左下敲木鱼 + 右下拨佛珠 -->
+    <div class="zen-fish-widget" id="zen-fish-widget" aria-hidden="true">
+      <button type="button" class="fish-tap-btn" id="btn-tap-fish" aria-label="敲木鱼">
+        <span class="fish-wave" id="fish-wave"></span>
+        <img src="./assets/wooden-fish.png?v=20261126-3dv1-12" alt="木鱼" />
+      </button>
+      <div class="zen-widget-cap">轻敲木鱼 · <b id="fish-count">0</b> <small>(空格键)</small></div>
+    </div>
+
+    <div class="zen-beads-widget" id="zen-beads-widget" aria-hidden="true">
+      <div class="beads-head">
+        <span>沉香念珠 · <b id="beads-count">0</b> 声</span>
+        <small>轻点或拨动</small>
+      </div>
+      <div class="beads-track" id="beads-track" role="button" tabindex="0" aria-label="拨动佛珠"></div>
+    </div>
+
+    <!-- 11. 右上角共修行为清单 / 排行榜（同一个人自动累计计数 + 测试人数密度切换） -->
     <aside class="merit-board" id="merit-board" aria-label="殿内共修榜">
       <div class="board-head">
         <div class="board-title">
           <i></i>
           <strong id="t-board-title">殿内共修榜</strong>
-          <small id="board-total-actions">实时统计</small>
+          <small id="board-total-actions">累计 0 次</small>
         </div>
         <button type="button" class="board-toggle" id="btn-board-toggle">收起</button>
+      </div>
+      <div class="board-density-bar">
+        <span>同屏人数测试：</span>
+        <button type="button" class="density-pill" data-density="3">3-4人</button>
+        <button type="button" class="density-pill is-active" data-density="5">5-6人</button>
       </div>
       <ol class="board-list" id="board-list"></ol>
     </aside>
@@ -87,16 +114,16 @@
       </div>
     </div>
 
-    <!-- 9. 顶栏（极简 V1 暗青玉细金） -->
+    <!-- 12. 顶栏（极简 V1 暗青玉细金） -->
     <header class="hall-topbar">
       <div class="hall-title">
         <strong id="t-hall-name">大雄宝殿 · 释迦牟尼佛</strong>
-        <small id="t-hall-sub">第一人称共修测试 · 殿前蒲团 + 四大仪式动画 + 实时共修榜</small>
+        <small id="t-hall-sub">第一人称多人共修 · 7席蒲团 + 多角色同修 + 听佛/佛珠/木鱼</small>
       </div>
       <div class="hall-top-tools">
         <span class="online-pill" id="online-pill">
           <i></i>
-          <b id="online-count">46</b> <span id="t-online">位同修在殿</span>
+          <b id="online-count">48</b> <span id="t-online">位同修在殿</span>
         </span>
         <button type="button" class="tool-btn" id="btn-quiet">清净模式</button>
         <button type="button" class="tool-btn" id="btn-sound">清音 · 关</button>
@@ -104,19 +131,23 @@
       </div>
     </header>
 
-    <!-- 10. 底部五键共修操作栏（香、礼拜、灯、茶、花） -->
+    <!-- 13. 底部共修操作栏（供养礼敬 5 键 + 静修 3 键） -->
     <footer class="hall-dock">
       <button type="button" class="dock-btn is-gold" id="btn-act-incense"><b>香</b><span id="t-incense">敬香</span></button>
       <button type="button" class="dock-btn" id="btn-act-bow"><b>礼</b><span id="t-bow">礼拜</span></button>
       <button type="button" class="dock-btn" id="btn-act-lamp"><b>灯</b><span id="t-lamp">供灯</span></button>
       <button type="button" class="dock-btn" id="btn-act-tea"><b>茶</b><span id="t-tea">奉茶</span></button>
       <button type="button" class="dock-btn" id="btn-act-lotus"><b>花</b><span id="t-lotus">献花</span></button>
+      <span class="dock-sep" aria-hidden="true"></span>
+      <button type="button" class="dock-btn" id="btn-act-listen"><b>听</b><span id="t-listen">听佛</span></button>
+      <button type="button" class="dock-btn" id="btn-act-beads"><b>珠</b><span id="t-beads">佛珠</span></button>
+      <button type="button" class="dock-btn" id="btn-act-fish"><b>鱼</b><span id="t-fish">木鱼</span></button>
     </footer>
 
     <div class="hall-toast" id="hall-toast" role="status"></div>
   </main>
 
   <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
-  <script src="./hall-test.js?v=20261126-3dv1-11"></script>
+  <script src="./hall-test.js?v=20261126-3dv1-12"></script>
 </body>
 </html>
