@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261126-3dv1-14";
+  const V = "20261126-3dv1-16";
   let isEn = false;
 
   function showToast(msg) {
@@ -912,11 +912,31 @@
     { ox:   6, freq: 0.012, amp: 22, speed: 0.85, phase: 5.5, width: 2.6, alpha: 0.16 },
   ];
 
+  function syncHaloToPaintedRing() {
+    // 精确匹配 3840x2405 原图 .hall-bg-layer (inset:-5%, bg-pos:50% 42%, cover, scale:1.06) 的项光圆心与直径
+    const IW = 3840, IH = 2405;
+    const bw = w * 1.10, bh = h * 1.10;
+    const sCover = Math.max(bw / IW, bh / IH);
+    const rw = IW * sCover, rh = IH * sCover;
+    const imgLeft = (bw - rw) * 0.50;
+    const imgTop  = (bh - rh) * 0.42;
+    const hxLocal = imgLeft + 0.4984 * rw;
+    const hyLocal = imgTop  + 0.1979 * rh;
+    const hrLocal = 0.1110 * rh;
+    const hxScreen = (w * 0.5) + (hxLocal - bw * 0.5) * 1.06;
+    const hyScreen = (h * 0.5) + (hyLocal - bh * 0.5) * 1.06;
+    const hdScreen = hrLocal * 2.0 * 1.06;
+    stage.style.setProperty("--halo-x", `${hxScreen.toFixed(1)}px`);
+    stage.style.setProperty("--halo-y", `${hyScreen.toFixed(1)}px`);
+    stage.style.setProperty("--halo-d", `${hdScreen.toFixed(1)}px`);
+  }
+
   function resize() {
     w = window.innerWidth; h = window.innerHeight;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    syncHaloToPaintedRing();
     if (!motes.length) {
       for (let i = 0; i < 48; i++) {
         motes.push({ x: Math.random() * w, y: Math.random() * h, r: 0.8 + Math.random() * 1.5, vy: -(0.14 + Math.random() * 0.26), phase: Math.random() * Math.PI * 2, alpha: 0.2 + Math.random() * 0.48 });
