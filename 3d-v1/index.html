@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080e10" />
   <title>大雄宝殿 · 第一人称多人共修测试 (3D-v1)</title>
-  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-12" />
+  <link rel="stylesheet" href="./hall-test.css?v=20261126-3dv1-13" />
 </head>
 <body>
   <main class="hall-stage" id="hall-stage">
@@ -52,7 +52,7 @@
       </div>
 
       <div class="fp-hands-actor" id="fp-hands-actor">
-        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-12" alt="" />
+        <img src="./assets/hands-warm-pray.png?v=20261126-3dv1-13" alt="" />
       </div>
 
       <div class="fp-offer-actor" id="fp-offer-actor">
@@ -69,21 +69,32 @@
     <!-- 9. 底部安全带轻流动态字幕（不再固定在左上角，绝不挡佛像） -->
     <div class="hall-danmaku-bar" id="hall-danmaku-bar" aria-live="polite"></div>
 
-    <!-- 10. 静修工具浮层：左下敲木鱼 + 右下拨佛珠 -->
+    <!-- 10. 静修工具浮层：左下敲木鱼（手动/自动）+ 右下真实3D圆环沉香佛珠（手动/自动） -->
     <div class="zen-fish-widget" id="zen-fish-widget" aria-hidden="true">
       <button type="button" class="fish-tap-btn" id="btn-tap-fish" aria-label="敲木鱼">
         <span class="fish-wave" id="fish-wave"></span>
-        <img src="./assets/wooden-fish.png?v=20261126-3dv1-12" alt="木鱼" />
+        <img src="./assets/wooden-fish.png?v=20261126-3dv1-13" alt="木鱼" />
       </button>
-      <div class="zen-widget-cap">轻敲木鱼 · <b id="fish-count">0</b> <small>(空格键)</small></div>
+      <div class="zen-widget-cap">
+        <span>轻敲木鱼 · <b id="fish-count">0</b></span>
+        <button type="button" class="zen-mini-toggle" id="btn-fish-auto">自动</button>
+      </div>
     </div>
 
     <div class="zen-beads-widget" id="zen-beads-widget" aria-hidden="true">
       <div class="beads-head">
-        <span>沉香念珠 · <b id="beads-count">0</b> 声</span>
-        <small>轻点或拨动</small>
+        <span>沉香十八子 · <b id="beads-count">0</b> 声</span>
+        <div class="zen-mode-switch" role="group" aria-label="念佛模式">
+          <button type="button" class="zen-mini-toggle is-on" id="btn-beads-manual">手动</button>
+          <button type="button" class="zen-mini-toggle" id="btn-beads-auto">自动</button>
+        </div>
       </div>
-      <div class="beads-track" id="beads-track" role="button" tabindex="0" aria-label="拨动佛珠"></div>
+      <div class="beads-ring-stage" id="beads-track" role="button" tabindex="0" aria-label="拨动沉香佛珠">
+        <canvas id="beads-canvas" width="440" height="224"></canvas>
+      </div>
+      <div class="beads-foot">
+        <span id="beads-round-label">点击 / 滑过 / 滚轮逐颗拨珠</span>
+      </div>
     </div>
 
     <!-- 11. 右上角共修行为清单 / 排行榜（同一个人自动累计计数 + 测试人数密度切换） -->
@@ -148,6 +159,6 @@
   </main>
 
   <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
-  <script src="./hall-test.js?v=20261126-3dv1-12"></script>
+  <script src="./hall-test.js?v=20261126-3dv1-13"></script>
 </body>
 </html>

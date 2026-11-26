@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261126-3dv1-12";
+  const V = "20261126-3dv1-13";
   let isEn = false;
 
   function showToast(msg) {
@@ -688,33 +688,197 @@
     }
   });
 
-  // 拨佛珠
+  // 真实 3D 透视圆环沉香 18 子佛珠（一颗一颗平滑转动 + 手动/自动切换）
   let beadsCount = 0;
+  let beadsAutoTimer = null;
+  let beadsTargetAngle = 0;
+  let beadsCurAngle = 0;
+  const BEAD_TOTAL = 18;
+  const STEP_RAD = (Math.PI * 2) / BEAD_TOTAL;
+
   const beadsBtn = document.getElementById("btn-act-beads");
-  beadsTrack.innerHTML = Array.from({ length: 7 }, (_, i) => `<span class="mala-bead ${i === 3 ? "is-center" : ""}"></span>`).join("");
+  const beadsManualBtn = document.getElementById("btn-beads-manual");
+  const beadsAutoBtn = document.getElementById("btn-beads-auto");
+  const beadsRoundLabel = document.getElementById("beads-round-label");
+  const beadsCanvas = document.getElementById("beads-canvas");
+  const bctx = beadsCanvas.getContext("2d");
+
+  function drawRosaryRing(nowSec) {
+    beadsCurAngle += (beadsTargetAngle - beadsCurAngle) * 0.18;
+    const cw = beadsCanvas.width;
+    const ch = beadsCanvas.height;
+    bctx.clearRect(0, 0, cw, ch);
+
+    const cx = cw * 0.5;
+    const cy = ch * 0.48;
+    const rx = cw * 0.37;
+    const ry = ch * 0.26;
+
+    // 1. 先绘制丝绳椭圆轨道
+    bctx.save();
+    bctx.strokeStyle = "rgba(182, 134, 72, 0.42)";
+    bctx.lineWidth = 3.5;
+    bctx.beginPath();
+    bctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+    bctx.stroke();
+    bctx.restore();
+
+    // 2. 计算 18 颗珠子的 3D 透视位置并按景深从后往前排序绘制
+    const beads = [];
+    for (let i = 0; i < BEAD_TOTAL; i++) {
+      const theta = beadsCurAngle + i * STEP_RAD + Math.PI * 0.5; // +PI/2 让第 0 颗初始在最前方
+      const x = cx + Math.cos(theta) * rx;
+      const depth = Math.sin(theta); // -1(最远后排) .. +1(最近前排正中)
+      const y = cy + depth * ry;
+      const scale = 0.62 + (depth + 1) * 0.30; // 0.62 .. 1.22
+      const isGuru = i === 0;
+      const r = (isGuru ? 21 : 17.5) * scale;
+      beads.push({ i, x, y, depth, scale, r, isGuru });
+    }
+    beads.sort((a, b) => a.depth - b.depth);
+
+    for (const b of beads) {
+      bctx.save();
+      // 接触暗影
+      bctx.fillStyle = `rgba(0, 0, 0, ${(0.25 + (b.depth + 1) * 0.2).toFixed(2)})`;
+      bctx.beginPath();
+      bctx.ellipse(b.x, b.y + b.r * 0.72, b.r * 0.9, b.r * 0.32, 0, 0, Math.PI * 2);
+      bctx.fill();
+
+      // 若是佛头母珠，绘制垂坠金穗流苏
+      if (b.isGuru) {
+        const sway = Math.sin(nowSec * 2.2) * 3.5;
+        const gradT = bctx.createLinearGradient(b.x, b.y + b.r, b.x + sway, b.y + b.r + 30 * b.scale);
+        gradT.addColorStop(0, "#f2c86b");
+        gradT.addColorStop(1, "rgba(186, 118, 38, 0.25)");
+        bctx.strokeStyle = gradT;
+        bctx.lineWidth = 4.5 * b.scale;
+        bctx.lineCap = "round";
+        bctx.beginPath();
+        bctx.moveTo(b.x, b.y + b.r * 0.85);
+        bctx.quadraticCurveTo(b.x + sway * 0.5, b.y + b.r + 14 * b.scale, b.x + sway, b.y + b.r + 28 * b.scale);
+        bctx.stroke();
+      }
+
+      // 沉香木珠球体渐变（随景深明暗自然过渡）
+      const lightBoost = 0.72 + (b.depth + 1) * 0.22;
+      const gx = b.x - b.r * 0.34;
+      const gy = b.y - b.r * 0.36;
+      const grad = bctx.createRadialGradient(gx, gy, b.r * 0.08, b.x, b.y, b.r);
+      if (b.isGuru) {
+        grad.addColorStop(0, "#ffe4a2");
+        grad.addColorStop(0.32, "#c6883a");
+        grad.addColorStop(0.72, "#6b3e14");
+        grad.addColorStop(1, "#261205");
+      } else {
+        grad.addColorStop(0, `rgba(222, 168, 108, ${Math.min(1, lightBoost).toFixed(2)})`);
+        grad.addColorStop(0.34, `rgba(128, 76, 34, ${Math.min(1, lightBoost).toFixed(2)})`);
+        grad.addColorStop(0.76, "#42220d");
+        grad.addColorStop(1, "#180a03");
+      }
+      bctx.fillStyle = grad;
+      bctx.beginPath();
+      bctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      bctx.fill();
+
+      // 细腻木纹高光弧线
+      bctx.strokeStyle = b.isGuru ? "rgba(255, 232, 168, 0.65)" : `rgba(232, 186, 124, ${(0.12 + (b.depth + 1) * 0.14).toFixed(2)})`;
+      bctx.lineWidth = b.isGuru ? 1.8 : 1.1;
+      bctx.beginPath();
+      bctx.arc(b.x, b.y, b.r * 0.78, -Math.PI * 0.82, -Math.PI * 0.22);
+      bctx.stroke();
+
+      // 最前方当前拨动主珠的暖金微光晕
+      if (b.depth > 0.92) {
+        bctx.strokeStyle = "rgba(255, 226, 152, 0.68)";
+        bctx.lineWidth = 2;
+        bctx.beginPath();
+        bctx.arc(b.x, b.y, b.r + 3, 0, Math.PI * 2);
+        bctx.stroke();
+      }
+      bctx.restore();
+    }
+  }
+
+  function setBeadsMode(autoOn) {
+    clearInterval(beadsAutoTimer);
+    beadsAutoTimer = null;
+    beadsManualBtn.classList.toggle("is-on", !autoOn);
+    beadsAutoBtn.classList.toggle("is-on", autoOn);
+    if (autoOn) {
+      beadsRoundLabel.textContent = isEn ? "Auto rotating · 1 bead / 1.2s" : "自动念佛中 · 逐颗流转";
+      beadsAutoTimer = setInterval(() => {
+        if (!document.hidden && beadsWidget.classList.contains("is-open")) rollOneBead();
+      }, 1250);
+    } else {
+      beadsRoundLabel.textContent = isEn ? "Click / drag / wheel to turn" : "点击 / 滑过 / 滚轮逐颗拨珠";
+    }
+  }
+
+  beadsManualBtn.addEventListener("click", () => setBeadsMode(false));
+  beadsAutoBtn.addEventListener("click", () => setBeadsMode(true));
 
   beadsBtn.addEventListener("click", () => {
     const open = beadsWidget.classList.toggle("is-open");
     beadsBtn.classList.toggle("is-active", open);
+    if (!open) setBeadsMode(false);
   });
 
   function rollOneBead() {
     beadsCount += 1;
+    beadsTargetAngle -= STEP_RAD; // 每次精确顺时针转动一颗珠子
     beadsCountEl.textContent = String(beadsCount);
-    playTone("bead");
-    beadsTrack.classList.add("is-rolling");
-    setTimeout(() => beadsTrack.classList.remove("is-rolling"), 140);
+    const fullRound = beadsCount % BEAD_TOTAL === 0;
+    playTone(fullRound ? "lamp" : "bead");
     recordAction("u-me", "你", "本机", "beads", true);
-    spawnSpotFloat(82, 76, "念诵 +1");
+    spawnSpotFloat(82, 74, fullRound ? "圆满一串 +1" : "念诵 +1");
+    if (fullRound) {
+      showToast(`已圆满念诵 ${beadsCount / BEAD_TOTAL} 串（${beadsCount} 声）`);
+    }
   }
-  beadsTrack.addEventListener("click", rollOneBead);
 
-  // 敲木鱼
+  beadsTrack.addEventListener("click", rollOneBead);
+  beadsTrack.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    rollOneBead();
+  }, { passive: false });
+  let dragStartX = null;
+  beadsTrack.addEventListener("pointerdown", (e) => { dragStartX = e.clientX; });
+  beadsTrack.addEventListener("pointermove", (e) => {
+    if (dragStartX === null) return;
+    if (Math.abs(e.clientX - dragStartX) > 22) {
+      dragStartX = e.clientX;
+      rollOneBead();
+    }
+  });
+  window.addEventListener("pointerup", () => { dragStartX = null; });
+
+  // 敲木鱼（支持手动点击/空格键 + 自动敲击切换）
   let fishCount = 0;
+  let fishAutoTimer = null;
   const fishToggleBtn = document.getElementById("btn-act-fish");
+  const fishAutoBtn = document.getElementById("btn-fish-auto");
+
+  function setFishAuto(on) {
+    clearInterval(fishAutoTimer);
+    fishAutoTimer = null;
+    fishAutoBtn.classList.toggle("is-on", on);
+    fishAutoBtn.textContent = on ? (isEn ? "Auto On" : "自动中") : (isEn ? "Auto" : "自动");
+    if (on) {
+      fishAutoTimer = setInterval(() => {
+        if (!document.hidden && fishWidget.classList.contains("is-open")) strikeFish();
+      }, 1150);
+    }
+  }
+  fishAutoBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setFishAuto(!fishAutoBtn.classList.contains("is-on"));
+  });
+
   fishToggleBtn.addEventListener("click", () => {
     const open = fishWidget.classList.toggle("is-open");
     fishToggleBtn.classList.toggle("is-active", open);
+    if (!open) setFishAuto(false);
   });
 
   function strikeFish() {
@@ -810,6 +974,9 @@
     extraStrands *= 0.988;
     ctx.clearRect(0, 0, w, h);
     drawSilkIncenseSmoke(t);
+    if (beadsWidget.classList.contains("is-open")) {
+      drawRosaryRing(t);
+    }
     for (let i = 0; i < motes.length; i++) {
       const m = motes[i];
       m.phase += 0.024; m.y += m.vy; m.x += Math.sin(m.phase) * 0.18;
