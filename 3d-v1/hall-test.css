@@ -88,32 +88,67 @@ html, body, .hall-stage {
   position: absolute;
   left: var(--halo-x, 50%);
   top: var(--halo-y, 20%);
-  width: var(--halo-d, 220px);
-  height: var(--halo-d, 220px);
+  width: calc(var(--halo-d, 220px) * 2.4);
+  height: calc(var(--halo-d, 220px) * 2.4);
   transform: translate3d(calc(-50% + var(--px) * -0.45), calc(-50% + var(--py) * -0.32), 0);
   mix-blend-mode: screen;
   pointer-events: none;
-  /* 精准挖空光圈正中的佛祖头部与下方双肩，让动态发光严格处于原图项光与佛身之后 */
+  /* 精准挖空中央佛头面容 + 下方双肩，让三层向外发散的金色光波严格处于佛身之后 */
   -webkit-mask-image:
-    radial-gradient(ellipse 39% 48% at 50% 56%, transparent 0%, transparent 78%, #000 94%),
-    linear-gradient(180deg, #000 0%, #000 76%, transparent 92%);
+    radial-gradient(ellipse 16.5% 20.5% at 50% 52.5%, transparent 0%, transparent 78%, #000 94%),
+    linear-gradient(180deg, #000 0%, #000 62%, transparent 76%);
   -webkit-mask-composite: source-in;
   mask-image:
-    radial-gradient(ellipse 39% 48% at 50% 56%, transparent 0%, transparent 78%, #000 94%),
-    linear-gradient(180deg, #000 0%, #000 76%, transparent 92%);
+    radial-gradient(ellipse 16.5% 20.5% at 50% 52.5%, transparent 0%, transparent 78%, #000 94%),
+    linear-gradient(180deg, #000 0%, #000 62%, transparent 76%);
   mask-composite: intersect;
+}
+/* 0. 三层交错向外持续发散的佛光金波（从原图项光圆环启程，向四周殿堂空间缓缓扩散消散） */
+.halo-wave {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--halo-d, 220px);
+  height: var(--halo-d, 220px);
+  margin-left: calc(var(--halo-d, 220px) * -0.5);
+  margin-top: calc(var(--halo-d, 220px) * -0.5);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 44%,
+    rgba(255, 242, 192, 0.52) 50%,
+    rgba(246, 198, 86, 0.24) 56%,
+    transparent 66%
+  );
+  filter: blur(4px);
+  opacity: 0;
+  animation: halo-radiate-out 6.6s cubic-bezier(0.18, 0.55, 0.35, 1) infinite;
+}
+.halo-wave.w1 { animation-delay: 0s; }
+.halo-wave.w2 { animation-delay: -2.2s; }
+.halo-wave.w3 { animation-delay: -4.4s; }
+@keyframes halo-radiate-out {
+  0%   { opacity: 0;    transform: scale(0.94); }
+  14%  { opacity: 0.92; transform: scale(1.04); }
+  58%  { opacity: 0.42; transform: scale(1.58); }
+  100% { opacity: 0;    transform: scale(2.22); }
 }
 /* 1. 严丝合缝贴合原图金色光圈的动态发光流转环 */
 .halo-ring-flow {
   position: absolute;
-  inset: -4%;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--halo-d, 220px) * 1.08);
+  height: calc(var(--halo-d, 220px) * 1.08);
+  margin-left: calc(var(--halo-d, 220px) * -0.54);
+  margin-top: calc(var(--halo-d, 220px) * -0.54);
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
     rgba(255, 248, 212, 0.92) 0deg,
-    rgba(246, 198, 86, 0.24) 55deg,
+    rgba(246, 198, 86, 0.22) 55deg,
     rgba(255, 240, 184, 0.85) 125deg,
-    rgba(238, 182, 64, 0.18) 205deg,
+    rgba(238, 182, 64, 0.16) 205deg,
     rgba(255, 246, 206, 0.88) 285deg,
     rgba(255, 248, 212, 0.92) 360deg
   );
@@ -122,27 +157,36 @@ html, body, .hall-stage {
   mask-image: radial-gradient(circle, transparent 60%, #000 68%, #000 74%, transparent 84%);
   animation: halo-spin-ccw 18s linear infinite, halo-pulse-ring 4.2s ease-in-out infinite alternate;
 }
-/* 2. 从原图光圈边缘向外柔和流转的十六道庄严佛光 */
+/* 2. 从原图光圈边缘向外发散流转的十六道庄严佛光射线 */
 .halo-rays-spin {
   position: absolute;
-  inset: -52%;
+  inset: 4%;
   border-radius: 50%;
   background: repeating-conic-gradient(
     from 0deg,
-    rgba(255, 236, 174, 0.28) 0deg 7deg,
+    rgba(255, 236, 174, 0.30) 0deg 7deg,
     rgba(255, 214, 116, 0.02) 7deg 22.5deg
   );
   filter: blur(7px);
-  -webkit-mask-image: radial-gradient(circle, transparent 34%, rgba(0,0,0,0.92) 48%, rgba(0,0,0,0.4) 64%, transparent 78%);
-  mask-image: radial-gradient(circle, transparent 34%, rgba(0,0,0,0.92) 48%, rgba(0,0,0,0.4) 64%, transparent 78%);
-  animation: halo-spin-cw 44s linear infinite;
+  -webkit-mask-image: radial-gradient(circle, transparent 18%, rgba(0,0,0,0.92) 28%, rgba(0,0,0,0.42) 54%, transparent 74%);
+  mask-image: radial-gradient(circle, transparent 18%, rgba(0,0,0,0.92) 28%, rgba(0,0,0,0.42) 54%, transparent 74%);
+  animation: halo-spin-cw 44s linear infinite, halo-rays-pulse 5.4s ease-in-out infinite alternate;
+}
+@keyframes halo-rays-pulse {
+  0%   { opacity: 0.7; transform: rotate(0deg) scale(0.95); }
+  100% { opacity: 1;   transform: rotate(12deg) scale(1.08); }
 }
 /* 3. 原图光圈外缘动态呼吸辉光 */
 .halo-core-breathe {
   position: absolute;
-  inset: -24%;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--halo-d, 220px) * 1.48);
+  height: calc(var(--halo-d, 220px) * 1.48);
+  margin-left: calc(var(--halo-d, 220px) * -0.74);
+  margin-top: calc(var(--halo-d, 220px) * -0.74);
   border-radius: 50%;
-  background: radial-gradient(circle, transparent 42%, rgba(255, 240, 186, 0.44) 56%, rgba(246, 194, 78, 0.16) 68%, transparent 84%);
+  background: radial-gradient(circle, transparent 42%, rgba(255, 240, 186, 0.42) 56%, rgba(246, 194, 78, 0.14) 68%, transparent 84%);
   animation: halo-breathe 5.0s ease-in-out infinite alternate;
 }
 @keyframes halo-spin-cw  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

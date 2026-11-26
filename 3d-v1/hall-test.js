@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261126-3dv1-16";
+  const V = "20261126-3dv1-17";
   let isEn = false;
 
   function showToast(msg) {
@@ -912,6 +912,9 @@
     { ox:   6, freq: 0.012, amp: 22, speed: 0.85, phase: 5.5, width: 2.6, alpha: 0.16 },
   ];
 
+  const haloScreen = { x: 0, y: 0, r: 110 };
+  const haloSparks = [];
+
   function syncHaloToPaintedRing() {
     // 精确匹配 3840x2405 原图 .hall-bg-layer (inset:-5%, bg-pos:50% 42%, cover, scale:1.06) 的项光圆心与直径
     const IW = 3840, IH = 2405;
@@ -925,10 +928,60 @@
     const hrLocal = 0.1110 * rh;
     const hxScreen = (w * 0.5) + (hxLocal - bw * 0.5) * 1.06;
     const hyScreen = (h * 0.5) + (hyLocal - bh * 0.5) * 1.06;
-    const hdScreen = hrLocal * 2.0 * 1.06;
+    const hrScreen = hrLocal * 1.06;
+    const hdScreen = hrScreen * 2.0;
+    haloScreen.x = hxScreen;
+    haloScreen.y = hyScreen;
+    haloScreen.r = hrScreen;
     stage.style.setProperty("--halo-x", `${hxScreen.toFixed(1)}px`);
     stage.style.setProperty("--halo-y", `${hyScreen.toFixed(1)}px`);
     stage.style.setProperty("--halo-d", `${hdScreen.toFixed(1)}px`);
+  }
+
+  function initHaloSparks() {
+    if (haloSparks.length) return;
+    for (let i = 0; i < 30; i++) {
+      // 集中在佛头后方与上方 240° 扇区，避免穿过下方佛胸
+      const angle = -Math.PI * 1.16 + Math.random() * (Math.PI * 1.32);
+      haloSparks.push({
+        angle,
+        prog: Math.random(),
+        speed: 0.0022 + Math.random() * 0.0028,
+        size: 1.0 + Math.random() * 1.8,
+        drift: (Math.random() - 0.5) * 0.0015,
+      });
+    }
+  }
+
+  function drawRadiatingHaloSparks() {
+    const cx = haloScreen.x - curX * 0.45;
+    const cy = haloScreen.y - curY * 0.32;
+    const r0 = haloScreen.r * 0.96;
+    const span = haloScreen.r * 1.45;
+    ctx.save();
+    for (let i = 0; i < haloSparks.length; i++) {
+      const s = haloSparks[i];
+      s.prog += s.speed;
+      s.angle += s.drift;
+      if (s.prog >= 1) {
+        s.prog = 0;
+        s.angle = -Math.PI * 1.16 + Math.random() * (Math.PI * 1.32);
+      }
+      const dist = r0 + s.prog * span;
+      const sx = cx + Math.cos(s.angle) * dist;
+      const sy = cy + Math.sin(s.angle) * dist;
+      const fadeIn = Math.min(1, s.prog * 5);
+      const fadeOut = Math.pow(1 - s.prog, 1.35);
+      const alpha = 0.72 * fadeIn * fadeOut;
+      if (alpha < 0.01) continue;
+      ctx.fillStyle = `rgba(255, 238, 178, ${alpha.toFixed(3)})`;
+      ctx.shadowColor = `rgba(255, 214, 108, ${(alpha * 0.9).toFixed(3)})`;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(sx, sy, s.size * (1 - s.prog * 0.35), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
   }
 
   function resize() {
@@ -937,6 +990,7 @@
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     syncHaloToPaintedRing();
+    initHaloSparks();
     if (!motes.length) {
       for (let i = 0; i < 48; i++) {
         motes.push({ x: Math.random() * w, y: Math.random() * h, r: 0.8 + Math.random() * 1.5, vy: -(0.14 + Math.random() * 0.26), phase: Math.random() * Math.PI * 2, alpha: 0.2 + Math.random() * 0.48 });
@@ -993,6 +1047,7 @@
 
     extraStrands *= 0.988;
     ctx.clearRect(0, 0, w, h);
+    drawRadiatingHaloSparks();
     drawSilkIncenseSmoke(t);
     if (beadsWidget.classList.contains("is-open")) {
       drawRosaryRing(t);
