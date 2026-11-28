@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261128-3dv1-19";
+  const V = "20261128-3dv1-20";
   let isEn = false;
 
   function showToast(msg) {
@@ -132,13 +132,17 @@
     setTimeout(() => tag.remove(), 2750);
   }
 
+  let dmLane = 0;
   function pushDanmaku(city, name, actionText) {
     if (document.body.classList.contains("quiet-mode") || document.hidden) return;
-    while (danmakuBar.children.length >= 2) {
+    while (danmakuBar.children.length >= 6) {
       danmakuBar.firstElementChild?.remove();
     }
+    const lane = dmLane++ % 2;
+    const dur = 12.5 + Math.random() * 3.5;
     const pill = document.createElement("div");
-    pill.className = "danmaku-pill";
+    pill.className = `danmaku-pill lane-${lane}`;
+    pill.style.setProperty("--dm-dur", `${dur.toFixed(1)}s`);
     pill.innerHTML = `
       <span class="dm-city">【${city}】</span>
       <span class="dm-time">${formatNow()}</span>
@@ -146,8 +150,29 @@
       <span class="dm-act">${actionText}</span>
     `;
     danmakuBar.appendChild(pill);
-    setTimeout(() => pill.remove(), 3850);
+    setTimeout(() => pill.remove(), Math.round(dur * 1000) + 200);
   }
+
+  // 额外轻柔滚动弹幕流（每 2.8 秒补充一条，让大殿底部安全带持续热闹流动）
+  const ambientDanmaku = [
+    ["洛杉矶", "慧心", "敬了一炷清香 · 愿家人安康"],
+    ["温哥华", "静远", "点亮一盏长明酥油灯"],
+    ["新加坡", "知行", "于佛前奉上一盏青瓷清茶"],
+    ["旧金山", "苏明", "合十礼拜 · 愿心安住当下"],
+    ["纽约",   "Grace","献上一盘清莲 · Peace for all"],
+    ["台北",   "清和", "静心敲木鱼 · 功德回向十方"],
+    ["London", "Elena","Light a butter lamp for family"],
+    ["上海",   "安然", "拨动沉香念珠 · 愿岁岁平安"],
+  ];
+  let ambIdx = 0;
+  setTimeout(() => {
+    const [c, n, a] = ambientDanmaku[ambIdx++ % ambientDanmaku.length];
+    pushDanmaku(c, n, a);
+  }, 600);
+  setInterval(() => {
+    const [c, n, a] = ambientDanmaku[ambIdx++ % ambientDanmaku.length];
+    pushDanmaku(c, n, a);
+  }, 2800);
 
   /* ===== 2. 右上角共修行为清单 / 排行榜（同一个人自动累计计数） ===== */
   const ledger = new Map();
