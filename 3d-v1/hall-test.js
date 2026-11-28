@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261128-3dv1-20";
+  const V = "20261128-3dv1-21";
   let isEn = false;
 
   function showToast(msg) {
@@ -444,6 +444,8 @@
     el.className = `visitor-actor ${user.role === "child" ? "is-child" : ""}`;
     el.style.left = `${s.x}%`;
     el.style.top = `${s.y}%`;
+    // 严格按纵深 y 坐标排序 z-index：前排人物永远遮挡后排人物，绝不出现前后穿帮
+    el.style.zIndex = String(Math.round(s.y * 10));
     el.style.setProperty("--vh", `${Math.round(s.vh * sp.hScale)}px`);
     el.innerHTML = `
       <div class="visitor-badge"><b>${user.name}</b> · ${user.city}</div>
