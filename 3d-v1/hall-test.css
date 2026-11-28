@@ -40,24 +40,24 @@ html, body, .hall-stage {
   will-change: transform;
 }
 .hall-stage.is-fp-bowing .hall-camera {
-  transform: translate3d(0, -4.8%, 0) scale(1.06);
+  transform: translate3d(0, -1.6%, 0) scale(1.03);
 }
 .hall-stage.is-fp-sitting .hall-camera {
-  transform: translate3d(0, -2.4%, 0) scale(1.03);
+  transform: translate3d(0, -1.0%, 0) scale(1.02);
 }
 .hall-stage.is-fp-bowing .hall-buddha-glow,
 .hall-stage.is-fp-sitting .hall-buddha-glow {
   filter: brightness(1.36);
 }
 
-/* 1. 真 4K (3840x2405) 大雄宝殿超清底图（微锐化+立体雕刻光影，突出中央金身佛祖） */
+/* 1. 真 4K (3840x2405) 大雄宝殿超清底图（锚定顶部 16% 确保佛祖头部与项光绝不超出裁切） */
 .hall-bg-layer {
   position: absolute;
-  inset: -5%;
+  inset: -3%;
   z-index: 1;
-  background: url("./assets/scene-hall-clean-4k.jpg?v=20261126-3dv1-16") center 42% / cover no-repeat;
+  background: url("./assets/scene-hall-clean-4k.jpg?v=20261126-3dv1-16") center 16% / cover no-repeat;
   filter: saturate(1.18) contrast(1.12) brightness(1.06);
-  transform: translate3d(calc(var(--px) * -0.45), calc(var(--py) * -0.32), 0) scale(1.06);
+  transform: translate3d(calc(var(--px) * -0.45), calc(var(--py) * -0.32), 0) scale(1.03);
   will-change: transform;
 }
 .hall-bg-layer::after {
@@ -608,15 +608,16 @@ html, body, .hall-stage {
 }
 @keyframes fp-offer-flash { 0%, 24% { opacity: 0; } 55% { opacity: 0.85; } 100% { opacity: 0; } }
 
-/* ===== 8. 「听佛」禅坐经文轻字幕 ===== */
+/* ===== 8. 「听佛」禅坐经文轻字幕（严格位于底部安全区，绝不遮挡佛祖脸部与身体） ===== */
 .listen-sutra-bar {
   position: fixed;
   left: 50%;
-  top: 46%;
+  bottom: 108px;
   transform: translate(-50%, 6px);
   z-index: 24;
   pointer-events: none;
   opacity: 0;
+  max-width: calc(100vw - 24px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 .hall-stage.is-fp-sitting .listen-sutra-bar {
@@ -625,17 +626,17 @@ html, body, .hall-stage {
 }
 .listen-sutra-bar span {
   display: inline-block;
-  padding: 7px 22px;
+  padding: 6px 18px;
   border-radius: 999px;
-  background: rgba(9, 15, 18, 0.68);
-  border: 1px solid rgba(246, 214, 142, 0.38);
+  background: rgba(9, 15, 18, 0.76);
+  border: 1px solid rgba(246, 214, 142, 0.4);
   backdrop-filter: blur(8px);
   font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.18em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   color: #fae8be;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
-  white-space: nowrap;
+  text-align: center;
 }
 
 /* ===== 9. 底部安全带实时轻流字幕（不钉死左上角，绝不挡佛像） ===== */
@@ -855,16 +856,16 @@ html, body, .hall-stage {
 .board-acts { font-size: 9.5px; color: rgba(244, 234, 214, 0.66); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .board-total { font-size: 11px; font-weight: 600; color: var(--gold-bright); white-space: nowrap; flex-shrink: 0; }
 
-/* 点击供品祈愿卡 */
+/* 点击供品祈愿卡（落于底部安全区，绝不遮挡佛祖面部与身体） */
 .offering-popover {
-  position: fixed; left: 50%; top: 46%; transform: translate(-50%, -50%) scale(0.95);
-  z-index: 42; width: min(300px, calc(100vw - 32px)); padding: 14px 16px 13px;
-  border-radius: 14px; background: rgba(11, 19, 22, 0.92);
+  position: fixed; left: 50%; bottom: 116px; transform: translate(-50%, 10px) scale(0.96);
+  z-index: 42; width: min(300px, calc(100vw - 28px)); padding: 13px 15px 12px;
+  border-radius: 14px; background: rgba(11, 19, 22, 0.94);
   border: 1px solid rgba(236, 200, 126, 0.48); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(10px); opacity: 0; pointer-events: none;
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
-.offering-popover.is-open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.offering-popover.is-open { opacity: 1; pointer-events: auto; transform: translate(-50%, 0) scale(1); }
 .popover-close { position: absolute; right: 10px; top: 8px; width: 24px; height: 24px; border: 0; background: transparent; color: var(--muted); font-size: 16px; cursor: pointer; }
 .popover-meta { font-size: 11px; color: var(--gold); letter-spacing: 0.06em; margin-bottom: 6px; }
 .popover-wish { font-family: var(--font-display); font-size: 14px; line-height: 1.65; color: #fff6e2; margin-bottom: 12px; }
@@ -935,25 +936,57 @@ body.quiet-mode .offering-popover { display: none !important; }
   color: #fff8e6;
 }
 
+/* 提示条落于底部安全区，绝不压佛祖额头与面部 */
 .hall-toast {
-  position: fixed; top: 62px; left: 50%; transform: translate(-50%, -8px);
+  position: fixed; bottom: 112px; left: 50%; transform: translate(-50%, 8px);
   z-index: 50; padding: 6px 15px; border-radius: 999px;
   background: rgba(14, 22, 25, 0.92); border: 1px solid rgba(242, 208, 134, 0.56);
-  color: #fae6b6; font-size: 12px; white-space: nowrap;
+  color: #fae6b6; font-size: 12px; white-space: nowrap; max-width: calc(100vw - 24px);
+  overflow: hidden; text-overflow: ellipsis;
   opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s;
 }
 .hall-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
 
 @media (max-width: 780px) {
-  .merit-board { width: 204px; top: 92px; right: 10px; }
-  .board-list { max-height: 150px; }
-  .lamp-visual { width: 38px; height: 38px; }
-  .lotus-visual { width: 48px; height: 48px; }
-  .tea-visual { width: 34px; height: 34px; }
-  .temple-cushion { width: 76px; }
-  .temple-cushion.is-self { width: 102px; }
-  .zen-fish-widget { left: 10px; bottom: 62px; }
-  .fish-tap-btn { width: 92px; height: 74px; }
-  .zen-beads-widget { right: 10px; bottom: 62px; width: 186px; }
-  .dock-btn { padding: 7px 10px; font-size: 11px; gap: 3px; }
+  /* 手机竖屏：确保佛祖头部绝不裁切，顶部与中部净空 */
+  .hall-bg-layer { background-position: center 12%; }
+  .hall-topbar { padding: max(8px, env(safe-area-inset-top)) 10px 6px; gap: 6px; }
+  .hall-title strong { font-size: 14px; letter-spacing: 0.1em; }
+  .hall-title small { display: none; }
+  .online-pill { padding: 4px 8px; font-size: 10.5px; }
+  .tool-btn { padding: 4px 9px; font-size: 10.5px; }
+
+  /* 手机端共修榜：默认收起为右上轻胶囊，展开时落于底部抽屉，绝不挡佛祖肩膀与身体 */
+  .merit-board {
+    top: auto;
+    bottom: max(62px, env(safe-area-inset-bottom) + 54px);
+    right: 10px;
+    width: min(260px, calc(100vw - 20px));
+  }
+  .merit-board.is-collapsed {
+    top: max(50px, env(safe-area-inset-top) + 44px);
+    bottom: auto;
+    width: auto;
+  }
+  .merit-board.is-collapsed .board-title small { display: none; }
+  .board-list { max-height: 170px; }
+
+  .lamp-visual { width: 34px; height: 34px; }
+  .lotus-visual { width: 44px; height: 44px; }
+  .tea-visual { width: 30px; height: 30px; }
+  .temple-cushion { width: 68px; }
+  .temple-cushion.is-self { width: 92px; }
+  .zen-fish-widget { left: 10px; bottom: 66px; }
+  .fish-tap-btn { width: 86px; height: 68px; }
+  .zen-beads-widget { right: 10px; bottom: 66px; width: 196px; }
+  .hall-danmaku-bar { bottom: 58px; }
+  .danmaku-pill { font-size: 10.5px; padding: 4px 10px; }
+  .listen-sutra-bar { bottom: 96px; }
+  .listen-sutra-bar span { font-size: 11.5px; padding: 5px 12px; letter-spacing: 0.08em; }
+  .hall-dock {
+    bottom: max(8px, env(safe-area-inset-bottom) + 6px);
+    gap: 5px;
+    padding: 2px 6px;
+  }
+  .dock-btn { padding: 7px 9px; font-size: 11px; gap: 3px; }
 }

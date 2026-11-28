@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261126-3dv1-17";
+  const V = "20261128-3dv1-18";
   let isEn = false;
 
   function showToast(msg) {
@@ -204,6 +204,11 @@
   recordAction("u-chen",  "陈志远", "纽约",   "tea");
 
   const boardToggleBtn = document.getElementById("btn-board-toggle");
+  // 手机端默认收起共修榜，确保佛祖脸部与双肩 100% 净空不被遮挡
+  if (window.innerWidth <= 780) {
+    boardEl.classList.add("is-collapsed");
+    boardToggleBtn.textContent = "展开";
+  }
   boardToggleBtn.addEventListener("click", () => {
     const collapsed = boardEl.classList.toggle("is-collapsed");
     boardToggleBtn.textContent = collapsed ? (isEn ? "Open" : "展开") : (isEn ? "Hide" : "收起");
@@ -916,19 +921,21 @@
   const haloSparks = [];
 
   function syncHaloToPaintedRing() {
-    // 精确匹配 3840x2405 原图 .hall-bg-layer (inset:-5%, bg-pos:50% 42%, cover, scale:1.06) 的项光圆心与直径
+    // 精确匹配 3840x2405 原图 .hall-bg-layer (inset:-3%, bg-pos:50% 16%/12%, cover, scale:1.03) 的项光圆心与直径
     const IW = 3840, IH = 2405;
-    const bw = w * 1.10, bh = h * 1.10;
+    const isMob = w <= 780;
+    const bgPosY = isMob ? 0.12 : 0.16;
+    const bw = w * 1.06, bh = h * 1.06;
     const sCover = Math.max(bw / IW, bh / IH);
     const rw = IW * sCover, rh = IH * sCover;
     const imgLeft = (bw - rw) * 0.50;
-    const imgTop  = (bh - rh) * 0.42;
+    const imgTop  = (bh - rh) * bgPosY;
     const hxLocal = imgLeft + 0.4984 * rw;
     const hyLocal = imgTop  + 0.1979 * rh;
     const hrLocal = 0.1110 * rh;
-    const hxScreen = (w * 0.5) + (hxLocal - bw * 0.5) * 1.06;
-    const hyScreen = (h * 0.5) + (hyLocal - bh * 0.5) * 1.06;
-    const hrScreen = hrLocal * 1.06;
+    const hxScreen = (w * 0.5) + (hxLocal - bw * 0.5) * 1.03;
+    const hyScreen = (h * 0.5) + (hyLocal - bh * 0.5) * 1.03;
+    const hrScreen = hrLocal * 1.03;
     const hdScreen = hrScreen * 2.0;
     haloScreen.x = hxScreen;
     haloScreen.y = hyScreen;
