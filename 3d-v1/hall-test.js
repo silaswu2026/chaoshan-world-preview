@@ -35,7 +35,7 @@
   const popoverBlessBtn = document.getElementById("popover-bless-btn");
   const popoverBlessNum = document.getElementById("popover-bless-num");
 
-  const V = "20261128-3dv1-18";
+  const V = "20261128-3dv1-19";
   let isEn = false;
 
   function showToast(msg) {
@@ -203,16 +203,15 @@
   recordAction("u-child", "小豆子", "台北",   "bow");
   recordAction("u-chen",  "陈志远", "纽约",   "tea");
 
+  const boardOpenBtn = document.getElementById("btn-board-open");
   const boardToggleBtn = document.getElementById("btn-board-toggle");
-  // 手机端默认收起共修榜，确保佛祖脸部与双肩 100% 净空不被遮挡
-  if (window.innerWidth <= 780) {
-    boardEl.classList.add("is-collapsed");
-    boardToggleBtn.textContent = "展开";
+  function setBoardOpen(open) {
+    boardEl.classList.toggle("is-open", open);
+    boardEl.setAttribute("aria-hidden", open ? "false" : "true");
+    boardOpenBtn.classList.toggle("is-on", open);
   }
-  boardToggleBtn.addEventListener("click", () => {
-    const collapsed = boardEl.classList.toggle("is-collapsed");
-    boardToggleBtn.textContent = collapsed ? (isEn ? "Open" : "展开") : (isEn ? "Hide" : "收起");
-  });
+  boardOpenBtn.addEventListener("click", () => setBoardOpen(!boardEl.classList.contains("is-open")));
+  boardToggleBtn.addEventListener("click", () => setBoardOpen(false));
 
   /* ===== 3. 殿前 7 席写实蒲团阵（左右 2 排 6 席同修 + 正中 1 席你的主蒲团） ===== */
   const cushionSlots = [
@@ -1106,7 +1105,8 @@
     document.getElementById("t-listen").textContent = isEn ? "Listen" : "听佛";
     document.getElementById("t-beads").textContent = isEn ? "Beads" : "佛珠";
     document.getElementById("t-fish").textContent = isEn ? "Fish" : "木鱼";
-    boardToggleBtn.textContent = boardEl.classList.contains("is-collapsed") ? (isEn ? "Open" : "展开") : (isEn ? "Hide" : "收起");
+    boardOpenBtn.textContent = isEn ? "Board" : "共修榜";
+    boardToggleBtn.textContent = isEn ? "Close" : "收起";
     renderBoard();
   });
 })();

@@ -794,53 +794,67 @@ html, body, .hall-stage {
   color: var(--muted);
 }
 
-/* ===== 11. 右上角共修清单 / 排行榜 ===== */
+/* ===== 11. 右上角窄幅半透明共修榜（默认收起在顶栏按钮中，展开紧贴右缘绝不挡佛像） ===== */
 .merit-board {
-  position: fixed; top: 60px; right: 14px; z-index: 26; width: 258px;
-  border-radius: 14px; background: rgba(10, 17, 20, 0.84);
-  border: 1px solid rgba(232, 198, 126, 0.38);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.52); backdrop-filter: blur(10px); overflow: hidden;
+  position: fixed;
+  top: 52px;
+  right: 12px;
+  z-index: 26;
+  width: 208px;
+  border-radius: 12px;
+  background: rgba(8, 14, 17, 0.56);
+  border: 1px solid rgba(232, 198, 126, 0.32);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.24s ease;
 }
-.merit-board.is-collapsed .board-list,
-.merit-board.is-collapsed .board-density-bar { display: none; }
+.merit-board.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
 .board-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 11px; border-bottom: 1px solid rgba(228, 194, 122, 0.2);
-  background: rgba(20, 31, 35, 0.55);
+  padding: 7px 10px; border-bottom: 1px solid rgba(228, 194, 122, 0.16);
+  background: rgba(14, 22, 26, 0.42);
 }
-.board-title { display: flex; align-items: center; gap: 6px; }
-.board-title i { width: 6px; height: 6px; border-radius: 50%; background: #f6ce72; box-shadow: 0 0 8px #f6ce72; }
-.board-title strong { font-family: var(--font-display); font-size: 13px; color: #fae6b6; letter-spacing: 0.08em; font-weight: 500; }
-.board-title small { font-size: 10px; color: var(--muted); }
+.board-title { display: flex; align-items: center; gap: 5px; }
+.board-title i { width: 5px; height: 5px; border-radius: 50%; background: #f6ce72; box-shadow: 0 0 8px #f6ce72; }
+.board-title strong { font-family: var(--font-display); font-size: 12px; color: #fae6b6; letter-spacing: 0.06em; font-weight: 500; }
+.board-title small { font-size: 9.5px; color: var(--muted); }
 .board-toggle {
-  border: 1px solid rgba(228, 194, 122, 0.3); background: transparent; color: var(--muted);
-  font-size: 10.5px; padding: 2px 8px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(228, 194, 122, 0.28); background: transparent; color: var(--muted);
+  font-size: 10px; padding: 1.5px 7px; border-radius: 999px; cursor: pointer;
 }
 .board-density-bar {
-  display: flex; align-items: center; gap: 5px; padding: 6px 10px;
-  border-bottom: 1px solid rgba(228, 194, 122, 0.14);
-  font-size: 10.5px; color: var(--muted);
+  display: flex; align-items: center; gap: 4px; padding: 5px 8px;
+  border-bottom: 1px solid rgba(228, 194, 122, 0.12);
+  font-size: 9.5px; color: var(--muted);
 }
 .density-pill {
-  padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(228, 194, 122, 0.28);
-  background: transparent; color: var(--paper); font-size: 10px; cursor: pointer;
+  padding: 1.5px 6px; border-radius: 999px; border: 1px solid rgba(228, 194, 122, 0.26);
+  background: transparent; color: var(--paper); font-size: 9.5px; cursor: pointer;
 }
 .density-pill.is-active {
-  background: rgba(214, 174, 92, 0.3); border-color: rgba(250, 224, 152, 0.78); color: #fff7e2;
+  background: rgba(214, 174, 92, 0.28); border-color: rgba(250, 224, 152, 0.72); color: #fff7e2;
 }
 .board-list {
-  list-style: none; max-height: 240px; overflow-y: auto;
-  padding: 6px 8px 8px; display: flex; flex-direction: column; gap: 5px;
+  list-style: none; max-height: 220px; overflow-y: auto;
+  padding: 5px 6px 7px; display: flex; flex-direction: column; gap: 4px;
   scrollbar-width: thin; scrollbar-color: rgba(228, 194, 122, 0.35) transparent;
 }
 .board-list::-webkit-scrollbar { width: 4px; }
 .board-list::-webkit-scrollbar-thumb { background: rgba(228, 194, 122, 0.35); border-radius: 99px; }
 .board-row {
-  display: flex; align-items: center; gap: 7px; padding: 5.5px 8px; border-radius: 9px;
-  background: rgba(18, 28, 32, 0.55); border: 1px solid rgba(228, 194, 122, 0.14);
+  display: flex; align-items: center; gap: 6px; padding: 4.5px 7px; border-radius: 8px;
+  background: rgba(14, 22, 26, 0.42); border: 1px solid rgba(228, 194, 122, 0.12);
   transition: background 0.3s, border-color 0.3s;
 }
-.board-row.is-me { background: rgba(66, 48, 18, 0.56); border-color: rgba(250, 222, 150, 0.52); }
+.board-row.is-me { background: rgba(66, 48, 18, 0.48); border-color: rgba(250, 222, 150, 0.48); }
 .board-row.is-flash { animation: board-row-flash 1.1s ease; }
 @keyframes board-row-flash { 0% { border-color: #fae09e; background: rgba(214, 170, 82, 0.32); } }
 .board-rank {
@@ -956,20 +970,13 @@ body.quiet-mode .offering-popover { display: none !important; }
   .online-pill { padding: 4px 8px; font-size: 10.5px; }
   .tool-btn { padding: 4px 9px; font-size: 10.5px; }
 
-  /* 手机端共修榜：默认收起为右上轻胶囊，展开时落于底部抽屉，绝不挡佛祖肩膀与身体 */
+  /* 手机端共修榜：窄幅半透明，展开紧贴右缘，绝不挡佛祖 */
   .merit-board {
-    top: auto;
-    bottom: max(62px, env(safe-area-inset-bottom) + 54px);
-    right: 10px;
-    width: min(260px, calc(100vw - 20px));
+    top: max(50px, env(safe-area-inset-top) + 42px);
+    right: 8px;
+    width: 186px;
   }
-  .merit-board.is-collapsed {
-    top: max(50px, env(safe-area-inset-top) + 44px);
-    bottom: auto;
-    width: auto;
-  }
-  .merit-board.is-collapsed .board-title small { display: none; }
-  .board-list { max-height: 170px; }
+  .board-list { max-height: 165px; }
 
   .lamp-visual { width: 34px; height: 34px; }
   .lotus-visual { width: 44px; height: 44px; }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080e10" />
   <title>大雄宝殿 · 第一人称多人共修测试 (3D-v1)</title>
-  <link rel="stylesheet" href="./hall-test.css?v=20261128-3dv1-18" />
+  <link rel="stylesheet" href="./hall-test.css?v=20261128-3dv1-19" />
 </head>
 <body>
   <main class="hall-stage" id="hall-stage">
@@ -60,7 +60,7 @@
       </div>
 
       <div class="fp-hands-actor" id="fp-hands-actor">
-        <img src="./assets/hands-warm-pray.png?v=20261128-3dv1-18" alt="" />
+        <img src="./assets/hands-warm-pray.png?v=20261128-3dv1-19" alt="" />
       </div>
 
       <div class="fp-offer-actor" id="fp-offer-actor">
@@ -81,7 +81,7 @@
     <div class="zen-fish-widget" id="zen-fish-widget" aria-hidden="true">
       <button type="button" class="fish-tap-btn" id="btn-tap-fish" aria-label="敲木鱼">
         <span class="fish-wave" id="fish-wave"></span>
-        <img src="./assets/wooden-fish.png?v=20261128-3dv1-18" alt="木鱼" />
+        <img src="./assets/wooden-fish.png?v=20261128-3dv1-19" alt="木鱼" />
       </button>
       <div class="zen-widget-cap">
         <span>轻敲木鱼 · <b id="fish-count">0</b></span>
@@ -105,8 +105,8 @@
       </div>
     </div>
 
-    <!-- 11. 右上角共修行为清单 / 排行榜（同一个人自动累计计数 + 测试人数密度切换） -->
-    <aside class="merit-board" id="merit-board" aria-label="殿内共修榜">
+    <!-- 11. 右上角窄幅半透明共修榜（默认收起至顶栏「共修榜」按钮，展开紧贴右缘不挡佛像） -->
+    <aside class="merit-board" id="merit-board" aria-label="殿内共修榜" aria-hidden="true">
       <div class="board-head">
         <div class="board-title">
           <i></i>
@@ -144,6 +144,7 @@
           <i></i>
           <b id="online-count">48</b> <span id="t-online">位同修在殿</span>
         </span>
+        <button type="button" class="tool-btn" id="btn-board-open">共修榜</button>
         <button type="button" class="tool-btn" id="btn-quiet">清净模式</button>
         <button type="button" class="tool-btn" id="btn-sound">清音 · 关</button>
         <button type="button" class="tool-btn" id="btn-lang">EN</button>
@@ -167,6 +168,6 @@
   </main>
 
   <audio id="hall-bgm" loop preload="none" src="./assets/audio/heart-sutra.mp3"></audio>
-  <script src="./hall-test.js?v=20261128-3dv1-18"></script>
+  <script src="./hall-test.js?v=20261128-3dv1-19"></script>
 </body>
 </html>
